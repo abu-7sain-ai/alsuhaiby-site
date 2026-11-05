@@ -23,7 +23,7 @@ const brands = group((e) => e.data.brands);
     {systems.map(([s, list]) => (
       <section id={s}>
         <h3 style="font-size:24px;margin:28px 0 12px">{s}</h3>
-        <div class="grid">{list.map((e) => <Card lang={lang} slug={e.data.slug} title={e.data.title} cover={e.data.cover} views={e.data.views} />)}</div>
+        <div class="grid">{list.map((e, i) => <Card eager={i < 2 && s === systems[0][0]} lang={lang} slug={e.data.slug} title={e.data.title} cover={e.data.cover} views={e.data.views} />)}</div>
       </section>
     ))}
     {brands.length > 0 && (

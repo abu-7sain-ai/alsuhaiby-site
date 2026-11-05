@@ -40,7 +40,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: P.
 
     <h2 class="sechead">{u.popular}</h2>
     <div class="tags">{topSystems.map((s) => <a class="tag" href={`/topics/#${encodeURIComponent(s)}`}>{s}</a>)}</div>
-    <div class="grid">{popular.map((e) => <Card lang={lang} slug={e.data.slug} title={e.data.title} cover={e.data.cover} views={e.data.views} />)}</div>
+    <div class="grid">{popular.map((e, i) => <Card eager={i < 2} lang={lang} slug={e.data.slug} title={e.data.title} cover={e.data.cover} views={e.data.views} />)}</div>
 
     <h2 class="sechead">{u.latest}</h2>
     <div class="grid">{latest.map((e) => <Card lang={lang} slug={e.data.slug} title={e.data.title} cover={e.data.cover} views={e.data.views} />)}</div>

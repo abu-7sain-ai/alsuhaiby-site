@@ -24,6 +24,8 @@ function images(v) {
   const og = path.join(OG, `${v.id}.jpg`);
   // Frame at 1.5 s: past the first black frames, usually Mohammad on screen with the title text.
   if (!fs.existsSync(cover)) ff(['-ss', '1.5', '-i', v.path, '-frames:v', '1', '-vf', 'scale=576:-2', '-c:v', 'libwebp', '-quality', '68', cover]);
+  const thumb = path.join(COVERS, `${v.id}-s.webp`); // small version for cards
+  if (!fs.existsSync(thumb)) ff(['-ss', '1.5', '-i', v.path, '-frames:v', '1', '-vf', 'scale=320:-2', '-c:v', 'libwebp', '-quality', '62', thumb]);
   if (!fs.existsSync(og)) ff(['-ss', '1.5', '-i', v.path, '-frames:v', '1', '-vf', 'scale=-2:630,pad=1200:630:(ow-iw)/2:0:black', '-q:v', '4', og]);
   return { cover: `/covers/${v.id}.webp`, ogImage: `/og/${v.id}.jpg` };
 }

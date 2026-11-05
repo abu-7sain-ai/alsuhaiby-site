@@ -1,10 +1,11 @@
 ---
 import { videoUrl, formatViews, t, type Lang } from '../i18n';
-interface Props { lang: Lang; slug: string; title: string; cover: string; views: number }
-const { lang, slug, title, cover, views } = Astro.props;
+interface Props { lang: Lang; slug: string; title: string; cover: string; views: number; eager?: boolean }
+const { lang, slug, title, cover, views, eager = false } = Astro.props;
+const thumb = cover.replace(/\.webp$/, '-s.webp'); // 320px card thumbnail made by build-page.js
 ---
 <a class="card" href={videoUrl(lang, slug)}>
-  <img src={cover} alt="" width="576" height="768" loading="lazy" decoding="async" />
+  <img src={thumb} alt="" width="320" height="427" loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} decoding="async" />
   <span class="t">{title}</span>
   <span class="m">{formatViews(views, lang)} {t(lang).views}</span>
 </a>

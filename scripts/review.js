@@ -86,22 +86,33 @@ Return ONLY JSON:
 List every unit that is not SUPPORTED. Omit SUPPORTED units.`;
 
 const PASS2 = `You are the same skeptical Kuwaiti master mechanic. Some sentences were removed or corrected in this Arabic article after your fact check.
-1) Make it read coherently again with MINIMAL wording edits only: fix dangling references («ثانيًا» with no «أولًا», «كما ذكرنا» pointing to removed text, a count in the title or summary that no longer matches the number of sections, broken transitions).
-   You may NOT add any new fact, number, cause or advice, and you may not lengthen the article. Shorter is fine.
+1) Make it read coherently again with MINIMAL wording edits only: fix dangling references («ثانيًا» with no «أولًا», «كما ذكرنا» pointing to removed text, broken transitions).
+   If the number in the title or summary does not match the number of cause/sign sections taken from the MAIN video, you MUST edit the title/summary so they match.
+   Replace any remaining literary or Modern Standard phrasing with plain spoken Kuwaiti (same meaning).
+   You may NOT add any new fact, number, cause or advice, and you may not lengthen the article.
+   You may NOT remove or summarise sentences either: the fact check is already done, so every remaining sentence stays. Change words, not content. Only return fields you actually changed.
 2) Score the FINAL article from 0 to 10 on six dimensions:
-   fidelity (faithful to what Mohammad said in the video), dialect (Kuwaiti tone of the video), answerFirst (first two lines fully answer the question),
+   fidelity (every point Mohammad makes is present and central, nothing contradicts him; correct general explanation that you already fact-checked is allowed and is not a fidelity problem — only judge whether his message is kept and nothing false or off-topic remains),
+   dialect (Kuwaiti tone of the video), answerFirst (first two lines fully answer the question),
    structure (each cause/sign under its own heading), specificity (concrete, specific details instead of generic talk — but no invented ones), noFluff (no padding, repetition or AI phrases).
 Return ONLY JSON:
 {"edits":[{"field":"title|summary|intro|description|sections[i].heading|sections[i].body|faq[i].q|faq[i].a","text":"the full new text of that field"}],"scores":{"fidelity":0,"dialect":0,"answerFirst":0,"structure":0,"specificity":0,"noFluff":0},"notes":"one or two English sentences on what still needs a human look, if anything"}`;
 
+// Coherence edits are wording-only: an edit that shrinks a text field by more than 20% would be an unlogged cut, so it is rejected.
 function applyEdits(a, edits = []) {
   const out = structuredClone(a);
+  const applied = [], rejected = [];
   for (const e of edits) {
     const m = String(e.field).match(/^(sections|faq)\[(\d+)\]\.(heading|body|q|a)$/);
-    if (m) { const arr = out[m[1]]; if (arr?.[+m[2]]) arr[+m[2]][m[3]] = e.text; }
-    else if (['title', 'summary', 'intro', 'description'].includes(e.field)) out[e.field] = e.text;
+    const get = () => (m ? out[m[1]]?.[+m[2]]?.[m[3]] : out[e.field]);
+    const before = get();
+    if (before === undefined || typeof e.text !== 'string') continue;
+    const shortField = ['title', 'description'].includes(e.field) || /heading|\.q$/.test(e.field);
+    if (!shortField && wordCount(e.text) < 0.8 * wordCount(before)) { rejected.push({ ...e, before, why: 'would shorten the text by more than 20% (unlogged cut)' }); continue; }
+    if (m) out[m[1]][+m[2]][m[3]] = e.text; else out[e.field] = e.text;
+    applied.push({ ...e, before });
   }
-  return out;
+  return { article: out, applied, rejected };
 }
 
 const summary = { kept: 0, fixed: 0, cut: 0 };
@@ -111,14 +122,18 @@ for (const t of topics) {
   if (!draft) { console.warn(`skip ${t.key}: no Arabic draft — run write.js first`); continue; }
   const logFile = cachePath(v, 'review.ar');
   const finalFile = cachePath(v, 'final.ar');
-  if (fs.existsSync(finalFile) && !A.force) { console.log(`skip ${t.key} (already reviewed)`); continue; }
-  console.log(`review ${t.key} (${draft.words} words)`);
+  const pass2Only = A['pass2-only'] && fs.existsSync(logFile);
+  if (fs.existsSync(finalFile) && !A.force && !A['pass2-only']) { console.log(`skip ${t.key} (already reviewed)`); continue; }
+  console.log(`review ${t.key} (${draft.words} words)${pass2Only ? ' — pass 2 only, reusing saved pass 1 verdicts' : ''}`);
 
   const units = toUnits(draft);
-  const p1 = await chat({
-    script: 'review', label: `${t.key} pass1`, model: REVIEW_MODEL, temperature: 0, maxTokens: 16000,
-    messages: [{ role: 'system', content: PASS1 }, { role: 'user', content: `TRANSCRIPTS\n${transcripts(t)}\n\nTITLE: ${draft.title}\n\nARTICLE UNITS\n${units.map((u) => `${u.id} [${u.where}] ${u.text}`).join('\n')}` }],
-  });
+  const prev = pass2Only ? readJson(logFile, null) : null;
+  const p1 = prev
+    ? { verdicts: prev.log.map((l) => ({ id: l.id, verdict: l.verdict, fixed: l.verdict === 'FIX' ? l.text : undefined, reason: l.reason })), dialect: prev.dialect, answerFirst: prev.answerFirst }
+    : await chat({
+      script: 'review', label: `${t.key} pass1`, model: REVIEW_MODEL, temperature: 0, maxTokens: 16000,
+      messages: [{ role: 'system', content: PASS1 }, { role: 'user', content: `TRANSCRIPTS\n${transcripts(t)}\n\nTITLE: ${draft.title}\n\nARTICLE UNITS\n${units.map((u) => `${u.id} [${u.where}] ${u.text}`).join('\n')}` }],
+    });
   const log = [];
   for (const vd of p1.verdicts || []) {
     const u = units.find((x) => x.id === vd.id);
@@ -136,13 +151,14 @@ for (const t of topics) {
     script: 'review', label: `${t.key} pass2`, model: REVIEW_MODEL, temperature: 0, maxTokens: 12000,
     messages: [{ role: 'system', content: PASS2 }, { role: 'user', content: `TRANSCRIPTS\n${transcripts(t)}\n\nARTICLE (JSON)\n${JSON.stringify({ title: draft.title, summary: afterCuts.summary, description: draft.description, intro: afterCuts.intro, sections: afterCuts.sections, faq: afterCuts.faq })}` }],
   });
-  const final = applyEdits({ ...afterCuts, title: draft.title, description: draft.description }, p2.edits);
+  const { article: final, applied, rejected } = applyEdits({ ...afterCuts, title: draft.title, description: draft.description }, p2.edits);
+  if (rejected.length) console.log(`  rejected ${rejected.length} coherence edit(s) that would have cut text without logging it`);
   const counts = { kept: log.filter((l) => l.verdict === 'KEEP').length, fixed: log.filter((l) => l.verdict === 'FIX').length, cut: log.filter((l) => l.verdict === 'CUT').length, supported: units.length - log.length, units: units.length };
   summary.kept += counts.kept; summary.fixed += counts.fixed; summary.cut += counts.cut;
   const finalWords = words(final);
   writeJson(logFile, {
     topic: t.key, model: REVIEW_MODEL, reviewedAt: new Date().toISOString(), wordsBefore: draft.words, wordsAfter: finalWords, counts,
-    dialect: p1.dialect, answerFirst: p1.answerFirst, scores: p2.scores, notes: p2.notes, coherenceEdits: p2.edits || [], log,
+    dialect: p1.dialect, answerFirst: p1.answerFirst, scores: p2.scores, notes: p2.notes, coherenceEdits: applied, rejectedEdits: rejected, log,
   });
   writeJson(finalFile, { ...draft, ...final, words: finalWords, reviewed: true, reviewModel: REVIEW_MODEL });
   console.log(`  ${draft.words} → ${finalWords} words · kept ${counts.kept} · fixed ${counts.fixed} · cut ${counts.cut} · score ${Object.values(p2.scores || {}).reduce((x, y) => x + y, 0)}/60${finalWords < 500 ? ' · under 500 words (left short, not padded)' : ''}`);

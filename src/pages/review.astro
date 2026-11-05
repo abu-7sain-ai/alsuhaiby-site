@@ -2,6 +2,7 @@
 // Local review page (not for search engines): quality score on the six approved dimensions + every «إضافة»
 // (anything the article says that Mohammad did not say in the video). Data: data/review.json (written by scripts/build-page.js).
 import fs from 'node:fs';
+import path from 'node:path';
 import Base from '../layouts/Base.astro';
 type Row = {
   slug: string; title: string; words: number; wordsBefore?: number; mainId: string; otherIds: string[]; views: number;
@@ -9,7 +10,7 @@ type Row = {
   counts?: { kept: number; fixed: number; cut: number; supported: number; units: number };
   additions: string[]; fixes?: { from: string; to: string; reason: string }[]; cuts?: { text: string; reason: string }[];
 };
-const file = new URL('../../data/review.json', import.meta.url);
+const file = path.join(process.cwd(), 'data', 'review.json'); // project root (works in dev and build)
 const rows: Row[] = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : [];
 const DIMS: [string, string][] = [
   ['fidelity', 'الأمانة لكلام الفيديو'],

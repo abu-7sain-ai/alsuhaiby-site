@@ -42,7 +42,7 @@ const jsonLd = [
   { '@context': 'https://schema.org', ...person },
 ];
 ---
-<Base lang={lang} title={d.title} description={d.description} path={path} alternates={alternates} ogImage={d.ogImage} ogType="article" jsonLd={jsonLd}>
+<Base lang={lang} title={d.title} description={d.description} path={path} alternates={alternates} ogImage={d.ogImage} ogType="article" jsonLd={jsonLd} preloadImage={d.cover}>
   <article class="wrap">
     <h1 class="ptitle">{d.title}</h1>
     <div class="answer"><p>{d.summary}</p></div>

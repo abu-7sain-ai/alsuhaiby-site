@@ -23,13 +23,16 @@ You MAY expand with correct, well-established technical explanation (why it happ
 but EVERY factual statement he did not say must be listed in "additions" (one short Arabic sentence per added fact). Be exhaustive and honest in that list.
 Never invent prices, part numbers, brand-specific claims, statistics or personal stories. No prices at all. Use numbers (km, °C, seconds, RPM) only when they are standard and safe, and list them in additions.
 
-VOICE: Kuwaiti dialect that every Gulf reader understands, the same tone as his videos: direct, friendly, practical, short sentences, talking to the driver as «انت».
+VOICE: spoken Kuwaiti dialect that every Gulf reader understands, exactly like he talks in the videos: plain, direct, practical, SHORT sentences (mostly under 20 words), talking to the driver as «انت».
+Write like a mechanic explaining to a customer at the garage, not like a writer. No literary or dramatic words (e.g. «محكم»، «جهنمية»، «القلب النابض»، «تترجم»، «صدمات»، «بنعومة فائقة»), no Modern Standard connectors («بالإضافة إلى ذلك»، «وبالتالي»، «حيث إن»، «يُعد»). Prefer: وايد، شوي، يبيلها، تحس، تدوس، يتسكر، عطلان، بدّله، شيّك عليه.
 Use «كراج» (never «ورشة»). His words: سيارتك، تدوس بنزين، البلاكات، البخاخات، الكويلات، القير، المكينة، الرديتر، السكّان، التواير... keep the car words he uses.
 Forbidden: hashtags, emojis, his on-video CTAs («اضغط على هذي»، «اللي يبي مكان كراجنا»), and AI filler such as «في عالم السيارات»، «لا شك أن»، «في الختام»، «تجدر الإشارة»، «يعتبر»، «دعونا»، «رحلة»، «عزيزي القارئ». No repetition, no padding.
 
 STRUCTURE AND SEO:
 - title: a natural search sentence that STARTS WITH THE SYMPTOM the driver feels (not the part name), as people type it, e.g. «سيارتي ترجف لما أدوس بنزين: 4 أسباب». Include the count when he lists items. Max 70 characters.
-- summary: exactly two sentences that fully answer the question (what is happening and what to do). This is shown first on the page.
+- summary: exactly two sentences that fully answer the question: the first names the causes/signs he lists in the MAIN video, the second says what to do. This is shown first on the page.
+- The count in the title must equal the number of causes/signs he lists in the MAIN video. Points that only appear in the OTHER videos go in ONE extra section titled «أسباب ثانية ذكرها محمد» (or «علامات ثانية…») — never as extra numbered causes.
+- Never give maintenance intervals in km or months, prices, or brand-specific facts unless he said them.
 - description: meta description, max 155 characters, includes the main search phrase.
 - slug: 3–6 Arabic words from the title joined with "-", no digits, no punctuation.
 - intro: 1 short paragraph (40–80 words) after the summary, no repetition of the summary.

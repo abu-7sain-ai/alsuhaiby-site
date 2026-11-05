@@ -4,3 +4,4 @@ dist/
 .env
 *.mp4
 *.mov
+data/run-*.log
