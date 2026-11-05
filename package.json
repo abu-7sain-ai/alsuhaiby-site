@@ -8,6 +8,7 @@
     "preview": "astro preview --host",
     "analyze": "node scripts/analyze.js",
     "write": "node scripts/write.js",
+    "review": "node scripts/review.js",
     "build-pages": "node scripts/build-page.js"
   },
   "dependencies": {

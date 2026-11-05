@@ -64,7 +64,8 @@ for (const t of topics) {
   const dur = duration(main.path);
   const others = (t.others || []).map((id) => videos.get(id)).filter((v) => v?.path);
   for (const lang of LANGS) {
-    const w = readJson(cachePath(main, `write.${lang}`), null);
+    // Arabic: publish the reviewed version (review.js) when it exists; translations are made from it.
+    const w = (lang === 'ar' && readJson(cachePath(main, 'final.ar'), null)) || readJson(cachePath(main, `write.${lang}`), null);
     if (!w) continue;
     const otherVideos = others.map((v) => {
       const an = readJson(cachePath(v, 'analysis'), {});
@@ -86,10 +87,16 @@ for (const t of topics) {
     fs.writeFileSync(file, frontmatter(fm) + body, 'utf8');
     generated.add(path.normalize(file));
     if (lang === 'ar') {
-      const sc = scores[t.key];
+      const rv = readJson(cachePath(main, 'review.ar'), null);
+      const sc = rv?.scores || scores[t.key]?.scores;
       review.push({
-        topic: t.key, slug, title: fm.title, words: wordCount(`${fm.summary} ${body}`), mainId: main.id, otherIds: others.map((v) => v.id), views: main.views,
-        scores: sc?.scores, total: sc ? Object.values(sc.scores).reduce((a, b) => a + b, 0) : undefined, notes: sc?.notes, additions: w.additions || [],
+        topic: t.key, slug, title: fm.title, words: wordCount(`${fm.summary} ${body}`), wordsBefore: rv?.wordsBefore, mainId: main.id, otherIds: others.map((v) => v.id), views: main.views,
+        scores: sc, total: sc ? Object.values(sc).reduce((a, b) => a + b, 0) : undefined, notes: rv?.notes || scores[t.key]?.notes,
+        dialect: rv?.dialect, answerFirst: rv?.answerFirst, counts: rv?.counts,
+        // «إضافة» = what the article says beyond Mohammad's words: the KEEP verdicts once reviewed, Gemini's own list before.
+        additions: rv ? rv.log.filter((l) => l.verdict === 'KEEP').map((l) => l.text) : w.additions || [],
+        fixes: rv ? rv.log.filter((l) => l.verdict === 'FIX').map((l) => ({ from: l.original, to: l.text, reason: l.reason })) : [],
+        cuts: rv ? rv.log.filter((l) => l.verdict === 'CUT').map((l) => ({ text: l.original, reason: l.reason })) : [],
       });
     }
   }

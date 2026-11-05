@@ -89,7 +89,8 @@ async function translate(t, v, ar, lang) {
   const out = cachePath(v, `write.${lang}`);
   if (fs.existsSync(out) && !A.force) { console.log(`skip ${t.key} ${lang} (exists)`); return; }
   console.log(`translate ${t.key} ${lang}`);
-  const { additions, words, writtenAt, model, ...src } = ar;
+  const { title, slug, summary, description, intro, sections, faq, keywords, system, brands, tags } = ar;
+  const src = { title, slug, summary, description, intro, sections, faq, keywords, system, brands, tags };
   const tr = await chat({ script: 'write', label: `${t.key} ${lang}`, messages: [{ role: 'system', content: TR_RULES(lang) }, { role: 'user', content: JSON.stringify(src) }] });
   writeJson(out, { topic: t.key, lang, mainId: t.main, otherIds: t.others || [], translatedFrom: 'ar', writtenAt: new Date().toISOString(), model: 'google/gemini-3.8-flash', ...tr });
 }
@@ -98,7 +99,10 @@ if (!topics.length) throw new Error('data/topics.json has no topics');
 for (const t of topics) {
   const v = videos.get(t.main);
   if (!v?.path) throw new Error(`no local file for main video ${t.main}`);
-  const ar = await writeArabic(t, v);
+  const draft = await writeArabic(t, v);
+  // Translations are made from the reviewed Arabic (scripts/review.js) when it exists.
+  const ar = readJson(cachePath(v, 'final.ar'), null) || draft;
+  if (langs.length > 1 && !ar.reviewed) console.warn(`  ! ${t.key}: translating an unreviewed draft — run review.js first`);
   for (const lang of langs.filter((l) => l !== 'ar')) await translate(t, v, ar, lang);
 }
 const spend = readJson(path.join(ROOT, 'data', 'spend.json'), { totalUsd: 0 });

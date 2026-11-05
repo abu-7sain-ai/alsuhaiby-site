@@ -4,8 +4,10 @@
 import fs from 'node:fs';
 import Base from '../layouts/Base.astro';
 type Row = {
-  slug: string; title: string; words: number; mainId: string; otherIds: string[]; views: number;
-  scores?: Record<string, number>; total?: number; notes?: string; additions: string[];
+  slug: string; title: string; words: number; wordsBefore?: number; mainId: string; otherIds: string[]; views: number;
+  scores?: Record<string, number>; total?: number; notes?: string; dialect?: string; answerFirst?: string;
+  counts?: { kept: number; fixed: number; cut: number; supported: number; units: number };
+  additions: string[]; fixes?: { from: string; to: string; reason: string }[]; cuts?: { text: string; reason: string }[];
 };
 const file = new URL('../../data/review.json', import.meta.url);
 const rows: Row[] = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : [];
@@ -23,19 +25,33 @@ const avg = rows.filter((r) => r.total).reduce((s, r, _, a) => s + (r.total ?? 0
   <div class="wrap wide">
     <h1 class="ptitle">مراجعة الصفحات</h1>
     <p>{rows.length} صفحة · متوسط الدرجة: <strong>{avg ? avg.toFixed(1) : '—'} / 60</strong> · كل بُعد من 10.</p>
-    <p class="note">«إضافة» = معلومة كتبها جمناي من عنده وما قالها محمد في الفيديو. تظهر هنا فقط، مو في الصفحة المنشورة.</p>
+    <p class="note">كل جملة ما قالها محمد في الفيديو راجعها «ميكانيكي خبير» (Claude Sonnet): «إضافة مؤكدة» = معلومة صحيحة بقت في المقال، «تصحيح» = انعادت صياغتها، «حذف» = انشالت (عند الشك نحذف). هالتفاصيل تظهر هنا فقط، مو في الصفحة المنشورة.</p>
     {rows.map((r, i) => (
       <section style="border-top:2px solid var(--fg);padding:20px 0;margin-top:20px">
         <h2 style="font-size:24px">{i + 1}. <a href={`/${r.slug}/`}>{r.title}</a></h2>
-        <p class="meta">{r.words} كلمة · {r.views.toLocaleString('en')} مشاهدة · فيديو أساسي {r.mainId}{r.otherIds.length > 0 && ` · فيديوهات أخرى: ${r.otherIds.length}`}</p>
+        <p class="meta">{r.wordsBefore ? `${r.wordsBefore} ← ` : ''}{r.words} كلمة · {r.views.toLocaleString('en')} مشاهدة · فيديو أساسي {r.mainId}{r.otherIds.length > 0 && ` · فيديوهات أخرى: ${r.otherIds.length}`}</p>
+        {r.counts && <p class="meta">المراجعة: مدعومة من الفيديو {r.counts.supported} · إضافة مؤكدة {r.counts.kept} · تصحيح {r.counts.fixed} · حذف {r.counts.cut}</p>}
         {r.scores ? (
           <p><strong>الدرجة: {r.total} / 60</strong> — {DIMS.map(([k, label]) => `${label}: ${r.scores![k] ?? '—'}`).join(' · ')}</p>
         ) : <p>الدرجة: لم تُقيَّم بعد</p>}
-        {r.notes && <p class="meta">ملاحظة المراجع: {r.notes}</p>}
+        {r.notes && <p class="meta" dir="ltr" style="text-align:left">Reviewer: {r.notes}</p>}
+        {(r.dialect || r.answerFirst) && <p class="meta" dir="ltr" style="text-align:left">Dialect: {r.dialect} · First two lines: {r.answerFirst}</p>}
         <details>
-          <summary style="cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center">إضافات ({r.additions.length})</summary>
+          <summary style="cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center">إضافات مؤكدة ({r.additions.length})</summary>
           <ul>{r.additions.map((a) => <li>إضافة: {a}</li>)}</ul>
         </details>
+        {r.fixes && r.fixes.length > 0 && (
+          <details>
+            <summary style="cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center">تصحيحات ({r.fixes.length})</summary>
+            <ul>{r.fixes.map((f) => <li><s>{f.from}</s><br />← {f.to}<br /><span class="meta" dir="ltr">{f.reason}</span></li>)}</ul>
+          </details>
+        )}
+        {r.cuts && r.cuts.length > 0 && (
+          <details>
+            <summary style="cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center">محذوفات ({r.cuts.length})</summary>
+            <ul>{r.cuts.map((c) => <li><s>{c.text}</s><br /><span class="meta" dir="ltr">{c.reason}</span></li>)}</ul>
+          </details>
+        )}
       </section>
     ))}
   </div>
