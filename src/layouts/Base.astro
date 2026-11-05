@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import { getCollection } from 'astro:content';
+import { LANGS, SITE, t, homeUrl, PERSON, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  path: string; // e.g. /about/
+  alternates?: { lang: Lang; url: string }[]; // translations of this page (hreflang)
+  ogImage?: string;
+  ogType?: string;
+  jsonLd?: object[];
+  noindex?: boolean;
+  current?: 'home' | 'topics' | 'about' | 'contact' | 'search';
+}
+
+const { lang, title, description, path, ogImage = '/og-default.jpg', ogType = 'website', jsonLd = [], noindex = false, current } = Astro.props;
+const L = LANGS[lang];
+const u = t(lang);
+
+// Languages appear in the switcher only when they have content (Phase 1: Arabic only).
+const all = await getCollection('videos');
+const langsWithContent = (Object.keys(LANGS) as Lang[]).filter((l) => l === 'ar' || all.some((e) => e.data.lang === l));
+const alternates = (Astro.props.alternates ?? [{ lang, url: path }]).filter((a) => langsWithContent.includes(a.lang));
+const switchTo = (l: Lang) => alternates.find((a) => a.lang === l)?.url ?? homeUrl(l);
+const canonical = new URL(path, SITE).href;
+const fullTitle = path === homeUrl(lang) ? `${PERSON[lang].name} | ${PERSON[lang].job}` : `${title} | ${PERSON[lang].name}`;
+const nav = [
+  { k: 'home', href: homeUrl(lang), label: u.home },
+  { k: 'topics', href: '/topics/', label: u.topics },
+  { k: 'search', href: '/search/', label: u.search },
+  { k: 'about', href: '/about/', label: u.about },
+  { k: 'contact', href: '/contact/', label: u.contact },
+];
+---
+<!doctype html>
+<html lang={lang} dir={L.dir}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {alternates.length > 1 && alternates.map((a) => <link rel="alternate" hreflang={LANGS[a.lang].hreflang} href={new URL(a.url, SITE).href} />)}
+    {alternates.length > 1 && <link rel="alternate" hreflang="x-default" href={new URL(alternates.find((a) => a.lang === 'ar')?.url ?? path, SITE).href} />}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, SITE).href} />
+    <meta property="og:locale" content={lang} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/tajawal-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {jsonLd.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap wide">
+        <a class="brand" href={homeUrl(lang)}>{PERSON[lang].name}</a>
+        <nav class="nav" aria-label={u.home}>
+          {nav.map((n) => <a href={n.href} aria-current={current === n.k ? 'page' : undefined}>{n.label}</a>)}
+        </nav>
+        {langsWithContent.length > 1 && (
+          <nav class="langs" aria-label={u.language}>
+            {langsWithContent.map((l) => <a href={switchTo(l)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>{LANGS[l].name}</a>)}
+          </nav>
+        )}
+      </div>
+    </header>
+    <main><slot /></main>
+    <footer class="foot">
+      <div class="wrap wide">
+        <span>{PERSON[lang].name} · {PERSON[lang].job} · {PERSON[lang].garage}</span>
+        <span><a href="https://www.tiktok.com/@m_alsuhaiby" rel="me">TikTok</a> · <a href="https://www.instagram.com/mohammad_alsuhaiby/" rel="me">Instagram</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

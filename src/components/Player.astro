@@ -1,0 +1,24 @@
+---
+// TikTok player: shows the cover first; the real player (from TikTok oEmbed: tiktok.com/player/v1/<id>) loads only on click.
+import { t, type Lang } from '../i18n';
+interface Props { id: string; cover: string; title: string; lang: Lang; eager?: boolean }
+const { id, cover, title, lang, eager = false } = Astro.props;
+---
+<div class="player" data-tiktok={id}>
+  <button type="button" aria-label={`${t(lang).watch}: ${title}`}>
+    <img src={cover} alt={title} width="576" height="1024" loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} decoding="async" />
+    <span class="play">▶ {t(lang).watch}</span>
+  </button>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('.player[data-tiktok]').forEach((el) => {
+    el.querySelector('button')?.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = `https://www.tiktok.com/player/v1/${el.dataset.tiktok}?autoplay=1&description=0&music_info=0&rel=0`;
+      f.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+      f.allowFullscreen = true;
+      f.title = 'TikTok';
+      el.replaceChildren(f);
+    });
+  });
+</script>

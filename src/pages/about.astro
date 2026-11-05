@@ -1,0 +1,42 @@
+---
+// About: written only from known facts (constitution + account data). Anything unconfirmed carries «يحتاج تأكيد» — remove the mark once Mohammad confirms.
+import Base from '../layouts/Base.astro';
+import { PERSON, SITE, SOCIAL } from '../i18n';
+const P = PERSON.ar;
+const media = [
+  { name: 'تلفزيون الكويت', note: 'ظهر فيه 5 مرات', confirm: false },
+  { name: 'مربع نت', note: '', confirm: false },
+  { name: 'القبس', note: '', confirm: false },
+  { name: 'الحقيقة', note: '', confirm: false },
+  { name: 'سارة نيوز', note: '', confirm: true },
+];
+const jsonLd = [{
+  '@context': 'https://schema.org', '@type': 'ProfilePage',
+  mainEntity: { '@type': 'Person', '@id': `${SITE}/about/#person`, name: P.name, alternateName: 'Mohammad Al-Suhaiby', jobTitle: P.job,
+    nationality: 'Kuwaiti', worksFor: { '@type': 'AutoRepair', name: P.garage, address: { '@type': 'PostalAddress', addressCountry: 'KW' } },
+    sameAs: [SOCIAL.tiktok, SOCIAL.instagram] },
+}];
+---
+<Base lang="ar" title={`عن ${P.name}`} description={`${P.name}، ${P.job} كويتي وصاحب ${P.garage} للسيارات الألمانية منذ 2022، يشرح أعطال السيارات بالعامية الكويتية.`} path="/about/" jsonLd={jsonLd} current="about">
+  <div class="wrap article">
+    <h1 class="ptitle">عن {P.name}</h1>
+    <div class="answer"><p>{P.name}، {P.job} من الكويت، وصاحب {P.garage} المتخصص بالسيارات الألمانية منذ 2022. يشرح أعطال السيارات بالعامية الكويتية على تيك توك وانستقرام.</p></div>
+
+    <h2>الكراج</h2>
+    <p>{P.garage} متخصص بصيانة وتصليح السيارات الألمانية، وفاتح من سنة 2022.</p>
+    <p class="note">موقع الكراج بالضبط ومواعيد الدوام: يحتاج تأكيد.</p>
+
+    <h2>المحتوى</h2>
+    <p>من سبتمبر 2022 ومحمد ينشر فيديوهات قصيرة عن أعطال السيارات وعلاماتها وأسبابها وشلون تتصرف، بلهجة كويتية يفهمها كل الخليج. في هالموقع كل فيديو مكتوب بالتفصيل عشان تلقى الجواب حتى لو ما تقدر تشغّل الصوت.</p>
+    <ul>
+      <li>تيك توك: <a href={SOCIAL.tiktok} rel="me">‎@m_alsuhaiby</a> — أكثر من 460 ألف متابع (أكتوبر 2026)</li>
+      <li>انستقرام: <a href={SOCIAL.instagram} rel="me">mohammad_alsuhaiby</a> — أكثر من 156 ألف متابع (أكتوبر 2026)</li>
+    </ul>
+
+    <h2>الظهور الإعلامي</h2>
+    <ul>
+      {media.map((m) => <li>{m.name}{m.note && ` — ${m.note}`}{m.confirm && ' (يحتاج تأكيد: الاسم)'}</li>)}
+    </ul>
+    <p class="note">روابط المقابلات والمقالات الصحفية: يحتاج تأكيد — تُضاف أول ما توصلنا.</p>
+  </div>
+</Base>

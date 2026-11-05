@@ -1,0 +1,12 @@
+---
+// Translated video pages: /en/<slug>/, /fr/<slug>/, /es/<slug>/, /ur/<slug>/ — generated only when that language has content.
+import { getCollection } from 'astro:content';
+import VideoPage from '../../components/VideoPage.astro';
+import { OTHER_LANGS } from '../../i18n';
+export async function getStaticPaths() {
+  const entries = await getCollection('videos', (e) => (OTHER_LANGS as string[]).includes(e.data.lang));
+  return entries.map((entry) => ({ params: { lang: entry.data.lang, slug: entry.data.slug }, props: { entry } }));
+}
+const { entry } = Astro.props;
+---
+<VideoPage entry={entry} />

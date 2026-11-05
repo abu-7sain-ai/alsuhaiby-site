@@ -1,0 +1,47 @@
+---
+// Internal search: a small JSON index (/search-index.json) searched in the browser. Matches title, summary, keywords, tags and FAQ.
+import Base from '../layouts/Base.astro';
+import { t } from '../i18n';
+const u = t('ar');
+---
+<Base lang="ar" title={u.search} description="اكتب العطل اللي في سيارتك وتلقى الفيديو والشرح المكتوب من محمد الصهيبي." path="/search/" current="search">
+  <div class="wrap">
+    <h1 class="ptitle">{u.search}</h1>
+    <form role="search" onsubmit="return false" style="margin:20px 0">
+      <label class="sr" for="q">{u.search}</label>
+      <input id="q" type="search" name="q" placeholder={u.searchPlaceholder} autocomplete="off" />
+    </form>
+    <div id="results" class="grid" aria-live="polite"></div>
+    <p id="empty" hidden>{u.noResults}</p>
+  </div>
+  <script>
+    type Item = { slug: string; title: string; summary: string; cover: string; views: number; text: string };
+    const norm = (s: string) => s.toLowerCase()
+      .replace(/[ً-ْـ]/g, '')
+      .replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/ؤ/g, 'و').replace(/ئ/g, 'ي');
+    const input = document.getElementById('q') as HTMLInputElement;
+    const out = document.getElementById('results')!;
+    const empty = document.getElementById('empty')!;
+    let items: Item[] = [];
+    const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+    function run() {
+      const words = norm(input.value).split(/\s+/).filter((w) => w.length > 1);
+      if (!words.length) { out.innerHTML = ''; empty.hidden = true; return; }
+      const scored = items.map((it) => {
+        const title = norm(it.title), text = norm(it.text);
+        let s = 0;
+        for (const w of words) { if (title.includes(w)) s += 3; else if (text.includes(w)) s += 1; }
+        return { it, s };
+      }).filter((x) => x.s > 0).sort((a, b) => b.s - a.s || b.it.views - a.it.views).slice(0, 12);
+      empty.hidden = scored.length > 0;
+      out.innerHTML = scored.map(({ it }) => `<a class="card" href="/${encodeURIComponent(it.slug)}/"><img src="${it.cover}" alt="" width="576" height="768" loading="lazy"><span class="t">${esc(it.title)}</span><span class="m">${esc(it.summary)}</span></a>`).join('');
+    }
+    fetch('/search-index.json').then((r) => r.json()).then((d) => {
+      items = d;
+      const q = new URLSearchParams(location.search).get('q');
+      if (q) input.value = q;
+      run();
+    });
+    input.addEventListener('input', run);
+  </script>
+</Base>

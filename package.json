@@ -1,0 +1,17 @@
+{
+  "name": "alsuhaiby-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host",
+    "build": "astro build",
+    "preview": "astro preview --host",
+    "analyze": "node scripts/analyze.js",
+    "write": "node scripts/write.js",
+    "build-pages": "node scripts/build-page.js"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.4.7"
+  }
+}

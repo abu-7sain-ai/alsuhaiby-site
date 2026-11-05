@@ -1,0 +1,41 @@
+---
+// Topics: grouped automatically by car system and by brand (from each page's frontmatter).
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Card from '../components/Card.astro';
+import { t } from '../i18n';
+const lang = 'ar';
+const u = t(lang);
+const entries = (await getCollection('videos', (e) => e.data.lang === lang)).sort((a, b) => b.data.views - a.data.views);
+const group = (key: (e: (typeof entries)[number]) => string[]) => {
+  const m = new Map<string, typeof entries>();
+  for (const e of entries) for (const k of key(e)) m.set(k, [...(m.get(k) ?? []), e]);
+  return [...m.entries()].sort((a, b) => b[1].length - a[1].length);
+};
+const systems = group((e) => [e.data.system]);
+const brands = group((e) => e.data.brands);
+---
+<Base lang={lang} title={u.allTopics} description="كل مواضيع فيديوهات محمد الصهيبي مرتبة حسب نظام السيارة والماركة: محرك، قير، مكيف، فرامل، كهرباء، تواير." path="/topics/" current="topics">
+  <div class="wrap wide">
+    <h1 class="ptitle">{u.allTopics}</h1>
+    <div class="tags">{systems.map(([s, l]) => <a class="tag" href={`#${encodeURIComponent(s)}`}>{s} ({l.length})</a>)}</div>
+    <h2 class="sechead">{u.bySystem}</h2>
+    {systems.map(([s, list]) => (
+      <section id={s}>
+        <h3 style="font-size:24px;margin:28px 0 12px">{s}</h3>
+        <div class="grid">{list.map((e) => <Card lang={lang} slug={e.data.slug} title={e.data.title} cover={e.data.cover} views={e.data.views} />)}</div>
+      </section>
+    ))}
+    {brands.length > 0 && (
+      <>
+        <h2 class="sechead">{u.byBrand}</h2>
+        {brands.map(([b, list]) => (
+          <section id={b}>
+            <h3 style="font-size:24px;margin:28px 0 12px">{b}</h3>
+            <div class="grid">{list.map((e) => <Card lang={lang} slug={e.data.slug} title={e.data.title} cover={e.data.cover} views={e.data.views} />)}</div>
+          </section>
+        ))}
+      </>
+    )}
+  </div>
+</Base>

@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Card from './Card.astro';
+import { t, homeUrl, PERSON, OTHER_LANGS, LANGS, SITE, SOCIAL, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const u = t(lang);
+const P = PERSON[lang];
+const entries = await getCollection('videos', (e) => e.data.lang === lang);
+const latest = [...entries].sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf()).slice(0, 8);
+// "Most searched topics": systems ordered by total views of their pages.
+const bySystem = new Map<string, number>();
+for (const e of entries) bySystem.set(e.data.system, (bySystem.get(e.data.system) ?? 0) + e.data.views);
+const topSystems = [...bySystem.entries()].sort((a, b) => b[1] - a[1]).map(([s]) => s);
+const popular = [...entries].sort((a, b) => b.data.views - a.data.views).slice(0, 8);
+const all = await getCollection('videos');
+const alternates = (['ar', ...OTHER_LANGS] as Lang[]).filter((l) => l === 'ar' || all.some((e) => e.data.lang === l)).map((l) => ({ lang: l, url: homeUrl(l) }));
+const intro = {
+  ar: `${P.name}، ${P.job} من الكويت وصاحب ${P.garage} المتخصص بالسيارات الألمانية. هنا كل فيديو من فيديوهاتي مكتوب بالتفصيل: العطل، أسبابه، وشلون تتصرف.`,
+  en: `${P.name}, a car mechanic from Kuwait and owner of ${P.garage}, specialised in German cars. Every video, written out in full: the problem, the causes and what to do.`,
+  fr: `${P.name}, mécanicien automobile au Koweït et propriétaire du ${P.garage}, spécialisé dans les voitures allemandes.`,
+  es: `${P.name}, mecánico de coches en Kuwait y dueño del ${P.garage}, especializado en coches alemanes.`,
+  ur: `${P.name}، کویت سے کار مکینک اور ${P.garage} کے مالک، جرمن گاڑیوں کے ماہر۔`,
+}[lang];
+const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: P.name, url: SITE + LANGS[lang].prefix + '/', inLanguage: lang,
+  potentialAction: { '@type': 'SearchAction', target: `${SITE}/search/?q={q}`, 'query-input': 'required name=q' } },
+  { '@context': 'https://schema.org', '@type': 'Person', '@id': `${SITE}/about/#person`, name: P.name, jobTitle: P.job, sameAs: [SOCIAL.tiktok, SOCIAL.instagram] }];
+---
+<Base lang={lang} title={P.name} description={intro} path={homeUrl(lang)} alternates={alternates} jsonLd={jsonLd} current="home">
+  <div class="wrap wide">
+    <section class="hero">
+      <h1 class="ptitle">{P.name}</h1>
+      <p>{intro}</p>
+      <form action="/search/" method="get" role="search">
+        <label class="sr" for="q">{u.search}</label>
+        <input id="q" type="search" name="q" placeholder={u.searchPlaceholder} />
+      </form>
+    </section>
+
+    <h2 class="sechead">{u.popular}</h2>
+    <div class="tags">{topSystems.map((s) => <a class="tag" href={`/topics/#${encodeURIComponent(s)}`}>{s}</a>)}</div>
+    <div class="grid">{popular.map((e) => <Card lang={lang} slug={e.data.slug} title={e.data.title} cover={e.data.cover} views={e.data.views} />)}</div>
+
+    <h2 class="sechead">{u.latest}</h2>
+    <div class="grid">{latest.map((e) => <Card lang={lang} slug={e.data.slug} title={e.data.title} cover={e.data.cover} views={e.data.views} />)}</div>
+  </div>
+</Base>

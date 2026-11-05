@@ -1,0 +1,42 @@
+---
+// Local review page (not for search engines): quality score on the six approved dimensions + every «إضافة»
+// (anything the article says that Mohammad did not say in the video). Data: data/review.json (written by scripts/build-page.js).
+import fs from 'node:fs';
+import Base from '../layouts/Base.astro';
+type Row = {
+  slug: string; title: string; words: number; mainId: string; otherIds: string[]; views: number;
+  scores?: Record<string, number>; total?: number; notes?: string; additions: string[];
+};
+const file = new URL('../../data/review.json', import.meta.url);
+const rows: Row[] = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : [];
+const DIMS: [string, string][] = [
+  ['fidelity', 'الأمانة لكلام الفيديو'],
+  ['dialect', 'اللهجة والنبرة'],
+  ['answerFirst', 'الجواب في أول سطرين'],
+  ['structure', 'كل سبب تحت عنوان'],
+  ['specificity', 'أرقام وتفاصيل محددة'],
+  ['noFluff', 'بدون حشو'],
+];
+const avg = rows.filter((r) => r.total).reduce((s, r, _, a) => s + (r.total ?? 0) / a.length, 0);
+---
+<Base lang="ar" title="مراجعة الصفحات" description="صفحة مراجعة داخلية" path="/review/" noindex>
+  <div class="wrap wide">
+    <h1 class="ptitle">مراجعة الصفحات</h1>
+    <p>{rows.length} صفحة · متوسط الدرجة: <strong>{avg ? avg.toFixed(1) : '—'} / 60</strong> · كل بُعد من 10.</p>
+    <p class="note">«إضافة» = معلومة كتبها جمناي من عنده وما قالها محمد في الفيديو. تظهر هنا فقط، مو في الصفحة المنشورة.</p>
+    {rows.map((r, i) => (
+      <section style="border-top:2px solid var(--fg);padding:20px 0;margin-top:20px">
+        <h2 style="font-size:24px">{i + 1}. <a href={`/${r.slug}/`}>{r.title}</a></h2>
+        <p class="meta">{r.words} كلمة · {r.views.toLocaleString('en')} مشاهدة · فيديو أساسي {r.mainId}{r.otherIds.length > 0 && ` · فيديوهات أخرى: ${r.otherIds.length}`}</p>
+        {r.scores ? (
+          <p><strong>الدرجة: {r.total} / 60</strong> — {DIMS.map(([k, label]) => `${label}: ${r.scores![k] ?? '—'}`).join(' · ')}</p>
+        ) : <p>الدرجة: لم تُقيَّم بعد</p>}
+        {r.notes && <p class="meta">ملاحظة المراجع: {r.notes}</p>}
+        <details>
+          <summary style="cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center">إضافات ({r.additions.length})</summary>
+          <ul>{r.additions.map((a) => <li>إضافة: {a}</li>)}</ul>
+        </details>
+      </section>
+    ))}
+  </div>
+</Base>
