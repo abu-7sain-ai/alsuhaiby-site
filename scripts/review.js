@@ -77,6 +77,7 @@ const PASS1 = `You are a skeptical Kuwaiti master mechanic with 25 years in a ga
 The article starts from his transcript and is EXPANDED ON PURPOSE with general automotive knowledge. That expansion is wanted: correct general knowledge is KEEP by default, even if he did not say it.
 The article is split into numbered units (sentences, headings, FAQ questions). Flag ONLY the units that need action:
 - FIX: the idea is right but a detail is wrong, exaggerated or too specific, OR the wording is literary / Modern Standard / not natural Kuwaiti-Gulf dialect. Give the corrected sentence in Arabic (same dialect, no new facts).
+  A FIX changes ONLY the wrong detail or the wording: it keeps every other correct detail of the sentence and stays about the same length (never under 75% of the original's words). Do not summarise or tighten in a FIX. If most of a sentence is wrong, CUT it instead.
 - CUT: factually WRONG and not fixable in one sentence, CONTRADICTS the video, invented prices / km or month intervals / statistics / brand-specific claims, pure filler or repetition of an earlier sentence, AI phrases («في عالم السيارات»، «لا شك»، «في الختام»...), on-video CTAs.
 Do NOT cut a sentence only because it is not in the transcript. Do NOT cut correct explanation to make the article shorter: the article must stay 800–1500 words.
 Summary units are the first two lines on the page: they must fully answer the question. Prefer FIX over CUT there.
@@ -140,6 +141,11 @@ for (const t of topics) {
     if (!u) continue;
     const verdict = String(vd.verdict).toUpperCase();
     if (verdict === 'CUT') u.cut = true;
+    if (verdict === 'FIX' && vd.fixed && u.text.split(/\s+/).length >= 8 && vd.fixed.split(/\s+/).length < 0.6 * u.text.split(/\s+/).length) {
+      // a "fix" that drops 40%+ of a sentence is a hidden cut: keep the original and log it for a human look
+      log.push({ id: u.id, where: u.where, verdict: 'SHRINK-REJECTED', text: vd.fixed, reason: `fix rejected (would shrink the sentence by 40%+): ${vd.reason}` });
+      continue;
+    }
     if (verdict === 'FIX' && vd.fixed) u.text = vd.fixed;
     log.push({ id: u.id, where: u.where, verdict, text: verdict === 'FIX' ? vd.fixed : u.text, reason: vd.reason });
   }
@@ -154,7 +160,7 @@ for (const t of topics) {
   const { article: final, applied, rejected } = applyEdits({ ...afterCuts, title: draft.title, description: draft.description }, p2.edits);
   if (rejected.length) console.log(`  rejected ${rejected.length} coherence edit(s) that would have cut text without logging it`);
   const fixedN = log.filter((l) => l.verdict === 'FIX').length, cutN = log.filter((l) => l.verdict === 'CUT').length;
-  const counts = { kept: units.length - fixedN - cutN, fixed: fixedN, cut: cutN, units: units.length };
+  const counts = { kept: units.length - fixedN - cutN, fixed: fixedN, cut: cutN, shrinkRejected: log.filter((l) => l.verdict === 'SHRINK-REJECTED').length, units: units.length };
   summary.kept += counts.kept; summary.fixed += counts.fixed; summary.cut += counts.cut;
   const finalWords = words(final);
   writeJson(logFile, {

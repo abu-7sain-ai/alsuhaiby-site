@@ -1,5 +1,5 @@
 {
-  "totalUsd": 3.769892,
+  "totalUsd": 8.50481,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -963,6 +963,1131 @@
       "promptTokens": 5501,
       "completionTokens": 5160,
       "costUsd": 0.062602
+    },
+    {
+      "at": "2026-11-06T06:21:01.227Z",
+      "script": "write",
+      "label": "shake-at-idle ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1251,
+      "completionTokens": 5729,
+      "costUsd": 0.022422
+    },
+    {
+      "at": "2026-11-06T06:21:30.360Z",
+      "script": "review",
+      "label": "shake-at-idle pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5427,
+      "completionTokens": 4471,
+      "costUsd": 0.055564
+    },
+    {
+      "at": "2026-11-06T06:21:46.376Z",
+      "script": "review",
+      "label": "shake-at-idle pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 3879,
+      "completionTokens": 2501,
+      "costUsd": 0.032768
+    },
+    {
+      "at": "2026-11-06T06:22:17.921Z",
+      "script": "write",
+      "label": "fuel-filling-mistakes ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1298,
+      "completionTokens": 2964,
+      "costUsd": 0.0120885
+    },
+    {
+      "at": "2026-11-06T06:23:05.218Z",
+      "script": "write",
+      "label": "fuel-filling-mistakes ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3468,
+      "completionTokens": 4791,
+      "costUsd": 0.02056725
+    },
+    {
+      "at": "2026-11-06T06:23:34.156Z",
+      "script": "review",
+      "label": "fuel-filling-mistakes pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6214,
+      "completionTokens": 4191,
+      "costUsd": 0.054338
+    },
+    {
+      "at": "2026-11-06T06:23:53.498Z",
+      "script": "review",
+      "label": "fuel-filling-mistakes pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 4418,
+      "completionTokens": 3122,
+      "costUsd": 0.040056
+    },
+    {
+      "at": "2026-11-06T06:24:20.813Z",
+      "script": "write",
+      "label": "wheel-alignment-signs ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1397,
+      "completionTokens": 3318,
+      "costUsd": 0.01349025
+    },
+    {
+      "at": "2026-11-06T06:24:58.817Z",
+      "script": "write",
+      "label": "wheel-alignment-signs ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3611,
+      "completionTokens": 4596,
+      "costUsd": 0.01994325
+    },
+    {
+      "at": "2026-11-06T06:25:44.519Z",
+      "script": "review",
+      "label": "wheel-alignment-signs pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5971,
+      "completionTokens": 6871,
+      "costUsd": 0.080652
+    },
+    {
+      "at": "2026-11-06T06:25:59.546Z",
+      "script": "review",
+      "label": "wheel-alignment-signs pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5594,
+      "completionTokens": 2525,
+      "costUsd": 0.036438
+    },
+    {
+      "at": "2026-11-06T06:26:46.503Z",
+      "script": "write",
+      "label": "fuel-pump-failure-signs ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1238,
+      "completionTokens": 4503,
+      "costUsd": 0.01781475
+    },
+    {
+      "at": "2026-11-06T06:27:24.382Z",
+      "script": "write",
+      "label": "fuel-pump-failure-signs ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3376,
+      "completionTokens": 4971,
+      "costUsd": 0.02117325
+    },
+    {
+      "at": "2026-11-06T06:27:59.991Z",
+      "script": "review",
+      "label": "fuel-pump-failure-signs pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6266,
+      "completionTokens": 5840,
+      "costUsd": 0.070932
+    },
+    {
+      "at": "2026-11-06T06:28:16.176Z",
+      "script": "review",
+      "label": "fuel-pump-failure-signs pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5201,
+      "completionTokens": 2728,
+      "costUsd": 0.037682
+    },
+    {
+      "at": "2026-11-06T06:28:52.657Z",
+      "script": "write",
+      "label": "engine-flush ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1339,
+      "completionTokens": 3537,
+      "costUsd": 0.014268
+    },
+    {
+      "at": "2026-11-06T06:29:31.784Z",
+      "script": "write",
+      "label": "engine-flush ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3641,
+      "completionTokens": 4975,
+      "costUsd": 0.021387
+    },
+    {
+      "at": "2026-11-06T06:29:58.923Z",
+      "script": "review",
+      "label": "engine-flush pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6210,
+      "completionTokens": 4228,
+      "costUsd": 0.0547
+    },
+    {
+      "at": "2026-11-06T06:30:15.700Z",
+      "script": "review",
+      "label": "engine-flush pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 4493,
+      "completionTokens": 2582,
+      "costUsd": 0.034806
+    },
+    {
+      "at": "2026-11-06T06:30:48.241Z",
+      "script": "write",
+      "label": "bad-driving-habits ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1295,
+      "completionTokens": 3794,
+      "costUsd": 0.01519875
+    },
+    {
+      "at": "2026-11-06T06:31:39.793Z",
+      "script": "write",
+      "label": "bad-driving-habits ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3653,
+      "completionTokens": 4913,
+      "costUsd": 0.0211635
+    },
+    {
+      "at": "2026-11-06T06:32:12.561Z",
+      "script": "review",
+      "label": "bad-driving-habits pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6033,
+      "completionTokens": 4883,
+      "costUsd": 0.060896
+    },
+    {
+      "at": "2026-11-06T06:32:24.129Z",
+      "script": "review",
+      "label": "bad-driving-habits pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 4284,
+      "completionTokens": 1564,
+      "costUsd": 0.024208
+    },
+    {
+      "at": "2026-11-06T06:33:14.639Z",
+      "script": "write",
+      "label": "shake-at-certain-speeds ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1271,
+      "completionTokens": 4480,
+      "costUsd": 0.01775325
+    },
+    {
+      "at": "2026-11-06T06:34:01.779Z",
+      "script": "write",
+      "label": "shake-at-certain-speeds ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3405,
+      "completionTokens": 5104,
+      "costUsd": 0.02169375
+    },
+    {
+      "at": "2026-11-06T06:34:33.873Z",
+      "script": "review",
+      "label": "shake-at-certain-speeds pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6186,
+      "completionTokens": 5293,
+      "costUsd": 0.065302
+    },
+    {
+      "at": "2026-11-06T06:34:57.105Z",
+      "script": "review",
+      "label": "shake-at-certain-speeds pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 4972,
+      "completionTokens": 4312,
+      "costUsd": 0.053064
+    },
+    {
+      "at": "2026-11-06T06:35:32.837Z",
+      "script": "write",
+      "label": "airbag-light-on ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1295,
+      "completionTokens": 3174,
+      "costUsd": 0.01287375
+    },
+    {
+      "at": "2026-11-06T06:36:21.093Z",
+      "script": "write",
+      "label": "airbag-light-on ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3245,
+      "completionTokens": 6078,
+      "costUsd": 0.02522625
+    },
+    {
+      "at": "2026-11-06T06:36:53.040Z",
+      "script": "review",
+      "label": "airbag-light-on pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5918,
+      "completionTokens": 5241,
+      "costUsd": 0.064246
+    },
+    {
+      "at": "2026-11-06T06:37:10.508Z",
+      "script": "review",
+      "label": "airbag-light-on pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 4471,
+      "completionTokens": 2781,
+      "costUsd": 0.036752
+    },
+    {
+      "at": "2026-11-06T06:38:03.974Z",
+      "script": "write",
+      "label": "gearbox-failing-signs ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1270,
+      "completionTokens": 3526,
+      "costUsd": 0.014175
+    },
+    {
+      "at": "2026-11-06T06:38:49.186Z",
+      "script": "write",
+      "label": "gearbox-failing-signs ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3710,
+      "completionTokens": 4042,
+      "costUsd": 0.01794
+    },
+    {
+      "at": "2026-11-06T06:39:38.286Z",
+      "script": "review",
+      "label": "gearbox-failing-signs pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6668,
+      "completionTokens": 7468,
+      "costUsd": 0.088016
+    },
+    {
+      "at": "2026-11-06T06:39:58.520Z",
+      "script": "review",
+      "label": "gearbox-failing-signs pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5980,
+      "completionTokens": 3363,
+      "costUsd": 0.04559
+    },
+    {
+      "at": "2026-11-06T06:40:37.776Z",
+      "script": "write",
+      "label": "ac-weak-cooling ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1232,
+      "completionTokens": 5009,
+      "costUsd": 0.01970775
+    },
+    {
+      "at": "2026-11-06T06:41:23.118Z",
+      "script": "write",
+      "label": "ac-weak-cooling ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3707,
+      "completionTokens": 5206,
+      "costUsd": 0.02230275
+    },
+    {
+      "at": "2026-11-06T06:41:59.488Z",
+      "script": "review",
+      "label": "ac-weak-cooling pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 7081,
+      "completionTokens": 5618,
+      "costUsd": 0.070342
+    },
+    {
+      "at": "2026-11-06T06:42:22.444Z",
+      "script": "review",
+      "label": "ac-weak-cooling pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6574,
+      "completionTokens": 4270,
+      "costUsd": 0.055848
+    },
+    {
+      "at": "2026-11-06T06:43:08.351Z",
+      "script": "write",
+      "label": "differential-failure-signs ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1367,
+      "completionTokens": 2622,
+      "costUsd": 0.01085775
+    },
+    {
+      "at": "2026-11-06T06:43:50.660Z",
+      "script": "write",
+      "label": "differential-failure-signs ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3229,
+      "completionTokens": 5307,
+      "costUsd": 0.022323
+    },
+    {
+      "at": "2026-11-06T06:44:17.660Z",
+      "script": "review",
+      "label": "differential-failure-signs pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5838,
+      "completionTokens": 4175,
+      "costUsd": 0.053426
+    },
+    {
+      "at": "2026-11-06T06:44:31.640Z",
+      "script": "review",
+      "label": "differential-failure-signs pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 3992,
+      "completionTokens": 2168,
+      "costUsd": 0.029664
+    },
+    {
+      "at": "2026-11-06T06:45:25.593Z",
+      "script": "write",
+      "label": "crankshaft-sensor-signs ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1218,
+      "completionTokens": 3991,
+      "costUsd": 0.01587975
+    },
+    {
+      "at": "2026-11-06T06:46:02.050Z",
+      "script": "write",
+      "label": "crankshaft-sensor-signs ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3590,
+      "completionTokens": 3862,
+      "costUsd": 0.017175
+    },
+    {
+      "at": "2026-11-06T06:46:33.620Z",
+      "script": "review",
+      "label": "crankshaft-sensor-signs pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6560,
+      "completionTokens": 4883,
+      "costUsd": 0.06195
+    },
+    {
+      "at": "2026-11-06T06:46:53.647Z",
+      "script": "review",
+      "label": "crankshaft-sensor-signs pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5065,
+      "completionTokens": 3590,
+      "costUsd": 0.04603
+    },
+    {
+      "at": "2026-11-06T06:47:27.999Z",
+      "script": "write",
+      "label": "car-myths ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1352,
+      "completionTokens": 4193,
+      "costUsd": 0.01673775
+    },
+    {
+      "at": "2026-11-06T06:48:20.586Z",
+      "script": "write",
+      "label": "car-myths ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3951,
+      "completionTokens": 4774,
+      "costUsd": 0.02086575
+    },
+    {
+      "at": "2026-11-06T06:49:09.009Z",
+      "script": "review",
+      "label": "car-myths pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6633,
+      "completionTokens": 7536,
+      "costUsd": 0.088626
+    },
+    {
+      "at": "2026-11-06T06:49:37.834Z",
+      "script": "review",
+      "label": "car-myths pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6001,
+      "completionTokens": 4941,
+      "costUsd": 0.061412
+    },
+    {
+      "at": "2026-11-06T06:50:06.113Z",
+      "script": "write",
+      "label": "oil-on-spark-plugs ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1239,
+      "completionTokens": 3858,
+      "costUsd": 0.01539675
+    },
+    {
+      "at": "2026-11-06T06:50:42.816Z",
+      "script": "write",
+      "label": "oil-on-spark-plugs ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3733,
+      "completionTokens": 4055,
+      "costUsd": 0.018006
+    },
+    {
+      "at": "2026-11-06T06:51:15.944Z",
+      "script": "review",
+      "label": "oil-on-spark-plugs pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6112,
+      "completionTokens": 5119,
+      "costUsd": 0.063414
+    },
+    {
+      "at": "2026-11-06T06:51:25.594Z",
+      "script": "review",
+      "label": "oil-on-spark-plugs pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5704,
+      "completionTokens": 1344,
+      "costUsd": 0.024848
+    },
+    {
+      "at": "2026-11-06T06:52:17.208Z",
+      "script": "write",
+      "label": "high-fuel-consumption ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1362,
+      "completionTokens": 5989,
+      "costUsd": 0.02348025
+    },
+    {
+      "at": "2026-11-06T06:53:01.141Z",
+      "script": "write",
+      "label": "high-fuel-consumption ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3862,
+      "completionTokens": 4614,
+      "costUsd": 0.020199
+    },
+    {
+      "at": "2026-11-06T06:53:37.211Z",
+      "script": "review",
+      "label": "high-fuel-consumption pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6596,
+      "completionTokens": 5602,
+      "costUsd": 0.069212
+    },
+    {
+      "at": "2026-11-06T06:53:51.618Z",
+      "script": "review",
+      "label": "high-fuel-consumption pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5129,
+      "completionTokens": 2343,
+      "costUsd": 0.033688
+    },
+    {
+      "at": "2026-11-06T06:54:29.551Z",
+      "script": "write",
+      "label": "weak-engine-power ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1215,
+      "completionTokens": 5025,
+      "costUsd": 0.019755
+    },
+    {
+      "at": "2026-11-06T06:55:12.983Z",
+      "script": "write",
+      "label": "weak-engine-power ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3834,
+      "completionTokens": 3760,
+      "costUsd": 0.0169755
+    },
+    {
+      "at": "2026-11-06T06:55:47.315Z",
+      "script": "review",
+      "label": "weak-engine-power pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6666,
+      "completionTokens": 5718,
+      "costUsd": 0.070512
+    },
+    {
+      "at": "2026-11-06T06:55:56.726Z",
+      "script": "review",
+      "label": "weak-engine-power pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5441,
+      "completionTokens": 1222,
+      "costUsd": 0.023102
+    },
+    {
+      "at": "2026-11-06T06:56:47.110Z",
+      "script": "write",
+      "label": "overheating ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1321,
+      "completionTokens": 3177,
+      "costUsd": 0.0129045
+    },
+    {
+      "at": "2026-11-06T06:57:28.789Z",
+      "script": "write",
+      "label": "overheating ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3415,
+      "completionTokens": 4141,
+      "costUsd": 0.01809
+    },
+    {
+      "at": "2026-11-06T06:58:01.319Z",
+      "script": "review",
+      "label": "overheating pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5874,
+      "completionTokens": 5337,
+      "costUsd": 0.065118
+    },
+    {
+      "at": "2026-11-06T06:58:21.620Z",
+      "script": "review",
+      "label": "overheating pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 4123,
+      "completionTokens": 3462,
+      "costUsd": 0.042866
+    },
+    {
+      "at": "2026-11-06T06:58:48.170Z",
+      "script": "write",
+      "label": "torque-converter-failure-signs ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1376,
+      "completionTokens": 3886,
+      "costUsd": 0.0156045
+    },
+    {
+      "at": "2026-11-06T06:59:18.368Z",
+      "script": "review",
+      "label": "torque-converter-failure-signs pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5610,
+      "completionTokens": 4891,
+      "costUsd": 0.06013
+    },
+    {
+      "at": "2026-11-06T06:59:35.589Z",
+      "script": "review",
+      "label": "torque-converter-failure-signs pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 4469,
+      "completionTokens": 2547,
+      "costUsd": 0.034408
+    },
+    {
+      "at": "2026-11-06T07:00:31.516Z",
+      "script": "write",
+      "label": "gearbox-filter-clogged ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1274,
+      "completionTokens": 4802,
+      "costUsd": 0.018963
+    },
+    {
+      "at": "2026-11-06T07:00:57.626Z",
+      "script": "write",
+      "label": "gearbox-filter-clogged ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3700,
+      "completionTokens": 3723,
+      "costUsd": 0.01673625
+    },
+    {
+      "at": "2026-11-06T07:01:26.996Z",
+      "script": "review",
+      "label": "gearbox-filter-clogged pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6449,
+      "completionTokens": 4585,
+      "costUsd": 0.058748
+    },
+    {
+      "at": "2026-11-06T07:01:39.904Z",
+      "script": "review",
+      "label": "gearbox-filter-clogged pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 4452,
+      "completionTokens": 2080,
+      "costUsd": 0.029704
+    },
+    {
+      "at": "2026-11-06T07:03:00.064Z",
+      "script": "write",
+      "label": "shake-at-idle ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1252,
+      "completionTokens": 4508,
+      "costUsd": 0.017844
+    },
+    {
+      "at": "2026-11-06T07:03:49.217Z",
+      "script": "write",
+      "label": "shake-at-idle ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 4132,
+      "completionTokens": 4310,
+      "costUsd": 0.0192615
+    },
+    {
+      "at": "2026-11-06T07:04:23.282Z",
+      "script": "review",
+      "label": "shake-at-idle pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 8757,
+      "completionTokens": 5258,
+      "costUsd": 0.070094
+    },
+    {
+      "at": "2026-11-06T07:04:39.808Z",
+      "script": "review",
+      "label": "shake-at-idle pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 7989,
+      "completionTokens": 2441,
+      "costUsd": 0.040388
+    },
+    {
+      "at": "2026-11-06T07:05:26.285Z",
+      "script": "write",
+      "label": "fuel-filling-mistakes ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1299,
+      "completionTokens": 4678,
+      "costUsd": 0.01851675
+    },
+    {
+      "at": "2026-11-06T07:06:22.430Z",
+      "script": "write",
+      "label": "fuel-filling-mistakes ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 4403,
+      "completionTokens": 5534,
+      "costUsd": 0.02405475
+    },
+    {
+      "at": "2026-11-06T07:06:54.452Z",
+      "script": "review",
+      "label": "fuel-filling-mistakes pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 7510,
+      "completionTokens": 4921,
+      "costUsd": 0.06423
+    },
+    {
+      "at": "2026-11-06T07:07:18.336Z",
+      "script": "review",
+      "label": "fuel-filling-mistakes pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 3969,
+      "completionTokens": 3964,
+      "costUsd": 0.047578
+    },
+    {
+      "at": "2026-11-06T07:08:02.786Z",
+      "script": "write",
+      "label": "engine-flush ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1340,
+      "completionTokens": 3720,
+      "costUsd": 0.014955
+    },
+    {
+      "at": "2026-11-06T07:08:45.866Z",
+      "script": "write",
+      "label": "engine-flush ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 4290,
+      "completionTokens": 4073,
+      "costUsd": 0.01849125
+    },
+    {
+      "at": "2026-11-06T07:09:22.090Z",
+      "script": "review",
+      "label": "engine-flush pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 7114,
+      "completionTokens": 5823,
+      "costUsd": 0.072458
+    },
+    {
+      "at": "2026-11-06T07:09:40.834Z",
+      "script": "review",
+      "label": "engine-flush pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5344,
+      "completionTokens": 3181,
+      "costUsd": 0.042498
+    },
+    {
+      "at": "2026-11-06T07:10:32.656Z",
+      "script": "write",
+      "label": "bad-driving-habits ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1296,
+      "completionTokens": 3784,
+      "costUsd": 0.015162
+    },
+    {
+      "at": "2026-11-06T07:11:17.446Z",
+      "script": "write",
+      "label": "bad-driving-habits ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3884,
+      "completionTokens": 5295,
+      "costUsd": 0.02276925
+    },
+    {
+      "at": "2026-11-06T07:12:03.335Z",
+      "script": "review",
+      "label": "bad-driving-habits pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6785,
+      "completionTokens": 6900,
+      "costUsd": 0.08257
+    },
+    {
+      "at": "2026-11-06T07:12:17.506Z",
+      "script": "review",
+      "label": "bad-driving-habits pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6313,
+      "completionTokens": 2169,
+      "costUsd": 0.034316
+    },
+    {
+      "at": "2026-11-06T07:13:11.229Z",
+      "script": "write",
+      "label": "airbag-light-on ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1296,
+      "completionTokens": 5404,
+      "costUsd": 0.021237
+    },
+    {
+      "at": "2026-11-06T07:14:22.443Z",
+      "script": "write",
+      "label": "airbag-light-on ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3849,
+      "completionTokens": 8622,
+      "costUsd": 0.03521925
+    },
+    {
+      "at": "2026-11-06T07:14:53.482Z",
+      "script": "review",
+      "label": "airbag-light-on pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6518,
+      "completionTokens": 4644,
+      "costUsd": 0.059476
+    },
+    {
+      "at": "2026-11-06T07:15:07.996Z",
+      "script": "review",
+      "label": "airbag-light-on pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 3857,
+      "completionTokens": 2115,
+      "costUsd": 0.028864
+    },
+    {
+      "at": "2026-11-06T07:15:53.549Z",
+      "script": "write",
+      "label": "differential-failure-signs ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1370,
+      "completionTokens": 2962,
+      "costUsd": 0.012135
+    },
+    {
+      "at": "2026-11-06T07:16:42.938Z",
+      "script": "write",
+      "label": "differential-failure-signs ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3852,
+      "completionTokens": 5280,
+      "costUsd": 0.022689
+    },
+    {
+      "at": "2026-11-06T07:17:17.674Z",
+      "script": "review",
+      "label": "differential-failure-signs pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 7324,
+      "completionTokens": 5198,
+      "costUsd": 0.066628
+    },
+    {
+      "at": "2026-11-06T07:17:37.093Z",
+      "script": "review",
+      "label": "differential-failure-signs pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6996,
+      "completionTokens": 3279,
+      "costUsd": 0.046782
+    },
+    {
+      "at": "2026-11-06T07:18:08.272Z",
+      "script": "write",
+      "label": "overheating ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1322,
+      "completionTokens": 3837,
+      "costUsd": 0.01538025
+    },
+    {
+      "at": "2026-11-06T07:18:56.508Z",
+      "script": "write",
+      "label": "overheating ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3673,
+      "completionTokens": 4698,
+      "costUsd": 0.02037225
+    },
+    {
+      "at": "2026-11-06T07:19:33.152Z",
+      "script": "review",
+      "label": "overheating pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6532,
+      "completionTokens": 5563,
+      "costUsd": 0.068694
+    },
+    {
+      "at": "2026-11-06T07:20:03.955Z",
+      "script": "review",
+      "label": "overheating pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5848,
+      "completionTokens": 5678,
+      "costUsd": 0.068476
+    },
+    {
+      "at": "2026-11-06T07:21:08.942Z",
+      "script": "write",
+      "label": "torque-converter-failure-signs ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1377,
+      "completionTokens": 5154,
+      "costUsd": 0.02036025
+    },
+    {
+      "at": "2026-11-06T07:21:44.403Z",
+      "script": "review",
+      "label": "torque-converter-failure-signs pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6496,
+      "completionTokens": 5439,
+      "costUsd": 0.067382
+    },
+    {
+      "at": "2026-11-06T07:22:08.886Z",
+      "script": "review",
+      "label": "torque-converter-failure-signs pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 4665,
+      "completionTokens": 3693,
+      "costUsd": 0.04626
+    },
+    {
+      "at": "2026-11-06T07:22:52.400Z",
+      "script": "write",
+      "label": "gearbox-filter-clogged ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1275,
+      "completionTokens": 2797,
+      "costUsd": 0.011445
+    },
+    {
+      "at": "2026-11-06T07:23:38.215Z",
+      "script": "write",
+      "label": "gearbox-filter-clogged ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3772,
+      "completionTokens": 4041,
+      "costUsd": 0.01798275
+    },
+    {
+      "at": "2026-11-06T07:24:06.531Z",
+      "script": "review",
+      "label": "gearbox-filter-clogged pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6078,
+      "completionTokens": 4460,
+      "costUsd": 0.056756
+    },
+    {
+      "at": "2026-11-06T07:24:20.734Z",
+      "script": "review",
+      "label": "gearbox-filter-clogged pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 4429,
+      "completionTokens": 2167,
+      "costUsd": 0.030528
+    },
+    {
+      "at": "2026-11-06T07:25:51.463Z",
+      "script": "write",
+      "label": "shake-at-idle ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1252,
+      "completionTokens": 3405,
+      "costUsd": 0.01370775
+    },
+    {
+      "at": "2026-11-06T07:26:32.129Z",
+      "script": "write",
+      "label": "shake-at-idle ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3921,
+      "completionTokens": 4269,
+      "costUsd": 0.0189495
+    },
+    {
+      "at": "2026-11-06T07:27:11.177Z",
+      "script": "review",
+      "label": "shake-at-idle pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 8833,
+      "completionTokens": 6639,
+      "costUsd": 0.084056
+    },
+    {
+      "at": "2026-11-06T07:27:25.559Z",
+      "script": "review",
+      "label": "shake-at-idle pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 7648,
+      "completionTokens": 2157,
+      "costUsd": 0.036866
+    },
+    {
+      "at": "2026-11-06T07:28:08.174Z",
+      "script": "review",
+      "label": "fuel-filling-mistakes pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 7602,
+      "completionTokens": 6760,
+      "costUsd": 0.082804
+    },
+    {
+      "at": "2026-11-06T07:28:24.539Z",
+      "script": "review",
+      "label": "fuel-filling-mistakes pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 4790,
+      "completionTokens": 2609,
+      "costUsd": 0.03567
+    },
+    {
+      "at": "2026-11-06T07:28:59.525Z",
+      "script": "review",
+      "label": "airbag-light-on pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6610,
+      "completionTokens": 5992,
+      "costUsd": 0.07314
+    },
+    {
+      "at": "2026-11-06T07:29:20.921Z",
+      "script": "review",
+      "label": "airbag-light-on pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5340,
+      "completionTokens": 3903,
+      "costUsd": 0.04971
+    },
+    {
+      "at": "2026-11-06T07:29:57.416Z",
+      "script": "review",
+      "label": "torque-converter-failure-signs pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6588,
+      "completionTokens": 5925,
+      "costUsd": 0.072426
+    },
+    {
+      "at": "2026-11-06T07:30:19.261Z",
+      "script": "review",
+      "label": "torque-converter-failure-signs pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5199,
+      "completionTokens": 3617,
+      "costUsd": 0.046568
+    },
+    {
+      "at": "2026-11-06T07:30:53.292Z",
+      "script": "review",
+      "label": "gearbox-filter-clogged pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6170,
+      "completionTokens": 5724,
+      "costUsd": 0.06958
+    },
+    {
+      "at": "2026-11-06T07:31:10.098Z",
+      "script": "review",
+      "label": "gearbox-filter-clogged pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 5165,
+      "completionTokens": 2493,
+      "costUsd": 0.03526
+    },
+    {
+      "at": "2026-11-06T07:31:54.197Z",
+      "script": "write",
+      "label": "fuel-filling-mistakes ar",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1299,
+      "completionTokens": 3226,
+      "costUsd": 0.01307175
+    },
+    {
+      "at": "2026-11-06T07:32:48.837Z",
+      "script": "write",
+      "label": "fuel-filling-mistakes ar (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3802,
+      "completionTokens": 3721,
+      "costUsd": 0.01680525
+    },
+    {
+      "at": "2026-11-06T07:33:28.926Z",
+      "script": "review",
+      "label": "fuel-filling-mistakes pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 7499,
+      "completionTokens": 6086,
+      "costUsd": 0.075858
+    },
+    {
+      "at": "2026-11-06T07:33:54.036Z",
+      "script": "review",
+      "label": "fuel-filling-mistakes pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6623,
+      "completionTokens": 4515,
+      "costUsd": 0.058396
     }
   ]
 }

@@ -37,7 +37,7 @@ STRUCTURE AND SEO:
 - slug: 3–6 Arabic words from the title joined with "-", no digits, no punctuation.
 - intro: 1 short paragraph (40–80 words) after the summary, no repetition of the summary.
 - sections: one per cause/sign/step he mentioned (+ optionally one «متى توديها الكراج؟» section). heading = short (2–6 words) and specific. body = 130–230 words, plain paragraphs separated by \\n\\n, may contain a short "- " list.
-- The whole article (summary + intro + sections) must be 800–1500 Arabic words.
+- The whole article (summary + intro + sections) must be 1150–1400 Arabic words.
 - faq: 3–5 questions written exactly the way people ask in Gulf dialect (as in comments and Google searches); the FIRST sentence of each answer is the direct answer; answers 25–60 words.
 - keywords: 3–5 search phrases (mix فصحى and عامية), used naturally in title, summary and FAQ without stuffing.
 - system: exactly one of: ${SYSTEMS}.
@@ -76,9 +76,9 @@ async function writeArabic(t, v) {
   const messages = [{ role: 'system', content: AR_RULES }, { role: 'user', content: `Topic: ${t.key}\n\n${sourceBlock(t)}` }];
   let a = await chat({ script: 'write', label: `${t.key} ar`, messages });
   let words = articleWords(a);
-  if (words < 850 || words > 1500) {
-    console.log(`  ${words} words — asking for a ${words < 800 ? 'longer' : 'shorter'} version`);
-    messages.push({ role: 'assistant', content: JSON.stringify(a) }, { role: 'user', content: `The article is ${words} words. Rewrite it to 1000–1300 words following every rule: expand each section with correct general explanation (how to check it, what the fix is), never padding or repeating. Return the full JSON again.` });
+  if (words < 1050 || words > 1500) { // the error review trims ~15–30%, so drafts aim high to stay 800–1500 after it
+    console.log(`  ${words} words — asking for a ${words < 1050 ? 'longer' : 'shorter'} version`);
+    messages.push({ role: 'assistant', content: JSON.stringify(a) }, { role: 'user', content: `The article is ${words} words. Rewrite it to 1150–1400 words following every rule: expand each section with correct general explanation (how to check it, what the fix is), never padding or repeating. Return the full JSON again.` });
     a = await chat({ script: 'write', label: `${t.key} ar (resize)`, messages });
     words = articleWords(a);
   }
