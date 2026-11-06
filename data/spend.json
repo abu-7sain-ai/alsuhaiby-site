@@ -1,5 +1,5 @@
 {
-  "totalUsd": 8.519942,
+  "totalUsd": 8.526807,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -2176,6 +2176,65 @@
       "completionTokens": 2932,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.11918400000000001
+    },
+    {
+      "at": "2026-11-06T20:27:18.677Z",
+      "script": "night",
+      "label": "7310650628898917640 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 2279,
+      "completionTokens": 1375,
+      "costUsd": 0.0068655
+    },
+    {
+      "at": "2026-11-06T20:27:27.679Z",
+      "script": "night",
+      "label": "7310650628898917640 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 414,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.049128
+    },
+    {
+      "at": "2026-11-06T20:29:13.030Z",
+      "script": "night",
+      "label": "tk-7310650628898917640 write",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 9776,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2072024
+    },
+    {
+      "at": "2026-11-06T20:30:19.239Z",
+      "script": "night",
+      "label": "tk-7310650628898917640 write (resize)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 8435,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2202064
+    },
+    {
+      "at": "2026-11-06T20:30:40.616Z",
+      "script": "night",
+      "label": "tk-7310650628898917640 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1495,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0862894
+    },
+    {
+      "at": "2026-11-06T20:31:12.192Z",
+      "script": "night",
+      "label": "tk-7310650628898917640 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 3450,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.11763000000000001
     }
   ]
 }
