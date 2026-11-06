@@ -53,6 +53,15 @@ Every step: `guard()` records the run in data/status.json and sends ⚠️ to Te
 Bing: DONE via IndexNow — all 25 URLs submitted (HTTP 202); key file at /<key>.txt (data/indexnow-key.txt). No Bing Webmaster account needed.
 UptimeRobot: monitor on https://alsuhaiby.com every 5 min with EMAIL alerts.
 
+## Phase 3 acceptance (2026-11-06/07)
+1. Dry runs: `npm run night -- --dry-run` ✅ · cloud "Run workflow" dry run ✅ (library checkout, Zernio found 1 new video, queue seen).
+2. Night run (real, 5 videos): 1 merged into «سيارتي ترجف وهي واقفة», 3 queued (scores 48–49/60, ~1,070–1,150 words), 1 first skipped then re-checked after the skip rule was loosened (buying advice counts). 0 failures. Claude calls ran on the subscription.
+3. Cloud run (real): published 3 pages, astro build check passed, IndexNow 202, all live with their R2 videos:
+   - https://alsuhaiby.com/تبي-سيارة-توفر-بنزين-أفضل-سيارات/
+   - https://alsuhaiby.com/القير-يتأخر-ويخبط-بالتبديل/
+   - https://alsuhaiby.com/علامات-تلف-صينية-القير-العادي/
+4. Cost guard tripped as designed: today's spend $8.53 (Phase 1b work earlier the same day) > $2 → the new TikTok video waits for the next run (02:00, new day).
+
 ## Security log
 - 2026-11-06: the Cloudflare DNS token pasted in chat was rolled. New value in .env verified (DNS read OK); the old value is rejected by Cloudflare ("Invalid API Token").
 
@@ -61,4 +70,6 @@ UptimeRobot: monitor on https://alsuhaiby.com every 5 min with EMAIL alerts.
 - UptimeRobot: email alerts only. Telegram alert contact not added (needs a dashboard sign-in; unclear if Telegram is in the free plan's 5 integrations).
 - Garage WhatsApp + location: empty in config/site.json (pages show «[يُعبّى يدويًا]»).
 - Translations: ready, not generated (`node scripts/write.js --langs ar,en,fr,es,ur` then build-page).
-- Archive: 687 videos left at the start of Phase 3 (true count from the ledger), handled by `npm run night`.
+- Archive: 683 videos left (true count from the ledger), handled by `npm run night`. The queue is EMPTY after the test: run `npm run night` or the 02:00 run sends ⚠️ «الطابور فاضي».
+- Cloud download of NEW videos (yt-dlp on GitHub's servers) not proven yet: the first new video was held by the cost guard. If TikTok blocks it, the video is marked failed and the night run takes it.
+- `review.ar.json` → `factCheck` note: Claude sometimes leaves it empty (the verdicts and notes are there).
