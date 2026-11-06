@@ -9,7 +9,10 @@
 6. Status lives in `data/status.json` (read in Claude chat), not on a page. "next scheduled run: not set (Phase 3)".
 7. Alerts go one-way to the Reels app's «مجموعة التنبيهات» Telegram group (same bot).
 8. Uptime: UptimeRobot free, every 5 minutes, email alerts (Telegram not added).
-9. Bing gets URLs through IndexNow (no login) in addition to Bing Webmaster.
+9. Bing gets URLs through IndexNow (no login); no Bing Webmaster account.
+10. Google Search Console: Domain property, verified by DNS TXT; sitemap-index.xml accepted.
+11. DNS changes go through the Cloudflare API with a Zone:DNS:Edit token for alsuhaiby.com only (CLOUDFLARE_API_TOKEN in .env, scripts/lib/dns.js). Tokens are never pasted in chat.
+12. Phase 2 closed 2026-11-06.
 
 ## 2026-11-06 — writing (Phase 1b)
 1. One video → one long article (800–1500 words): the transcript is the starting point, expanded with correct general knowledge.
