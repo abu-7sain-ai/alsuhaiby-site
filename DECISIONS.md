@@ -8,7 +8,7 @@
 5. `config/site.json` holds user-editable settings; the advisor edits it on GitHub.
 6. Status lives in `data/status.json` (read in Claude chat), not on a page. "next scheduled run: not set (Phase 3)".
 7. Alerts go one-way to the Reels app's «مجموعة التنبيهات» Telegram group (same bot).
-8. Uptime: UptimeRobot free, every 5 minutes; email alerts (Telegram if the free plan allows it).
+8. Uptime: UptimeRobot free, every 5 minutes, email alerts (Telegram not added).
 9. Bing gets URLs through IndexNow (no login) in addition to Bing Webmaster.
 
 ## 2026-11-06 — writing (Phase 1b)

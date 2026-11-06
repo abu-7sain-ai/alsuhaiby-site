@@ -30,18 +30,20 @@ Every step: `guard()` records the run in data/status.json and sends ⚠️ to Te
 
 ## Alerts and monitoring
 - Telegram: `scripts/lib/telegram.py` → the Reels app's «مجموعة التنبيهات» group (✅ published, ⚠️ failure / low credit / catch-up run).
-- UptimeRobot: monitor on https://alsuhaiby.com every 5 minutes (account Abu.7sain.ai@gmail.com).
+- UptimeRobot: monitor on https://alsuhaiby.com every 5 minutes, email alerts (account Abu.7sain.ai@gmail.com).
 
 ## Phase 2 acceptance (2026-11-06)
 1. Speed (Lighthouse mobile, simulated slow 4G, live domain): home 99 · LCP 2.0 s; video page 99 · LCP 1.9 s; topics 99 · LCP 1.9 s. Real phone check on mobile data: pending (Mohammad).
 2. Video page plays from R2 in the clean player (no iframe; range requests 206). ✅
-3. Search Console verified + sitemap: PENDING — needs a Google sign-in inside Claude's built-in browser (Chrome's own profile cannot be automated).
+3. Search Console: Domain property alsuhaiby.com added (by Mohammad). Verification TXT `google-site-verification=kv_WER5KR1SnBkkW3YsflKHnW-U5Y8sHOZ8VOJRM-Pw` must be on the root of alsuhaiby.com (wrangler's login has no DNS permission, so it is added in the Cloudflare dashboard). Then «Verify» and submit `sitemap-index.xml`.
 4. Telegram test ✅ sent to «مجموعة التنبيهات» (scripts/lib/status.js --test-alert).
 5. Push to main → Cloudflare deployed by itself 24 s later. ✅
-Bing: all 25 URLs submitted via IndexNow (202). Bing Webmaster import from Google: pending with item 3.
-UptimeRobot: monitor exists (email alerts); Telegram contact pending the same sign-in.
+Bing: DONE via IndexNow — all 25 URLs submitted (HTTP 202); key file at /<key>.txt (data/indexnow-key.txt). No Bing Webmaster account needed.
+UptimeRobot: monitor on https://alsuhaiby.com every 5 min with EMAIL alerts.
 
 ## Open items
+- UptimeRobot: email alerts only. Telegram alert contact not added (needs a dashboard sign-in; unclear if Telegram is in the free plan's 5 integrations).
+- After each publish, re-submit new URLs to IndexNow (Phase 3 automates this).
 - Scheduler (automatic pull of new videos) = Phase 3; status shows "not set (Phase 3)".
 - Garage WhatsApp + location: empty in config/site.json (pages show «[يُعبّى يدويًا]»).
 - Translations: ready, not generated (`node scripts/write.js --langs ar,en,fr,es,ur` then build-page).
