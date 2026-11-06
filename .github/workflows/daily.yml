@@ -1,0 +1,92 @@
+# LINE 2 — daily publish in the cloud (no PC needed). See NOTES.md → "Daily pipeline".
+#   02:00 Kuwait (23:00 UTC): new TikTok videos end-to-end + publish N pages from queue/ + ONE Telegram summary.
+#   05:00 Kuwait (02:00 UTC): if the 02:00 run did not happen → ⚠️ + catch-up run.
+#   "Run workflow" button: manual run (dry run by default).
+name: daily publish
+
+on:
+  schedule:
+    - cron: '0 23 * * *'
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (no paid calls, nothing moved, pushed or sent)'
+        type: boolean
+        default: true
+      publish:
+        description: 'Pages to publish from the queue (empty = publishPerDay in config/site.json)'
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-publish
+  cancel-in-progress: false
+
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Private library (transcripts, articles, ledger)
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          repository: abu-7sain-ai/alsuhaiby-library
+          ssh-key: ${{ secrets.LIBRARY_DEPLOY_KEY }}
+          path: library
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Tools (yt-dlp, ffmpeg)
+        run: |
+          python -m pip install -q -U yt-dlp
+          command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+
+      - run: npm ci --no-audit --no-fund
+
+      - name: Git identity
+        run: |
+          for d in . library; do
+            git -C "$d" config user.name "alsuhaiby daily"
+            git -C "$d" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          done
+
+      - name: Run
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 8dd3c64c063798c9be9352f2b56f6f39
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          ZERNIO_API_KEY: ${{ secrets.ZERNIO_API_KEY }}
+          LIB_DIR: ${{ github.workspace }}/library
+          DOWNLOAD_DIR: ${{ runner.temp }}/videos
+          VIDEO_DIR: ${{ runner.temp }}/none
+        run: |
+          ARGS=""
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "0 2 * * *" ]; then ARGS="--check"; fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            [ "${{ inputs.dry_run }}" = "true" ] && ARGS="--dry-run"
+            [ -n "${{ inputs.publish }}" ] && ARGS="$ARGS --publish ${{ inputs.publish }}"
+          fi
+          node scripts/daily.js $ARGS
+
+      - name: Alert if the job itself broke
+        if: failure()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: test -f "$RUNNER_TEMP/alerted" || python -X utf8 scripts/lib/telegram.py "⚠️ alsuhaiby.com: فشل تشغيل النشر اليومي في GitHub — ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
