@@ -1,0 +1,9 @@
+{
+  "_help": "Settings the site reads at build time. Edit on GitHub; a push to main redeploys. Empty value = the page shows «[يُعبّى يدويًا]».",
+  "garage": {
+    "whatsapp": "",
+    "location": ""
+  },
+  "languages": ["ar", "en", "fr", "es", "ur"],
+  "mediaBase": "https://media.alsuhaiby.com"
+}

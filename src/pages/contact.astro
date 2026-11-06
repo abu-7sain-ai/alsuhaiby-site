@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { PERSON, SOCIAL, GARAGE } from '../i18n';
 const P = PERSON.ar;
-const WHATSAPP = GARAGE.whatsapp; // set in src/i18n.ts
+const WHATSAPP = GARAGE.whatsapp; // set in config/site.json
 ---
 <Base lang="ar" title="تواصل" description={`تواصل مع ${P.garage} عن طريق واتساب الكراج، أو تابع ${P.name} على تيك توك وانستقرام.`} path="/contact/" current="contact">
   <div class="wrap article">

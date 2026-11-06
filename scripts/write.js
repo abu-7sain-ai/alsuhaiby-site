@@ -6,6 +6,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, LANGS, args, videoIndex, cachePath, readJson, writeJson, chat, wordCount } from './lib/common.js';
+import { guard } from './lib/status.js';
+guard('write');
 
 const A = args();
 const langs = String(A.langs || 'ar').split(',').map((s) => s.trim()).filter(Boolean);

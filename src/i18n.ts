@@ -11,7 +11,15 @@ export const LANGS: Record<Lang, { dir: 'rtl' | 'ltr'; name: string; prefix: str
   ur: { dir: 'rtl', name: 'اردو', prefix: '/ur', hreflang: 'ur' },
 };
 
-export const OTHER_LANGS: Lang[] = ['en', 'fr', 'es', 'ur'];
+// User-editable settings (config/site.json): garage contact, enabled languages, video host.
+import SITE_CONFIG from '../config/site.json';
+export const CONFIG = SITE_CONFIG as { garage: { whatsapp: string; location: string }; languages: string[]; mediaBase: string };
+
+// Languages other than Arabic that are switched on in config/site.json (a language also needs content to get pages).
+export const OTHER_LANGS: Lang[] = (['en', 'fr', 'es', 'ur'] as Lang[]).filter((l) => CONFIG.languages.includes(l));
+
+// Mohammad's own MP4s on Cloudflare R2 (uploaded by scripts/build-page.js): <mediaBase>/<tiktokId>.mp4
+export const videoSrc = (tiktokId: string) => `${CONFIG.mediaBase}/${tiktokId}.mp4`;
 
 // Identity: the exact same wording everywhere (constitution section 4).
 export const PERSON = {
@@ -27,11 +35,8 @@ export const SOCIAL = {
   instagram: 'https://www.instagram.com/mohammad_alsuhaiby/',
 };
 
-// Filled in by hand (empty = the page shows «[يُعبّى يدويًا]»). Only the garage number is published, never a personal one.
-export const GARAGE = {
-  location: '', // e.g. the area + a Google Maps link
-  whatsapp: '', // digits only with country code, e.g. 965XXXXXXXX
-};
+// Filled in config/site.json (empty = the page shows «[يُعبّى يدويًا]»). Only the garage number is published, never a personal one.
+export const GARAGE = { location: CONFIG.garage.location.trim(), whatsapp: CONFIG.garage.whatsapp.replace(/\D/g, '') };
 
 const UI = {
   ar: {

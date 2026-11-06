@@ -3,8 +3,8 @@ import { SITE } from '../i18n';
 const bots = ['Googlebot', 'Bingbot', 'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'Google-Extended', 'PerplexityBot'];
 export function GET() {
   const body = [
-    ...bots.flatMap((b) => [`User-agent: ${b}`, 'Allow: /', 'Disallow: /review/', '']),
-    'User-agent: *', 'Allow: /', 'Disallow: /review/', '',
+    ...bots.flatMap((b) => [`User-agent: ${b}`, 'Allow: /', '']),
+    'User-agent: *', 'Allow: /', '',
     `Sitemap: ${SITE}/sitemap-index.xml`, '',
   ].join('\n');
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });

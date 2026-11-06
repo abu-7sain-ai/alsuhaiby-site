@@ -1,0 +1,33 @@
+{
+  "errors": [],
+  "lastRun": {
+    "script": "build-page",
+    "at": "2026-11-06T11:39:27.037Z",
+    "ok": true
+  },
+  "updatedAt": "2026-11-06T11:39:27.674Z",
+  "nextScheduledRun": "not set (Phase 3)",
+  "pagesPublished": {
+    "total": 20,
+    "byLang": {
+      "ar": 20
+    }
+  },
+  "videosProcessed": 50,
+  "videosOnR2": 34,
+  "openRouterSpendUsd": {
+    "total": 8.505,
+    "last30Days": 8.505
+  },
+  "keyCreditLeftUsd": {
+    "usd": 6.5,
+    "source": "key limit"
+  },
+  "siteHealth": {
+    "at": "2026-11-06T11:39:27.674Z",
+    "url": "https://alsuhaiby.com/",
+    "up": false,
+    "error": "fetch failed"
+  },
+  "alerts": {}
+}

@@ -6,6 +6,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, OLD_ANALYSES, args, videoIndex, cachePath, readJson, writeJson, chat } from './lib/common.js';
+import { guard } from './lib/status.js';
+guard('analyze');
 
 const A = args();
 const videos = videoIndex();

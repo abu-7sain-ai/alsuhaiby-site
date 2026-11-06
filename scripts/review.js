@@ -8,6 +8,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, args, videoIndex, cachePath, readJson, writeJson, chat, wordCount } from './lib/common.js';
+import { guard } from './lib/status.js';
+guard('review');
 
 const A = args();
 const REVIEW_MODEL = process.env.REVIEW_MODEL || 'anthropic/claude-sonnet-5.5';

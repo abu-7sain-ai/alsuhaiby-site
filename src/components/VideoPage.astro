@@ -3,7 +3,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Player from './Player.astro';
 import Card from './Card.astro';
-import { t, videoUrl, formatDate, formatViews, SITE, PERSON, SOCIAL, type Lang } from '../i18n';
+import { t, videoUrl, formatDate, formatViews, SITE, PERSON, SOCIAL, videoSrc, type Lang } from '../i18n';
 
 interface Props { entry: CollectionEntry<'videos'> }
 const { entry } = Astro.props;
@@ -32,7 +32,7 @@ const person = {
 const videoLd = (id: string, name: string, cover: string, date: Date, views: number, duration?: number) => ({
   '@type': 'VideoObject', name, description: d.summary, thumbnailUrl: [abs(cover)], uploadDate: date.toISOString(),
   ...(duration ? { duration: iso(duration) } : {}),
-  embedUrl: `https://www.tiktok.com/player/v1/${id}`, url: `https://www.tiktok.com/@m_alsuhaiby/video/${id}`, inLanguage: lang,
+  contentUrl: videoSrc(id), url: `https://www.tiktok.com/@m_alsuhaiby/video/${id}`, inLanguage: lang,
   interactionStatistic: { '@type': 'InteractionCounter', interactionType: { '@type': 'WatchAction' }, userInteractionCount: views },
   author: { '@id': person['@id'] },
 });

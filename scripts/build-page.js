@@ -6,6 +6,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { ROOT, LANGS, videoIndex, cachePath, readJson, writeJson, wordCount } from './lib/common.js';
+import { guard } from './lib/status.js';
+guard('build-page');
 
 const videos = videoIndex();
 const topics = readJson(path.join(ROOT, 'data', 'topics.json'), []);
@@ -28,6 +30,21 @@ function images(v) {
   if (!fs.existsSync(thumb)) ff(['-ss', '1.5', '-i', v.path, '-frames:v', '1', '-vf', 'scale=320:-2', '-c:v', 'libwebp', '-quality', '62', thumb]);
   if (!fs.existsSync(og)) ff(['-ss', '1.5', '-i', v.path, '-frames:v', '1', '-vf', 'scale=-2:630,pad=1200:630:(ow-iw)/2:0:black', '-q:v', '4', og]);
   return { cover: `/covers/${v.id}.webp`, ogImage: `/og/${v.id}.jpg` };
+}
+
+// Mohammad's own MP4s go to Cloudflare R2 (bucket alsuhaiby-media → https://media.alsuhaiby.com/<id>.mp4). MP4s are never committed to git.
+// data/r2.json remembers what is already uploaded (id → bytes), so each file is uploaded once.
+const R2_BUCKET = 'alsuhaiby-media';
+const R2_MANIFEST = path.join(ROOT, 'data', 'r2.json');
+const r2 = readJson(R2_MANIFEST, {});
+const WRANGLER = path.join(ROOT, 'node_modules', 'wrangler', 'bin', 'wrangler.js');
+function uploadVideo(v) {
+  const size = fs.statSync(v.path).size;
+  if (r2[v.id]?.bytes === size || process.argv.includes('--no-upload')) return;
+  console.log(`upload ${v.id}.mp4 to R2 (${(size / 1e6).toFixed(1)} MB)`);
+  execFileSync(process.execPath, [WRANGLER, 'r2', 'object', 'put', `${R2_BUCKET}/${v.id}.mp4`, '--file', v.path, '--content-type', 'video/mp4', '--cache-control', 'public, max-age=31536000, immutable', '--remote'], { stdio: ['ignore', 'ignore', 'inherit'] });
+  r2[v.id] = { bytes: size, uploadedAt: new Date().toISOString() };
+  writeJson(R2_MANIFEST, r2);
 }
 
 const yamlStr = (s) => JSON.stringify(String(s ?? ''));
@@ -76,8 +93,10 @@ for (const t of topics) {
   const main = videos.get(t.main);
   if (!main?.path) { console.warn(`skip ${t.key}: no file for ${t.main}`); continue; }
   const img = images(main);
+  uploadVideo(main);
   const dur = duration(main.path);
   const others = (t.others || []).map((id) => videos.get(id)).filter((v) => v?.path);
+  others.forEach(uploadVideo);
   for (const lang of LANGS) {
     // Arabic: publish the reviewed version (review.js) when it exists; translations are made from it.
     const w = (lang === 'ar' && readJson(cachePath(main, 'final.ar'), null)) || readJson(cachePath(main, `write.${lang}`), null);
