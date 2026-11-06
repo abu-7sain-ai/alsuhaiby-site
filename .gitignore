@@ -5,3 +5,4 @@ dist/
 *.mp4
 *.mov
 data/run-*.log
+data/rebuild.log
