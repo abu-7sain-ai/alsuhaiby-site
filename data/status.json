@@ -5,7 +5,7 @@
     "at": "2026-11-06T11:39:27.037Z",
     "ok": true
   },
-  "updatedAt": "2026-11-06T12:00:13.639Z",
+  "updatedAt": "2026-11-06T12:28:35.163Z",
   "nextScheduledRun": "not set (Phase 3)",
   "pagesPublished": {
     "total": 20,
@@ -24,10 +24,10 @@
     "source": "key limit"
   },
   "siteHealth": {
-    "at": "2026-11-06T12:00:13.638Z",
+    "at": "2026-11-06T12:28:35.162Z",
     "url": "https://alsuhaiby.com/",
     "httpStatus": 200,
-    "ms": 155,
+    "ms": 276,
     "up": true
   },
   "alerts": {}
