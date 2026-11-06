@@ -89,4 +89,5 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: test -f "$RUNNER_TEMP/alerted" || python -X utf8 scripts/lib/telegram.py "⚠️ alsuhaiby.com: فشل تشغيل النشر اليومي في GitHub — ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        run: |
+          test -f "$RUNNER_TEMP/alerted" || python -X utf8 scripts/lib/telegram.py "⚠️ alsuhaiby.com: فشل تشغيل النشر اليومي في GitHub — ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
