@@ -1,12 +1,34 @@
 ---
-// Clean player: Mohammad's own MP4 from Cloudflare R2 (media.alsuhaiby.com), no TikTok UI.
-// Cover as poster, browser controls only, no autoplay, nothing downloaded until the visitor presses play.
-import { videoSrc, type Lang } from '../i18n';
+// Clean player: Mohammad's own MP4 from Cloudflare R2 (media.alsuhaiby.com), no TikTok UI. Browser controls only, no autoplay.
+// Main video (eager): a <video> with the cover as poster, preload="none" → nothing but the cover loads until play.
+// Other videos: a lazy cover image + play button, swapped for the same <video> on tap (a <video> poster would load at once and slow the page).
+import { videoSrc, t, type Lang } from '../i18n';
 interface Props { id: string; cover: string; title: string; lang: Lang; eager?: boolean }
-const { id, cover, title } = Astro.props;
+const { id, cover, title, lang, eager = false } = Astro.props;
+const thumb = cover.replace(/\.webp$/, '-s.webp');
 ---
-<div class="player">
-  <video controls preload="none" playsinline poster={cover} width="576" height="1024" aria-label={title} controlslist="nodownload noplaybackrate" disablepictureinpicture>
-    <source src={videoSrc(id)} type="video/mp4" />
-  </video>
-</div>
+{eager ? (
+  <div class="player">
+    <video controls preload="none" playsinline poster={cover} width="576" height="1024" aria-label={title} controlslist="nodownload noplaybackrate" disablepictureinpicture>
+      <source src={videoSrc(id)} type="video/mp4" />
+    </video>
+  </div>
+) : (
+  <div class="player" data-src={videoSrc(id)} data-poster={cover}>
+    <button type="button" aria-label={`${t(lang).watch}: ${title}`}>
+      <img src={thumb} alt={title} width="320" height="569" loading="lazy" decoding="async" />
+      <span class="play">▶ {t(lang).watch}</span>
+    </button>
+  </div>
+)}
+<script>
+  document.querySelectorAll<HTMLElement>('.player[data-src]').forEach((el) => {
+    el.querySelector('button')?.addEventListener('click', () => {
+      const v = document.createElement('video');
+      Object.assign(v, { controls: true, playsInline: true, autoplay: true, poster: el.dataset.poster ?? '', src: el.dataset.src ?? '', disablePictureInPicture: true });
+      v.setAttribute('controlslist', 'nodownload noplaybackrate');
+      el.replaceChildren(v);
+      v.play().catch(() => {});
+    });
+  });
+</script>
