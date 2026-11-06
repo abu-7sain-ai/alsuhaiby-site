@@ -31,6 +31,7 @@ const videos = defineCollection({
     system: z.string(),
     brands: z.array(z.string()).default([]),
     keywords: z.array(z.string()).min(3).max(5),
+    manualEdit: z.string().optional(), // set by the «تعديل» editor on /review/; build-page.js then never overwrites the page
     faq: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
   }),
 });

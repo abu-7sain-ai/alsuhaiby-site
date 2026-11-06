@@ -1,13 +1,14 @@
 ---
-// Local review page (not for search engines): quality score on the six approved dimensions + every «إضافة»
-// (anything the article says that Mohammad did not say in the video). Data: data/review.json (written by scripts/build-page.js).
+// Local review page (not for search engines): quality score on the six approved dimensions, the reviewer's fixes and cuts,
+// what the writer added beyond the video, and (in `npm run dev` only) the «تعديل» editor for each article.
+// Data: data/review.json (written by scripts/build-page.js). Editor endpoints: scripts/lib/edit-plugin.js.
 import fs from 'node:fs';
 import path from 'node:path';
 import Base from '../layouts/Base.astro';
 type Row = {
   slug: string; title: string; words: number; wordsBefore?: number; mainId: string; otherIds: string[]; views: number;
   scores?: Record<string, number>; total?: number; notes?: string; dialect?: string; answerFirst?: string;
-  counts?: { kept: number; fixed: number; cut: number; supported: number; units: number };
+  counts?: { kept: number; fixed: number; cut: number; units: number };
   additions: string[]; fixes?: { from: string; to: string; reason: string }[]; cuts?: { text: string; reason: string }[];
 };
 const file = path.join(process.cwd(), 'data', 'review.json'); // project root (works in dev and build)
@@ -21,39 +22,112 @@ const DIMS: [string, string][] = [
   ['noFluff', 'بدون حشو'],
 ];
 const avg = rows.filter((r) => r.total).reduce((s, r, _, a) => s + (r.total ?? 0) / a.length, 0);
+const DEV = import.meta.env.DEV;
+const sum = 'cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center';
 ---
 <Base lang="ar" title="مراجعة الصفحات" description="صفحة مراجعة داخلية" path="/review/" noindex>
   <div class="wrap wide">
     <h1 class="ptitle">مراجعة الصفحات</h1>
     <p>{rows.length} صفحة · متوسط الدرجة: <strong>{avg ? avg.toFixed(1) : '—'} / 60</strong> · كل بُعد من 10.</p>
-    <p class="note">كل جملة ما قالها محمد في الفيديو راجعها «ميكانيكي خبير» (Claude Sonnet): «إضافة مؤكدة» = معلومة صحيحة بقت في المقال، «تصحيح» = انعادت صياغتها، «حذف» = انشالت (عند الشك نحذف). هالتفاصيل تظهر هنا فقط، مو في الصفحة المنشورة.</p>
+    <p class="note">كل مقال يبدأ من كلام محمد في الفيديو ويتوسع بمعلومات عامة صحيحة. «ميكانيكي خبير» (Claude Sonnet) راجعه على الأخطاء: «تصحيح» = جملة فيها غلط أو مو بلهجتنا وانعادت صياغتها، «حذف» = جملة غلط أو تخالف الفيديو أو حشو. «إضافات» = اللي زاده الكاتب على كلام الفيديو. هالتفاصيل تظهر هنا فقط، مو في الصفحة المنشورة.{DEV && ' زر «تعديل» يفتح المقال وتقدر تصححه بنفسك؛ النسخة القديمة تنحفظ في content/_history.'}</p>
     {rows.map((r, i) => (
-      <section style="border-top:2px solid var(--fg);padding:20px 0;margin-top:20px">
-        <h2 style="font-size:24px">{i + 1}. <a href={`/${r.slug}/`}>{r.title}</a></h2>
+      <section style="border-top:2px solid var(--fg);padding:20px 0;margin-top:20px" data-slug={r.slug}>
+        <h2 style="font-size:24px">{i + 1}. <a href={`/${r.slug}/`} class="rtitle">{r.title}</a></h2>
+        {DEV && <p><button type="button" class="btn edit-btn" data-slug={r.slug}>تعديل</button> <span class="meta saved" aria-live="polite"></span></p>}
         <p class="meta">{r.wordsBefore ? `${r.wordsBefore} ← ` : ''}{r.words} كلمة · {r.views.toLocaleString('en')} مشاهدة · فيديو أساسي {r.mainId}{r.otherIds.length > 0 && ` · فيديوهات أخرى: ${r.otherIds.length}`}</p>
-        {r.counts && <p class="meta">المراجعة: مدعومة من الفيديو {r.counts.supported} · إضافة مؤكدة {r.counts.kept} · تصحيح {r.counts.fixed} · حذف {r.counts.cut}</p>}
+        {r.counts && <p class="meta">المراجعة: باقية كما هي {r.counts.kept} · تصحيح {r.counts.fixed} · حذف {r.counts.cut}</p>}
         {r.scores ? (
           <p><strong>الدرجة: {r.total} / 60</strong> — {DIMS.map(([k, label]) => `${label}: ${r.scores![k] ?? '—'}`).join(' · ')}</p>
         ) : <p>الدرجة: لم تُقيَّم بعد</p>}
         {r.notes && <p class="meta" dir="ltr" style="text-align:left">Reviewer: {r.notes}</p>}
         {(r.dialect || r.answerFirst) && <p class="meta" dir="ltr" style="text-align:left">Dialect: {r.dialect} · First two lines: {r.answerFirst}</p>}
-        <details>
-          <summary style="cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center">إضافات مؤكدة ({r.additions.length})</summary>
-          <ul>{r.additions.map((a) => <li>إضافة: {a}</li>)}</ul>
-        </details>
         {r.fixes && r.fixes.length > 0 && (
           <details>
-            <summary style="cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center">تصحيحات ({r.fixes.length})</summary>
+            <summary style={sum}>تصحيحات ({r.fixes.length})</summary>
             <ul>{r.fixes.map((f) => <li><s>{f.from}</s><br />← {f.to}<br /><span class="meta" dir="ltr">{f.reason}</span></li>)}</ul>
           </details>
         )}
         {r.cuts && r.cuts.length > 0 && (
           <details>
-            <summary style="cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center">محذوفات ({r.cuts.length})</summary>
+            <summary style={sum}>محذوفات ({r.cuts.length})</summary>
             <ul>{r.cuts.map((c) => <li><s>{c.text}</s><br /><span class="meta" dir="ltr">{c.reason}</span></li>)}</ul>
+          </details>
+        )}
+        {r.additions.length > 0 && (
+          <details>
+            <summary style={sum}>إضافات على كلام الفيديو ({r.additions.length})</summary>
+            <ul>{r.additions.map((a) => <li>{a}</li>)}</ul>
           </details>
         )}
       </section>
     ))}
   </div>
+
+  {DEV && (
+    <dialog id="editor" style="width:min(960px,100%);max-width:100%;max-height:100dvh;border:2px solid var(--fg);background:var(--bg);color:var(--fg);padding:16px">
+      <form method="dialog" id="edit-form" style="display:grid;gap:12px">
+        <h2 style="font-size:24px;margin:0">تعديل المقال</h2>
+        <label>العنوان<input name="title" required style="width:100%;font:inherit;padding:8px" /></label>
+        <label>الملخص (أول سطرين بالصفحة)<textarea name="summary" rows="3" required style="width:100%;font:inherit;padding:8px"></textarea></label>
+        <label>نص المقال (Markdown: «## » قبل كل عنوان)<textarea name="body" rows="18" required style="width:100%;font:inherit;padding:8px;line-height:1.7"></textarea></label>
+        <fieldset style="border:1px solid var(--fg);padding:8px">
+          <legend>الأسئلة الشائعة</legend>
+          <div id="faq-list" style="display:grid;gap:10px"></div>
+          <button type="button" class="btn" id="faq-add" style="margin-top:8px">+ سؤال</button>
+        </fieldset>
+        <p class="meta" id="edit-msg" aria-live="polite"></p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button type="button" class="btn" id="edit-save">حفظ</button>
+          <button type="button" class="btn" id="edit-cancel">إلغاء</button>
+        </div>
+      </form>
+    </dialog>
+  )}
+  {DEV && (
+    <script is:inline>
+      (() => {
+        const dlg = document.getElementById('editor');
+        const form = document.getElementById('edit-form');
+        const list = document.getElementById('faq-list');
+        const msg = document.getElementById('edit-msg');
+        let slug = null;
+        const faqRow = (q = '', a = '') => {
+          const d = document.createElement('div');
+          d.style.cssText = 'display:grid;gap:4px;border-bottom:1px solid var(--fg);padding-bottom:8px';
+          d.innerHTML = '<input class="fq" placeholder="السؤال" style="width:100%;font:inherit;padding:8px" />'
+            + '<textarea class="fa" rows="3" placeholder="الجواب (أول جملة = الجواب المباشر)" style="width:100%;font:inherit;padding:8px"></textarea>'
+            + '<button type="button" class="btn faq-del" style="justify-self:start">حذف السؤال</button>';
+          d.querySelector('.fq').value = q;
+          d.querySelector('.fa').value = a;
+          d.querySelector('.faq-del').onclick = () => d.remove();
+          list.appendChild(d);
+        };
+        document.querySelectorAll('.edit-btn').forEach((b) => b.addEventListener('click', async () => {
+          slug = b.dataset.slug;
+          msg.textContent = 'جاري التحميل…';
+          const r = await fetch('/__edit/load?slug=' + encodeURIComponent(slug));
+          const d = await r.json();
+          if (!r.ok) { alert('ما قدرت أفتح المقال: ' + d.error); return; }
+          form.title.value = d.title; form.summary.value = d.summary; form.body.value = d.body;
+          list.innerHTML = ''; d.faq.forEach((f) => faqRow(f.q, f.a));
+          msg.textContent = '';
+          dlg.showModal();
+        }));
+        document.getElementById('faq-add').onclick = () => faqRow();
+        document.getElementById('edit-cancel').onclick = () => dlg.close();
+        document.getElementById('edit-save').onclick = async () => {
+          const faq = [...list.children].map((d) => ({ q: d.querySelector('.fq').value, a: d.querySelector('.fa').value }));
+          msg.textContent = 'جاري الحفظ…';
+          const r = await fetch('/__edit/save', { method: 'POST', headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ slug, title: form.title.value, summary: form.summary.value, body: form.body.value, faq }) });
+          const d = await r.json();
+          if (!r.ok) { msg.textContent = 'ما انحفظ: ' + d.error; return; }
+          const sec = document.querySelector('section[data-slug="' + CSS.escape(slug) + '"]');
+          sec.querySelector('.rtitle').textContent = form.title.value;
+          sec.querySelector('.saved').textContent = 'تم الحفظ ✓ (النسخة القديمة: ' + d.history + ')';
+          dlg.close();
+        };
+      })();
+    </script>
+  )}
 </Base>

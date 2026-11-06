@@ -1,9 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
-import { PERSON, SOCIAL } from '../i18n';
+import { PERSON, SOCIAL, GARAGE } from '../i18n';
 const P = PERSON.ar;
-// Workshop WhatsApp number: placeholder until Mohammad provides it (only the workshop number is published, never a personal one).
-const WHATSAPP = '';
+const WHATSAPP = GARAGE.whatsapp; // set in src/i18n.ts
 ---
 <Base lang="ar" title="تواصل" description={`تواصل مع ${P.garage} عن طريق واتساب الكراج، أو تابع ${P.name} على تيك توك وانستقرام.`} path="/contact/" current="contact">
   <div class="wrap article">
@@ -11,7 +10,7 @@ const WHATSAPP = '';
     <h2>واتساب الكراج</h2>
     {WHATSAPP
       ? <p><a class="btn" href={`https://wa.me/${WHATSAPP}`} rel="noopener">راسل {P.garage} على واتساب</a></p>
-      : <p class="note">رقم واتساب الكراج: يُضاف قريبًا.</p>}
+      : <p>رقم واتساب الكراج: [يُعبّى يدويًا]</p>}
     <h2>الحسابات</h2>
     <ul>
       <li><a href={SOCIAL.tiktok} rel="me">تيك توك</a></li>

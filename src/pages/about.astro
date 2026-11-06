@@ -1,14 +1,14 @@
 ---
-// About: written only from known facts (constitution + account data). Anything unconfirmed carries «يحتاج تأكيد» — remove the mark once Mohammad confirms.
+// About: written only from known facts (constitution + account data). Garage location and WhatsApp come from GARAGE in src/i18n.ts (empty = «[يُعبّى يدويًا]»).
 import Base from '../layouts/Base.astro';
-import { PERSON, SITE, SOCIAL } from '../i18n';
+import { PERSON, SITE, SOCIAL, GARAGE } from '../i18n';
 const P = PERSON.ar;
 const media = [
-  { name: 'تلفزيون الكويت', note: 'ظهر فيه 5 مرات', confirm: false },
-  { name: 'مربع نت', note: '', confirm: false },
-  { name: 'القبس', note: '', confirm: false },
-  { name: 'الحقيقة', note: '', confirm: false },
-  { name: 'سارة نيوز', note: '', confirm: true },
+  { name: 'تلفزيون الكويت', note: 'ظهر فيه 5 مرات' },
+  { name: 'مربع نت', note: '' },
+  { name: 'القبس', note: '' },
+  { name: 'الحقيقة', note: '' },
+  { name: 'سراة نيوز', note: '' },
 ];
 const jsonLd = [{
   '@context': 'https://schema.org', '@type': 'ProfilePage',
@@ -24,7 +24,10 @@ const jsonLd = [{
 
     <h2>الكراج</h2>
     <p>{P.garage} متخصص بصيانة وتصليح السيارات الألمانية، وفاتح من سنة 2022.</p>
-    <p class="note">موقع الكراج بالضبط ومواعيد الدوام: يحتاج تأكيد.</p>
+    <ul>
+      <li>موقع الكراج: {GARAGE.location || '[يُعبّى يدويًا]'}</li>
+      <li>واتساب الكراج: {GARAGE.whatsapp ? <a href={`https://wa.me/${GARAGE.whatsapp}`} rel="noopener">{GARAGE.whatsapp}</a> : '[يُعبّى يدويًا]'}</li>
+    </ul>
 
     <h2>المحتوى</h2>
     <p>من سبتمبر 2022 ومحمد ينشر فيديوهات قصيرة عن أعطال السيارات وعلاماتها وأسبابها وشلون تتصرف، بلهجة كويتية يفهمها كل الخليج. في هالموقع كل فيديو مكتوب بالتفصيل عشان تلقى الجواب حتى لو ما تقدر تشغّل الصوت.</p>
@@ -35,8 +38,7 @@ const jsonLd = [{
 
     <h2>الظهور الإعلامي</h2>
     <ul>
-      {media.map((m) => <li>{m.name}{m.note && ` — ${m.note}`}{m.confirm && ' (يحتاج تأكيد: الاسم)'}</li>)}
+      {media.map((m) => <li>{m.name}{m.note && ` — ${m.note}`}</li>)}
     </ul>
-    <p class="note">روابط المقابلات والمقالات الصحفية: يحتاج تأكيد — تُضاف أول ما توصلنا.</p>
   </div>
 </Base>

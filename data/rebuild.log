@@ -1,0 +1,51 @@
+[2m٠٩:٠٨:٢١[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m٠٩:٠٨:٢٢[22m [34m[content][39m Syncing content
+[2m٠٩:٠٨:٢٢[22m [34m[content][39m Content config changed
+[2m٠٩:٠٨:٢٢[22m [34m[content][39m Clearing content store
+[2m٠٩:٠٨:٢٢[22m [34m[content][39m Synced content
+[2m٠٩:٠٨:٢٢[22m [34m[types][39m Generated [2m1.05s[22m
+[2m٠٩:٠٨:٢٢[22m [34m[build][39m output: [34m"static"[39m
+[2m٠٩:٠٨:٢٢[22m [34m[build][39m mode: [34m"static"[39m
+[2m٠٩:٠٨:٢٢[22m [34m[build][39m directory: [34mC:\Users\HP\Desktop\alsuhaiby-site\dist\[39m
+[2m٠٩:٠٨:٢٢[22m [34m[build][39m Collecting build info...
+[2m٠٩:٠٨:٢٢[22m [34m[build][39m [32m✓ Completed in 1.10s.[39m
+[2m٠٩:٠٨:٢٢[22m [34m[build][39m Building static entrypoints...
+[2m٠٩:٠٨:٢٣[22m [34m[vite][39m [32m✓ built in 395ms[39m
+[2m٠٩:٠٨:٢٣[22m [34m[vite][39m [32m✓ built in 95ms[39m
+[2m٠٩:٠٨:٢٣[22m [34m[build][39m Rearranging server assets...
+
+[42m[30m generating static routes [39m[49m
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/about/index.html[22m [2m(+15ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/contact/index.html[22m [2m(+5ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/review/index.html[22m [2m(+19ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/robots.txt[22m [2m(+4ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/search/index.html[22m [2m(+4ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/search-index.json[22m [2m(+4ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/topics/index.html[22m [2m(+6ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/اخطاء-تعبئة-البنزين-محطة-الوقود/index.html[22m [2m(+6ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/تقطيع-وضعف-عزم-خراب-طرمبة-البنزين/index.html[22m [2m(+3ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/حرارة-السيارة-ارتفعت-فجأة-خطوات/index.html[22m [2m(+3ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/خرافات-شائعة-عن-السيارات-تضر-الموتر/index.html[22m [2m(+7ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/رجفة-السيارة-على-سرعات-معينة-أسباب/index.html[22m [2m(+3ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/زيت-على-البلاكات-علامات-تدل-عليه/index.html[22m [2m(+3ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/سيارتي-تحذف-علامات-ميزان-التواير/index.html[22m [2m(+3ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/سيارتي-ترجف-اول-ما-ادوس-بنزين/index.html[22m [2m(+4ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/سيارتي-ترجف-وهي-واقفة-أسباب/index.html[22m [2m(+3ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/سيارتي-تصرف-بنزين-وايد-اسباب/index.html[22m [2m(+3ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/صوت-ونة-وطقطقة-خراب-الدفرنس/index.html[22m [2m(+3ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/ضعف-عزم-السيارة-تصفية-المكينة/index.html[22m [2m(+4ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/عادات-غلط-تسويها-بالسواقة-تخرب-موترك/index.html[22m [2m(+4ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/عزم-سيارتي-طايح-وما-تسحب/index.html[22m [2m(+4ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/علامات-انسداد-فلتر-القير/index.html[22m [2m(+3ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/علامات-تدل-ان-القير-ضرب/index.html[22m [2m(+4ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/علامات-تلف-بطيخة-القير-بالسيارة/index.html[22m [2m(+3ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/علامات-تلف-حساس-الكرنك-بالمكينة/index.html[22m [2m(+4ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/لمبة-الإيرباق-والعة-بسيارتك-أسباب/index.html[22m [2m(+3ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/مكيف-السيارة-ما-يبرد-عدل/index.html[22m [2m(+3ms)[22m 
+[2m٠٩:٠٨:٢٣[22m   [34m├─[39m [2m/index.html[22m [2m(+4ms)[22m 
+[2m٠٩:٠٨:٢٣[22m [32m✓ Completed in 191ms.
+[39m
+[2m٠٩:٠٨:٢٣[22m [34m[build][39m [32m✓ Completed in 914ms.[39m
+[2m٠٩:٠٨:٢٣[22m [34m[@astrojs/sitemap][39m `sitemap-index.xml` created at `dist`
+[2m٠٩:٠٨:٢٣[22m [34m[build][39m 26 page(s) built in [1m2.06s[22m
+[2m٠٩:٠٨:٢٣[22m [34m[build][39m [1mComplete![22m

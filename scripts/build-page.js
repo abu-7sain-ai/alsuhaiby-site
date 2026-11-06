@@ -57,6 +57,19 @@ function frontmatter(o) {
 const clean = (s) => String(s || '').replace(/#\S+/g, '').replace(/[ \t]+\n/g, '\n').trim(); // never print hashtags
 const slugify = (s) => String(s).trim().replace(/[^\p{L}\p{N}\s-]/gu, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').toLowerCase();
 
+// Pages Mohammad corrected by hand on /review/ («تعديل») carry `manualEdit:` in their frontmatter and are never overwritten
+// (run with --overwrite-edits to replace them anyway; the edited version is in content/_history/ either way).
+const OVERWRITE_EDITS = process.argv.includes('--overwrite-edits');
+function manualEditedFile(lang, topicKey) {
+  const dir = path.join(ROOT, 'content', 'videos', lang);
+  if (!fs.existsSync(dir)) return null;
+  for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.md'))) {
+    const txt = fs.readFileSync(path.join(dir, f), 'utf8'); const head = txt.slice(0, txt.indexOf('---', 3)); // frontmatter only
+    if (head.includes(`topic: ${JSON.stringify(topicKey)}`) && /^manualEdit:/m.test(head)) return path.join(dir, f);
+  }
+  return null;
+}
+
 const generated = new Set();
 const review = [];
 for (const t of topics) {
@@ -73,7 +86,9 @@ for (const t of topics) {
       const an = readJson(cachePath(v, 'analysis'), {});
       return { tiktokId: v.id, title: clean(an.hook || an.topic || w.title), views: v.views, published: v.date, cover: images(v).cover };
     });
-    const slug = slugify(w.slug || w.title);
+    const edited = !OVERWRITE_EDITS && manualEditedFile(lang, t.key);
+    if (edited) { generated.add(path.normalize(edited)); console.log(`keep ${lang}/${path.basename(edited)} (edited by hand)`); }
+    const slug = edited ? path.basename(edited, '.md') : slugify(w.slug || w.title);
     const fm = {
       lang, topic: t.key, slug, title: clean(w.title), summary: clean(w.summary), description: clean(w.description).slice(0, 160),
       published: main.date, updated: today, views: main.views, cover: img.cover, ogImage: img.ogImage,
@@ -86,7 +101,7 @@ for (const t of topics) {
     const body = [clean(w.intro), ...w.sections.map((s) => `## ${clean(s.heading)}\n\n${clean(s.body)}`)].join('\n\n') + '\n';
     const file = path.join(ROOT, 'content', 'videos', lang, `${slug}.md`);
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, frontmatter(fm) + body, 'utf8');
+    if (!edited) fs.writeFileSync(file, frontmatter(fm) + body, 'utf8');
     generated.add(path.normalize(file));
     if (lang === 'ar') {
       const rv = readJson(cachePath(main, 'review.ar'), null);
@@ -95,8 +110,7 @@ for (const t of topics) {
         topic: t.key, slug, title: fm.title, words: wordCount(`${fm.summary} ${body}`), wordsBefore: rv?.wordsBefore, mainId: main.id, otherIds: others.map((v) => v.id), views: main.views,
         scores: sc, total: sc ? Object.values(sc).reduce((a, b) => a + b, 0) : undefined, notes: rv?.notes || scores[t.key]?.notes,
         dialect: rv?.dialect, answerFirst: rv?.answerFirst, counts: rv?.counts,
-        // «إضافة» = what the article says beyond Mohammad's words: the KEEP verdicts once reviewed, Gemini's own list before.
-        additions: rv ? rv.log.filter((l) => l.verdict === 'KEEP').map((l) => l.text) : w.additions || [],
+        additions: w.additions || [], // what the writer added beyond Mohammad's words (kept unless the reviewer flagged it)
         fixes: rv ? rv.log.filter((l) => l.verdict === 'FIX').map((l) => ({ from: l.original, to: l.text, reason: l.reason })) : [],
         cuts: rv ? rv.log.filter((l) => l.verdict === 'CUT').map((l) => ({ text: l.original, reason: l.reason })) : [],
       });

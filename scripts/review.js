@@ -1,7 +1,8 @@
-// review.js — a skeptical Kuwaiti master mechanic (Claude Sonnet via OpenRouter) checks every Arabic article against the video transcript.
-//   node scripts/review.js [--only <topicKey>] [--force]
-// Pass 1 (verdicts): every sentence NOT supported by the transcript gets KEEP (confirmed general knowledge), FIX (corrected sentence) or CUT. When in doubt: CUT.
-// Apply: cuts and fixes are applied by this script (nothing is added; the article is never padded).
+// review.js — a skeptical Kuwaiti master mechanic (Claude Sonnet via OpenRouter) checks every Arabic article for ERRORS.
+//   node scripts/review.js [--only <topicKey>] [--force] [--pass2-only]
+// Pass 1 (verdicts): correct general knowledge is KEEP by default (the article is expanded on purpose). Only sentences that are
+//   factually wrong, contradict the video, are filler/repetition, or are not in Kuwaiti dialect get FIX (corrected sentence) or CUT.
+// Apply: cuts and fixes are applied by this script (nothing is added).
 // Pass 2 (coherence + score): wording-only edits so the text still reads well after cuts, plus the six-dimension quality score.
 // Output next to the video: <file>.review.ar.json (full log) and <file>.final.ar.json (what build-page.js publishes).
 import fs from 'node:fs';
@@ -65,34 +66,33 @@ function fromUnits(a, units) {
 const words = (a) => wordCount([a.summary, a.intro, ...a.sections.map((s) => `${s.heading} ${s.body}`)].join(' '));
 
 function transcripts(t) {
-  return [t.main, ...(t.others || [])].map((id) => {
+  return [t.main].map((id) => { // one video → one article
     const v = videos.get(id);
     const an = readJson(cachePath(v, 'analysis'), {});
     return `### Video ${id}\nSpoken: ${an.transcript}\nOn screen: ${an.onScreenText || '-'}`;
   }).join('\n\n');
 }
 
-const PASS1 = `You are a skeptical Kuwaiti master mechanic with 25 years in a garage that services German and Japanese cars. You review a web article written by an AI from the video transcripts of محمد الصهيبي, a Kuwaiti mechanic.
-The article is split into numbered units (sentences, headings, FAQ questions). For EACH unit decide:
-- SUPPORTED: the transcript says it (paraphrase is fine). Do not list these.
-- KEEP: not in the transcript, but it is correct, standard automotive knowledge you would put your name to, with no invented numbers, prices, brand-specific claims or statistics.
-- FIX: the idea is useful but the wording is wrong, exaggerated, too specific, or not in natural Kuwaiti/Gulf dialect. Give the corrected sentence in Arabic (same dialect, no new facts).
-- CUT: unsupported and not certainly correct, invented numbers or prices, vague filler, repetition, AI-sounding phrases («في عالم السيارات»، «لا شك»، «في الختام»...), on-video CTAs, or anything that contradicts the transcript.
-WHEN IN DOUBT: CUT. A shorter, correct article beats a longer, wrong one.
-Summary units are the first two lines on the page: they must fully answer the question. Prefer FIX over CUT for summary units, keeping only what the transcript supports.
+const PASS1 = `You are a skeptical Kuwaiti master mechanic with 25 years in a garage that services German and Japanese cars. You review a web article written by an AI from one video of محمد الصهيبي, a Kuwaiti mechanic.
+The article starts from his transcript and is EXPANDED ON PURPOSE with general automotive knowledge. That expansion is wanted: correct general knowledge is KEEP by default, even if he did not say it.
+The article is split into numbered units (sentences, headings, FAQ questions). Flag ONLY the units that need action:
+- FIX: the idea is right but a detail is wrong, exaggerated or too specific, OR the wording is literary / Modern Standard / not natural Kuwaiti-Gulf dialect. Give the corrected sentence in Arabic (same dialect, no new facts).
+- CUT: factually WRONG and not fixable in one sentence, CONTRADICTS the video, invented prices / km or month intervals / statistics / brand-specific claims, pure filler or repetition of an earlier sentence, AI phrases («في عالم السيارات»، «لا شك»، «في الختام»...), on-video CTAs.
+Do NOT cut a sentence only because it is not in the transcript. Do NOT cut correct explanation to make the article shorter: the article must stay 800–1500 words.
+Summary units are the first two lines on the page: they must fully answer the question. Prefer FIX over CUT there.
 Also judge the whole article: dialect/tone (Kuwaiti, natural, same tone as the video; uses «كراج» not «ورشة») and whether the first two lines answer the question.
 Return ONLY JSON:
-{"verdicts":[{"id":"S12","verdict":"KEEP|FIX|CUT","fixed":"only for FIX","reason":"short English reason"}],"dialect":"short English note","answerFirst":"short English note"}
-List every unit that is not SUPPORTED. Omit SUPPORTED units.`;
+{"verdicts":[{"id":"S12","verdict":"FIX|CUT","fixed":"only for FIX","reason":"short English reason"}],"dialect":"short English note","answerFirst":"short English note"}
+List only FIX and CUT units. Every unit you do not list is kept as it is.`;
 
-const PASS2 = `You are the same skeptical Kuwaiti master mechanic. Some sentences were removed or corrected in this Arabic article after your fact check.
+const PASS2 = `You are the same skeptical Kuwaiti master mechanic. Some sentences were removed or corrected in this Arabic article after your error check.
 1) Make it read coherently again with MINIMAL wording edits only: fix dangling references («ثانيًا» with no «أولًا», «كما ذكرنا» pointing to removed text, broken transitions).
    If the number in the title or summary does not match the number of cause/sign sections taken from the MAIN video, you MUST edit the title/summary so they match.
    Replace any remaining literary or Modern Standard phrasing with plain spoken Kuwaiti (same meaning).
    You may NOT add any new fact, number, cause or advice, and you may not lengthen the article.
-   You may NOT remove or summarise sentences either: the fact check is already done, so every remaining sentence stays. Change words, not content. Only return fields you actually changed.
+   You may NOT remove or summarise sentences either: the error check is already done, so every remaining sentence stays. Change words, not content. Only return fields you actually changed.
 2) Score the FINAL article from 0 to 10 on six dimensions:
-   fidelity (every point Mohammad makes is present and central, nothing contradicts him; correct general explanation that you already fact-checked is allowed and is not a fidelity problem — only judge whether his message is kept and nothing false or off-topic remains),
+   fidelity (every point Mohammad makes in the video is present and central, nothing contradicts him, nothing false remains; correct general explanation is wanted and is not a fidelity problem),
    dialect (Kuwaiti tone of the video), answerFirst (first two lines fully answer the question),
    structure (each cause/sign under its own heading), specificity (concrete, specific details instead of generic talk — but no invented ones), noFluff (no padding, repetition or AI phrases).
 Return ONLY JSON:
@@ -131,7 +131,7 @@ for (const t of topics) {
   const p1 = prev
     ? { verdicts: prev.log.map((l) => ({ id: l.id, verdict: l.verdict, fixed: l.verdict === 'FIX' ? l.text : undefined, reason: l.reason })), dialect: prev.dialect, answerFirst: prev.answerFirst }
     : await chat({
-      script: 'review', label: `${t.key} pass1`, model: REVIEW_MODEL, temperature: 0, maxTokens: 16000,
+      script: 'review', label: `${t.key} pass1`, model: REVIEW_MODEL, temperature: 0, maxTokens: 12000,
       messages: [{ role: 'system', content: PASS1 }, { role: 'user', content: `TRANSCRIPTS\n${transcripts(t)}\n\nTITLE: ${draft.title}\n\nARTICLE UNITS\n${units.map((u) => `${u.id} [${u.where}] ${u.text}`).join('\n')}` }],
     });
   const log = [];
@@ -153,7 +153,8 @@ for (const t of topics) {
   });
   const { article: final, applied, rejected } = applyEdits({ ...afterCuts, title: draft.title, description: draft.description }, p2.edits);
   if (rejected.length) console.log(`  rejected ${rejected.length} coherence edit(s) that would have cut text without logging it`);
-  const counts = { kept: log.filter((l) => l.verdict === 'KEEP').length, fixed: log.filter((l) => l.verdict === 'FIX').length, cut: log.filter((l) => l.verdict === 'CUT').length, supported: units.length - log.length, units: units.length };
+  const fixedN = log.filter((l) => l.verdict === 'FIX').length, cutN = log.filter((l) => l.verdict === 'CUT').length;
+  const counts = { kept: units.length - fixedN - cutN, fixed: fixedN, cut: cutN, units: units.length };
   summary.kept += counts.kept; summary.fixed += counts.fixed; summary.cut += counts.cut;
   const finalWords = words(final);
   writeJson(logFile, {
@@ -161,6 +162,6 @@ for (const t of topics) {
     dialect: p1.dialect, answerFirst: p1.answerFirst, scores: p2.scores, notes: p2.notes, coherenceEdits: applied, rejectedEdits: rejected, log,
   });
   writeJson(finalFile, { ...draft, ...final, words: finalWords, reviewed: true, reviewModel: REVIEW_MODEL });
-  console.log(`  ${draft.words} → ${finalWords} words · kept ${counts.kept} · fixed ${counts.fixed} · cut ${counts.cut} · score ${Object.values(p2.scores || {}).reduce((x, y) => x + y, 0)}/60${finalWords < 500 ? ' · under 500 words (left short, not padded)' : ''}`);
+  console.log(`  ${draft.words} → ${finalWords} words · kept ${counts.kept} · fixed ${counts.fixed} · cut ${counts.cut} · score ${Object.values(p2.scores || {}).reduce((x, y) => x + y, 0)}/60${finalWords < 800 || finalWords > 1500 ? ' · OUTSIDE 800–1500' : ''}`);
 }
 console.log(`review totals: kept ${summary.kept}, fixed ${summary.fixed}, cut ${summary.cut}`);

@@ -27,6 +27,12 @@ export const SOCIAL = {
   instagram: 'https://www.instagram.com/mohammad_alsuhaiby/',
 };
 
+// Filled in by hand (empty = the page shows «[يُعبّى يدويًا]»). Only the garage number is published, never a personal one.
+export const GARAGE = {
+  location: '', // e.g. the area + a Google Maps link
+  whatsapp: '', // digits only with country code, e.g. 965XXXXXXXX
+};
+
 const UI = {
   ar: {
     home: 'الرئيسية', topics: 'المواضيع', about: 'عن محمد', contact: 'تواصل', search: 'بحث',

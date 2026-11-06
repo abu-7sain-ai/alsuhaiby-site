@@ -6,7 +6,7 @@
   - `tk (50).mp4` is one 18.5 s clip although map.json lists 10 IDs for it → treated as a duplicate of 7371869795513355527.
   - 17 `AQ…`/numeric files are Instagram downloads wrongly mapped to one ID in map.json → ignored for Phase 1.
   - Missing files for two high-view videos: 7214934819308899586 (3.3M), 7275783278387318034 (2.8M).
-- Views/dates/captions: `Desktop\KatibSuhaibi\data\outputs\_library.json` (615 videos).
+- Views/dates/captions: `Desktop\KatibSuhaibi\data\outputs\_library.json` (721 videos).
 - Existing analyses (transcript + hook + type) for all 48 old videos: `Desktop\KatibSuhaibi\data\files\بيانات-الحساب-والفيديوهات.txt` from line 634 → reused, no re-analysis.
 - Fonts/typography: `C:\Reels\engine\review\static\style.css` — Tajawal (body 400/500/700/800), Aref Ruqaa (headings 400/700), heading line-height 1.3, lead 16px/1.7, h1 64→40px mobile, h2 36→28px.
 

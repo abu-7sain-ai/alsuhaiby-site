@@ -1,4 +1,4 @@
-// write.js — writes the article for each topic from Mohammad's own words, then (optionally) the translations.
+// write.js — one video → one long article: Mohammad's transcript is the starting point, expanded with correct general knowledge (800–1500 words). Then (optionally) the translations.
 //   node scripts/write.js                       Arabic for every topic in data/topics.json (default --langs ar)
 //   node scripts/write.js --langs ar,en,fr,es,ur   Arabic + the four translations (Arabic is reused if it exists)
 //   node scripts/write.js --only <topicKey> [--force]
@@ -18,10 +18,10 @@ const SYSTEMS = 'محرك, قير, مكيف, فرامل, كهرباء, تواي�
 const AR_RULES = `You write web articles in Arabic for the personal site of محمد الصهيبي, a Kuwaiti car mechanic who owns «كراج الصهيبي» (German cars, since 2022).
 Each article turns one of his short TikTok videos into a full page that ranks on Google and gets quoted by AI assistants.
 
-SOURCE OF TRUTH: the transcripts below are his own words. Every cause / sign / step he lists becomes its own section, in his order, and each section starts from what he said.
-You MAY expand with correct, well-established technical explanation (why it happens, how to check, what the fix is) so the article is complete,
-but EVERY factual statement he did not say must be listed in "additions" (one short Arabic sentence per added fact). Be exhaustive and honest in that list.
-Never invent prices, part numbers, brand-specific claims, statistics or personal stories. No prices at all. Use numbers (km, °C, seconds, RPM) only when they are standard and safe, and list them in additions.
+SOURCE: the transcript below is his own words — the starting point. Every cause / sign / step he lists becomes its own section, in his order, and each section starts from what he said.
+Then EXPAND FREELY with correct, well-established general automotive knowledge (why it happens, how the driver can check it, what the fix is, what happens if it is ignored) so the article is long and complete.
+Never contradict the video. Never invent prices, part numbers, brand-specific claims, statistics, personal stories or maintenance intervals in km/months. No prices at all.
+List in "additions" one short Arabic sentence per main point you added beyond his words (for the review log; not published).
 
 VOICE: spoken Kuwaiti dialect that every Gulf reader understands, exactly like he talks in the videos: plain, direct, practical, SHORT sentences (mostly under 20 words), talking to the driver as «انت».
 Write like a mechanic explaining to a customer at the garage, not like a writer. No literary or dramatic words (e.g. «محكم»، «جهنمية»، «القلب النابض»، «تترجم»، «صدمات»، «بنعومة فائقة»), no Modern Standard connectors («بالإضافة إلى ذلك»، «وبالتالي»، «حيث إن»، «يُعد»). Prefer: وايد، شوي، يبيلها، تحس، تدوس، يتسكر، عطلان، بدّله، شيّك عليه.
@@ -30,13 +30,13 @@ Forbidden: hashtags, emojis, his on-video CTAs («اضغط على هذي»، «�
 
 STRUCTURE AND SEO:
 - title: a natural search sentence that STARTS WITH THE SYMPTOM the driver feels (not the part name), as people type it, e.g. «سيارتي ترجف لما أدوس بنزين: 4 أسباب». Include the count when he lists items. Max 70 characters.
-- summary: exactly two sentences that fully answer the question: the first names the causes/signs he lists in the MAIN video, the second says what to do. This is shown first on the page.
-- The count in the title must equal the number of causes/signs he lists in the MAIN video. Points that only appear in the OTHER videos go in ONE extra section titled «أسباب ثانية ذكرها محمد» (or «علامات ثانية…») — never as extra numbered causes.
+- summary: exactly two sentences that fully answer the question: the first names the causes/signs he lists in the video, the second says what to do. This is shown first on the page.
+- The count in the title must equal the number of causes/signs he lists in the video.
 - Never give maintenance intervals in km or months, prices, or brand-specific facts unless he said them.
 - description: meta description, max 155 characters, includes the main search phrase.
 - slug: 3–6 Arabic words from the title joined with "-", no digits, no punctuation.
 - intro: 1 short paragraph (40–80 words) after the summary, no repetition of the summary.
-- sections: one per cause/sign/step he mentioned (+ optionally one «متى توديها الكراج؟» section). heading = short (2–6 words) and specific. body = 120–220 words, plain paragraphs separated by \\n\\n, may contain a short "- " list.
+- sections: one per cause/sign/step he mentioned (+ optionally one «متى توديها الكراج؟» section). heading = short (2–6 words) and specific. body = 130–230 words, plain paragraphs separated by \\n\\n, may contain a short "- " list.
 - The whole article (summary + intro + sections) must be 800–1500 Arabic words.
 - faq: 3–5 questions written exactly the way people ask in Gulf dialect (as in comments and Google searches); the FIRST sentence of each answer is the direct answer; answers 25–60 words.
 - keywords: 3–5 search phrases (mix فصحى and عامية), used naturally in title, summary and FAQ without stuffing.
@@ -59,11 +59,11 @@ function articleWords(a) {
 }
 
 function sourceBlock(t) {
-  return [t.main, ...(t.others || [])].map((id, i) => {
+  return [t.main].map((id) => { // one video → one article: only the main video's transcript is the source (other videos stay embedded on the page)
     const v = videos.get(id);
     const an = v?.path ? readJson(cachePath(v, 'analysis'), null) : null;
     if (!an) throw new Error(`missing analysis for ${id} — run: node scripts/analyze.js --topics`);
-    return `### ${i === 0 ? 'MAIN VIDEO' : 'OTHER VIDEO ON THE SAME TOPIC'} ${id} (${v.views.toLocaleString('en')} views, ${v.date})
+    return `### VIDEO ${id} (${v.views.toLocaleString('en')} views, ${v.date})
 Spoken: ${an.transcript}
 On screen: ${an.onScreenText || '-'}${an.items ? `\nItems: ${JSON.stringify(an.items)}` : ''}`;
   }).join('\n\n');
@@ -76,9 +76,9 @@ async function writeArabic(t, v) {
   const messages = [{ role: 'system', content: AR_RULES }, { role: 'user', content: `Topic: ${t.key}\n\n${sourceBlock(t)}` }];
   let a = await chat({ script: 'write', label: `${t.key} ar`, messages });
   let words = articleWords(a);
-  if (words < 800 || words > 1600) {
+  if (words < 850 || words > 1500) {
     console.log(`  ${words} words — asking for a ${words < 800 ? 'longer' : 'shorter'} version`);
-    messages.push({ role: 'assistant', content: JSON.stringify(a) }, { role: 'user', content: `The article is ${words} words. Rewrite it to 950–1300 words following every rule (keep the additions list exhaustive). Return the full JSON again.` });
+    messages.push({ role: 'assistant', content: JSON.stringify(a) }, { role: 'user', content: `The article is ${words} words. Rewrite it to 1000–1300 words following every rule: expand each section with correct general explanation (how to check it, what the fix is), never padding or repeating. Return the full JSON again.` });
     a = await chat({ script: 'write', label: `${t.key} ar (resize)`, messages });
     words = articleWords(a);
   }
