@@ -16,106 +16,15 @@ const REVIEW_MODEL = process.env.REVIEW_MODEL || 'anthropic/claude-sonnet-5.5';
 const videos = videoIndex();
 const topics = readJson(path.join(ROOT, 'data', 'topics.json'), []).filter((t) => !A.only || t.key === A.only);
 
-// ---- split the article into numbered units -------------------------------
-function splitSentences(text) {
-  const out = [];
-  for (const para of String(text).split(/\n+/)) {
-    const p = para.trim();
-    if (!p) continue;
-    if (/^[-•]\s/.test(p)) { out.push({ text: p.replace(/^[-•]\s*/, ''), list: true, newPara: true }); continue; }
-    const parts = p.match(/[^.!؟?]+[.!؟?]+["»”)]*|[^.!؟?]+$/g) || [p];
-    parts.map((s) => s.trim()).filter(Boolean).forEach((s, i) => out.push({ text: s, newPara: i === 0 }));
-  }
-  return out;
-}
-
-function toUnits(a) {
-  const units = [];
-  const add = (where, s) => units.push({ id: `S${units.length + 1}`, where, ...s });
-  splitSentences(a.summary).forEach((s) => add('summary', s));
-  splitSentences(a.intro).forEach((s) => add('intro', s));
-  a.sections.forEach((sec, i) => {
-    add(`section${i}.heading`, { text: sec.heading, newPara: true });
-    splitSentences(sec.body).forEach((s) => add(`section${i}.body`, s));
-  });
-  a.faq.forEach((f, i) => {
-    add(`faq${i}.q`, { text: f.q, newPara: true });
-    splitSentences(f.a).forEach((s) => add(`faq${i}.a`, s));
-  });
-  return units;
-}
-
-function fromUnits(a, units) {
-  const join = (where) => {
-    let out = '';
-    for (const u of units.filter((x) => x.where === where && !x.cut)) {
-      const t = u.text.trim();
-      if (!t) continue;
-      out += out ? (u.list ? `\n- ${t}` : u.newPara ? `\n\n${t}` : ` ${t}`) : (u.list ? `- ${t}` : t);
-    }
-    return out.trim();
-  };
-  const sections = a.sections
-    .map((s, i) => ({ heading: units.find((u) => u.where === `section${i}.heading`)?.cut ? '' : units.find((u) => u.where === `section${i}.heading`)?.text, body: join(`section${i}.body`), fromVideo: s.fromVideo }))
-    .filter((s) => s.heading && wordCount(s.body) >= 15); // a section with (almost) nothing left is dropped, never padded
-  const faq = a.faq
-    .map((f, i) => ({ q: units.find((u) => u.where === `faq${i}.q`)?.cut ? '' : units.find((u) => u.where === `faq${i}.q`)?.text, a: join(`faq${i}.a`), firstCut: units.find((u) => u.where === `faq${i}.a`)?.cut }))
-    .filter((f) => f.q && f.a && !f.firstCut) // the first sentence must be the direct answer; if it was cut, drop the question
-    .map(({ q, a }) => ({ q, a }));
-  return { ...a, summary: join('summary'), intro: join('intro'), sections, faq };
-}
-
+import { toUnits, fromUnits, applyEdits, PASS1, PASS2 } from './lib/article.js';
 const words = (a) => wordCount([a.summary, a.intro, ...a.sections.map((s) => `${s.heading} ${s.body}`)].join(' '));
 
 function transcripts(t) {
-  return [t.main].map((id) => { // one video → one article
-    const v = videos.get(id);
-    const an = readJson(cachePath(v, 'analysis'), {});
-    return `### Video ${id}\nSpoken: ${an.transcript}\nOn screen: ${an.onScreenText || '-'}`;
-  }).join('\n\n');
-}
-
-const PASS1 = `You are a skeptical Kuwaiti master mechanic with 25 years in a garage that services German and Japanese cars. You review a web article written by an AI from one video of محمد الصهيبي, a Kuwaiti mechanic.
-The article starts from his transcript and is EXPANDED ON PURPOSE with general automotive knowledge. That expansion is wanted: correct general knowledge is KEEP by default, even if he did not say it.
-The article is split into numbered units (sentences, headings, FAQ questions). Flag ONLY the units that need action:
-- FIX: the idea is right but a detail is wrong, exaggerated or too specific, OR the wording is literary / Modern Standard / not natural Kuwaiti-Gulf dialect. Give the corrected sentence in Arabic (same dialect, no new facts).
-  A FIX changes ONLY the wrong detail or the wording: it keeps every other correct detail of the sentence and stays about the same length (never under 75% of the original's words). Do not summarise or tighten in a FIX. If most of a sentence is wrong, CUT it instead.
-- CUT: factually WRONG and not fixable in one sentence, CONTRADICTS the video, invented prices / km or month intervals / statistics / brand-specific claims, pure filler or repetition of an earlier sentence, AI phrases («في عالم السيارات»، «لا شك»، «في الختام»...), on-video CTAs.
-Do NOT cut a sentence only because it is not in the transcript. Do NOT cut correct explanation to make the article shorter: the article must stay 800–1500 words.
-Summary units are the first two lines on the page: they must fully answer the question. Prefer FIX over CUT there.
-Also judge the whole article: dialect/tone (Kuwaiti, natural, same tone as the video; uses «كراج» not «ورشة») and whether the first two lines answer the question.
-Return ONLY JSON:
-{"verdicts":[{"id":"S12","verdict":"FIX|CUT","fixed":"only for FIX","reason":"short English reason"}],"dialect":"short English note","answerFirst":"short English note"}
-List only FIX and CUT units. Every unit you do not list is kept as it is.`;
-
-const PASS2 = `You are the same skeptical Kuwaiti master mechanic. Some sentences were removed or corrected in this Arabic article after your error check.
-1) Make it read coherently again with MINIMAL wording edits only: fix dangling references («ثانيًا» with no «أولًا», «كما ذكرنا» pointing to removed text, broken transitions).
-   If the number in the title or summary does not match the number of cause/sign sections taken from the MAIN video, you MUST edit the title/summary so they match.
-   Replace any remaining literary or Modern Standard phrasing with plain spoken Kuwaiti (same meaning).
-   You may NOT add any new fact, number, cause or advice, and you may not lengthen the article.
-   You may NOT remove or summarise sentences either: the error check is already done, so every remaining sentence stays. Change words, not content. Only return fields you actually changed.
-2) Score the FINAL article from 0 to 10 on six dimensions:
-   fidelity (every point Mohammad makes in the video is present and central, nothing contradicts him, nothing false remains; correct general explanation is wanted and is not a fidelity problem),
-   dialect (Kuwaiti tone of the video), answerFirst (first two lines fully answer the question),
-   structure (each cause/sign under its own heading), specificity (concrete, specific details instead of generic talk — but no invented ones), noFluff (no padding, repetition or AI phrases).
-Return ONLY JSON:
-{"edits":[{"field":"title|summary|intro|description|sections[i].heading|sections[i].body|faq[i].q|faq[i].a","text":"the full new text of that field"}],"scores":{"fidelity":0,"dialect":0,"answerFirst":0,"structure":0,"specificity":0,"noFluff":0},"notes":"one or two English sentences on what still needs a human look, if anything"}`;
-
-// Coherence edits are wording-only: an edit that shrinks a text field by more than 20% would be an unlogged cut, so it is rejected.
-function applyEdits(a, edits = []) {
-  const out = structuredClone(a);
-  const applied = [], rejected = [];
-  for (const e of edits) {
-    const m = String(e.field).match(/^(sections|faq)\[(\d+)\]\.(heading|body|q|a)$/);
-    const get = () => (m ? out[m[1]]?.[+m[2]]?.[m[3]] : out[e.field]);
-    const before = get();
-    if (before === undefined || typeof e.text !== 'string') continue;
-    const shortField = ['title', 'description'].includes(e.field) || /heading|\.q$/.test(e.field);
-    if (!shortField && wordCount(e.text) < 0.8 * wordCount(before)) { rejected.push({ ...e, before, why: 'would shorten the text by more than 20% (unlogged cut)' }); continue; }
-    if (m) out[m[1]][+m[2]][m[3]] = e.text; else out[e.field] = e.text;
-    applied.push({ ...e, before });
-  }
-  return { article: out, applied, rejected };
+  const v = videos.get(t.main);
+  const an = readJson(cachePath(v, 'analysis'), {});
+  return `### Video ${t.main}
+Spoken: ${an.transcript}
+On screen: ${an.onScreenText || '-'}`;
 }
 
 const summary = { kept: 0, fixed: 0, cut: 0 };
@@ -142,7 +51,7 @@ for (const t of topics) {
     const u = units.find((x) => x.id === vd.id);
     if (!u) continue;
     const verdict = String(vd.verdict).toUpperCase();
-    if (verdict === 'CUT') u.cut = true;
+    if (verdict === 'CUT' || verdict === 'DOUBT') u.cut = true;
     if (verdict === 'FIX' && vd.fixed && u.text.split(/\s+/).length >= 8 && vd.fixed.split(/\s+/).length < 0.6 * u.text.split(/\s+/).length) {
       // a "fix" that drops 40%+ of a sentence is a hidden cut: keep the original and log it for a human look
       log.push({ id: u.id, where: u.where, verdict: 'SHRINK-REJECTED', text: vd.fixed, reason: `fix rejected (would shrink the sentence by 40%+): ${vd.reason}` });

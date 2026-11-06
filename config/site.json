@@ -4,6 +4,13 @@
     "whatsapp": "",
     "location": ""
   },
-  "languages": ["ar", "en", "fr", "es", "ur"],
-  "mediaBase": "https://media.alsuhaiby.com"
+  "languages": [
+    "ar",
+    "en",
+    "fr",
+    "es",
+    "ur"
+  ],
+  "mediaBase": "https://media.alsuhaiby.com",
+  "publishPerDay": 7
 }

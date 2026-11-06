@@ -1,4 +1,4 @@
-// build-page.js — turns write.js output into the site's Markdown files (one per topic per language),
+// build-page.js — (Phase 1b tool, for the 20 pages in data/topics.json) turns write.js output into the site's Markdown files (one per topic per language),
 // extracts cover + share images with ffmpeg, and writes data/review.json for the /review/ page.
 //   node scripts/build-page.js
 // Pages that disappear are moved to content/_archive/ (never deleted).
@@ -143,7 +143,9 @@ for (const lang of LANGS) {
   if (!fs.existsSync(dir)) continue;
   for (const f of fs.readdirSync(dir)) {
     const p = path.normalize(path.join(dir, f));
-    if (f.endsWith('.md') && !generated.has(p)) {
+    // Only pages that belong to data/topics.json are managed here; pages published from the queue (night.js / daily.js) are never touched.
+    const own = f.endsWith('.md') && topics.some((t) => fs.readFileSync(p, 'utf8').slice(0, 400).includes(`topic: ${JSON.stringify(t.key)}`));
+    if (own && !generated.has(p)) {
       const dest = path.join(ROOT, 'content', '_archive', lang, `${today}-${f}`);
       fs.mkdirSync(path.dirname(dest), { recursive: true });
       fs.renameSync(p, dest);

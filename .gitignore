@@ -6,3 +6,4 @@ dist/
 *.mov
 data/run-*.log
 data/rebuild.log
+library/

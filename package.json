@@ -11,7 +11,9 @@
     "review": "node scripts/review.js",
     "build-pages": "node scripts/build-page.js",
     "deploy": "astro build && wrangler deploy",
-    "status": "node scripts/lib/status.js"
+    "status": "node scripts/lib/status.js",
+    "night": "node scripts/night.js",
+    "daily": "node scripts/daily.js"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

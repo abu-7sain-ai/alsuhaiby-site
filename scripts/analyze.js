@@ -12,20 +12,7 @@ guard('analyze');
 const A = args();
 const videos = videoIndex();
 
-const PROMPT = `You are watching a short car-repair video by Mohammad Al-Suhaiby (محمد الصهيبي), a Kuwaiti mechanic. Watch it fully, with sound and picture.
-Return ONLY a JSON object with these keys, all text in Arabic exactly as spoken (Kuwaiti dialect, do not correct or rephrase his words):
-{
-  "transcript": "full spoken transcript, word for word",
-  "onScreenText": "all text that appears on screen, in order",
-  "hook": "the first sentence he says",
-  "topic": "one short sentence: what the video is about, starting with the symptom the driver feels",
-  "type": "عرض مشكلة | تحذير | سؤال مباشر | أخرى",
-  "system": "one of: محرك, قير, مكيف, فرامل, كهرباء, تواير, وقود, تبريد, تعليق وتوجيه, عادات وصيانة",
-  "brands": ["car brands he names, empty if none"],
-  "items": [{"name": "each cause / sign / step he lists, in his words", "whatHeSaid": "everything he says about it"}],
-  "cta": "the call to action he gives (follow, comment, garage location...), empty if none"
-}
-Never add information he did not say.`;
+import { ANALYZE_PROMPT as PROMPT } from './lib/pipeline.js';
 
 function importExisting() {
   const text = fs.readFileSync(OLD_ANALYSES, 'utf8');

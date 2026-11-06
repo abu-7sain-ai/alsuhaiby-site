@@ -2,13 +2,13 @@
 //   guard('<script>')   call once at the top of a pipeline script: records the run, alerts ⚠️ on failure, refreshes status on success.
 //   alert(text)         one-way Telegram message to «مجموعة التنبيهات» (scripts/lib/telegram.py); never throws.
 //   refreshStatus()     recomputes every field (pages, videos, spend, key credit, site health) and alerts ⚠️ if credit < $3.
-//   alertCatchUp(when)  for the Phase 3 scheduler: a scheduled run was skipped (machine off) and the catch-up ran.
+//   alertCatchUp(when)  the 02:00 daily run did not happen; the 05:00 check ran the catch-up.
 //   node scripts/lib/status.js [--test-alert]   refresh now (and optionally send a test ✅)
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { ROOT, VIDEO_DIR, readJson, writeJson, apiKey } from './common.js';
+import { ROOT, LIB_DIR, readJson, writeJson, apiKey } from './common.js';
 
 const FILE = path.join(ROOT, 'data', 'status.json');
 const SITE_URL = 'https://alsuhaiby.com/';
@@ -17,7 +17,7 @@ const load = () => readJson(FILE, { errors: [] });
 
 export function alert(text) {
   try {
-    const r = spawnSync('python', ['-X', 'utf8', path.join(ROOT, 'scripts', 'lib', 'telegram.py'), text], { encoding: 'utf8', timeout: 30000 });
+    const r = spawnSync(process.env.PYTHON || 'python', ['-X', 'utf8', path.join(ROOT, 'scripts', 'lib', 'telegram.py'), text], { encoding: 'utf8', timeout: 30000 });
     if (r.status !== 0) console.warn(`  ! ${String(r.stderr || r.error || 'telegram failed').trim()}`);
     return r.status === 0;
   } catch (e) {
@@ -61,6 +61,19 @@ async function siteHealth() {
   }
 }
 
+// Daily publish: GitHub Actions at 23:00 UTC = 02:00 Kuwait (.github/workflows/daily.yml).
+function nextRun() {
+  const n = new Date(); const t = new Date(Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate(), 23, 0));
+  if (t <= n) t.setUTCDate(t.getUTCDate() + 1);
+  const k = new Date(t.getTime() + 3 * 3600e3);
+  return `${k.toISOString().slice(0, 10)} 02:00 Kuwait (GitHub Actions, daily)`;
+}
+function archiveLeft() {
+  const lib = readJson(path.join(LIB_DIR, 'library.json'), null), led = readJson(path.join(LIB_DIR, 'ledger.json'), null);
+  if (!lib || !led) return undefined;
+  return lib.videos.filter((v) => !['published', 'queued', 'merged', 'skipped'].includes(led[v.id]?.status)).length;
+}
+
 export async function refreshStatus() {
   const s = load();
   const pages = {};
@@ -70,9 +83,12 @@ export async function refreshStatus() {
   const since = Date.now() - 30 * 864e5;
   const last30 = (spend.calls || []).filter((c) => Date.parse(c.at) >= since).reduce((a, c) => a + (c.costUsd || 0), 0);
   Object.assign(s, {
-    nextScheduledRun: 'not set (Phase 3)',
+    nextScheduledRun: nextRun(),
+    queueWaiting: fs.existsSync(path.join(ROOT, 'queue')) ? fs.readdirSync(path.join(ROOT, 'queue')).filter((d) => fs.existsSync(path.join(ROOT, 'queue', d, 'meta.json'))).length : 0,
+    publishPerDay: readJson(path.join(ROOT, 'config', 'site.json'), {}).publishPerDay ?? 7,
     pagesPublished: { total: Object.values(pages).reduce((a, b) => a + b, 0), byLang: pages },
-    videosProcessed: fs.existsSync(VIDEO_DIR) ? fs.readdirSync(VIDEO_DIR).filter((f) => f.endsWith('.analysis.json')).length : null,
+    videosAnalyzed: fs.existsSync(path.join(LIB_DIR, 'videos')) ? fs.readdirSync(path.join(LIB_DIR, 'videos')).filter((d) => fs.existsSync(path.join(LIB_DIR, 'videos', d, 'analysis.json'))).length : undefined,
+    archiveLeft: archiveLeft(),
     videosOnR2: Object.keys(readJson(path.join(ROOT, 'data', 'r2.json'), {})).length,
     openRouterSpendUsd: { total: Math.round(spend.totalUsd * 1000) / 1000, last30Days: Math.round(last30 * 1000) / 1000 },
     keyCreditLeftUsd: await keyCredit(),
@@ -88,7 +104,7 @@ export async function refreshStatus() {
 }
 
 export function alertCatchUp(missedAt) {
-  alert(`⚠️ alsuhaiby.com: التشغيل المجدول (${missedAt}) ما اشتغل لأن الجهاز كان طافي — تم تشغيل التعويض الحين.`);
+  alert(`⚠️ alsuhaiby.com: تشغيل النشر اليومي (${missedAt}) ما اشتغل — تم تشغيل التعويض الحين.`);
 }
 
 let guarded = false;

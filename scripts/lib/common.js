@@ -3,11 +3,16 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 export const VIDEO_DIR = process.env.VIDEO_DIR || path.join(os.homedir(), 'Videos', 'ChatExport_2026-10-30', 'video_files');
 export const EXPORT_DIR = path.dirname(VIDEO_DIR);
-export const LIBRARY = process.env.LIBRARY_JSON || path.join(os.homedir(), 'Desktop', 'KatibSuhaibi', 'data', 'outputs', '_library.json');
+// Private library repo (abu-7sain-ai/alsuhaiby-library): transcripts, analyses, articles, review logs, dedup ledger. Never public.
+export const LIB_DIR = process.env.LIB_DIR || path.join(os.homedir(), 'Desktop', 'alsuhaiby-library');
+export const LIBRARY = process.env.LIBRARY_JSON || path.join(LIB_DIR, 'library.json');
+// Videos fetched with yt-dlp (never committed; the copy everyone plays is on R2).
+export const DOWNLOAD_DIR = process.env.DOWNLOAD_DIR || path.join(os.homedir(), 'Videos', 'alsuhaiby-downloads');
 export const OLD_ANALYSES = process.env.OLD_ANALYSES || path.join(os.homedir(), 'Desktop', 'KatibSuhaibi', 'data', 'files', 'بيانات-الحساب-والفيديوهات.txt');
 export const MODEL = process.env.OPENROUTER_MODEL || 'google/gemini-3.8-flash';
 export const LANGS = ['ar', 'en', 'fr', 'es', 'ur'];
@@ -62,11 +67,32 @@ export function videoIndex() {
       if (m && byId.has(m[1]) && !byId.get(m[1]).file) Object.assign(byId.get(m[1]), { file: f, path: path.join(VIDEO_DIR, f) });
     }
   }
+  if (fs.existsSync(DOWNLOAD_DIR)) {
+    for (const f of fs.readdirSync(DOWNLOAD_DIR)) {
+      const m = f.match(/^(\d+)\.mp4$/);
+      if (m && byId.has(m[1]) && !byId.get(m[1]).file) Object.assign(byId.get(m[1]), { file: f, path: path.join(DOWNLOAD_DIR, f) });
+    }
+  }
   return byId;
 }
 
-/** Cache files live next to the video so nothing is paid for twice. */
-export const cachePath = (video, kind) => `${video.path}.${kind}.json`;
+/** Cache files live in the private library repo (videos/<id>/<kind>.json) so nothing is paid for twice. */
+export const cachePath = (video, kind) => path.join(LIB_DIR, 'videos', String(video.id ?? video), `${kind}.json`);
+
+// ---- dedup ledger (private library): id → { status, page, reason, line, at } ---------------------
+// status: published | queued | merged | skipped | download-failed. Remaining = library − ledger (published/queued/merged/skipped).
+export const LEDGER = path.join(LIB_DIR, 'ledger.json');
+export const DONE = new Set(['published', 'queued', 'merged', 'skipped']);
+export const loadLedger = () => readJson(LEDGER, {});
+export function setLedger(id, entry) {
+  const l = loadLedger();
+  l[id] = { ...(l[id] || {}), ...entry, at: new Date().toISOString() };
+  writeJson(LEDGER, l);
+  return l[id];
+}
+
+/** Kuwait date (YYYY-MM-DD) — the site's day. */
+export const kuwaitDay = (d = new Date()) => new Date(d.getTime() + 3 * 3600e3).toISOString().slice(0, 10);
 
 // ---- spend tracking -------------------------------------------------------
 const SPEND = path.join(ROOT, 'data', 'spend.json');
@@ -79,7 +105,51 @@ export function recordSpend(entry) {
 }
 
 // ---- OpenRouter -----------------------------------------------------------
+export class ClaudeLimitError extends Error {}
+
+// Claude Code CLI on his PC (his subscription, no per-call cost). Lean call: own system prompt, no tools, no MCP,
+// no user settings (so the Telegram Stop hook does not fire per call), no saved session.
+function claudeCli({ messages, script, label }) {
+  const sys = messages.filter((m) => m.role === 'system').map((m) => m.content).join('\n\n');
+  const conv = messages.filter((m) => m.role !== 'system')
+    .map((m) => (m.role === 'assistant' ? `YOUR PREVIOUS ANSWER:\n${m.content}` : typeof m.content === 'string' ? m.content : JSON.stringify(m.content))).join('\n\n');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'alsuhaiby-claude-'));
+  const sp = path.join(dir, 'system.txt');
+  fs.writeFileSync(sp, sys || 'You return JSON only.', 'utf8');
+  const env = { ...process.env };
+  delete env.ANTHROPIC_API_KEY; // always the subscription, never an API key
+  const t0 = Date.now();
+  const r = spawnSync('claude', ['-p', '--output-format', 'json', '--setting-sources', 'project', '--no-session-persistence', '--model', process.env.CLAUDE_MODEL || 'opus',
+    '--tools', '""', '--strict-mcp-config', '--system-prompt-file', `"${sp}"`], { input: `${conv}\n\nReturn ONLY the JSON object.`, cwd: dir, env, encoding: 'utf8', shell: true, timeout: 20 * 60e3, maxBuffer: 64 << 20 });
+  fs.rmSync(dir, { recursive: true, force: true });
+  let j;
+  try { j = JSON.parse(r.stdout); } catch { throw new Error(`claude CLI: ${String(r.stderr || r.stdout || r.error).slice(0, 300)}`); }
+  if (j.is_error) {
+    const msg = String(j.result || j.api_error_status || 'error');
+    if (/limit|usage|quota|rate|429|overloaded/i.test(msg)) throw new ClaudeLimitError(`Claude subscription limit: ${msg.slice(0, 200)}`);
+    throw new Error(`claude CLI: ${msg.slice(0, 300)}`);
+  }
+  const u = j.usage || {};
+  recordSpend({ script, label, model: 'claude-cli (subscription)', promptTokens: u.input_tokens, completionTokens: u.output_tokens, costUsd: 0, subscriptionUsdEquivalent: j.total_cost_usd });
+  console.log(`  · ${label}: claude (subscription) · ${u.output_tokens ?? '?'} out · ${Math.round((Date.now() - t0) / 1000)} s`);
+  return j.result;
+}
+
 export async function chat({ messages, script, label, json = true, model = MODEL, maxTokens = 12000, temperature = 0.6 }) {
+  if (model === 'claude-cli') {
+    let lastErr;
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        const text = claudeCli({ messages, script, label });
+        return json ? parseJson(text) : text;
+      } catch (e) {
+        if (e instanceof ClaudeLimitError) throw e;
+        lastErr = e;
+        console.warn(`  ! attempt ${attempt} failed: ${e.message}`);
+      }
+    }
+    throw lastErr;
+  }
   const body = { model, messages, max_tokens: maxTokens, temperature, usage: { include: true } };
   if (json) body.response_format = { type: 'json_object' };
   let lastErr;
