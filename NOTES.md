@@ -15,7 +15,8 @@ Rules: CONSTITUTION.md · decisions: DECISIONS.md · Arabic how-to: README.md ·
 | User settings | `config/site.json` — garage WhatsApp, garage location, enabled languages, media host |
 | Status ("dashboard") | `data/status.json` — refresh with `npm run status` |
 | Spend log | `data/spend.json` · R2 upload log: `data/r2.json` · IndexNow key: `data/indexnow-key.txt` |
-| Secrets | `.env` (OPENROUTER_API_KEY, git-ignored). Telegram token: read at run time by the Reels app (`C:/Reels/engine`), never copied |
+| DNS | `node scripts/lib/dns.js list|add-txt` (CLOUDFLARE_API_TOKEN in .env, Zone:DNS:Edit for alsuhaiby.com) |
+| Secrets | `.env` (OPENROUTER_API_KEY, CLOUDFLARE_API_TOKEN; git-ignored). Telegram token: read at run time by the Reels app (`C:/Reels/engine`), never copied |
 
 ## Pipeline
 1. `node scripts/analyze.js --topics` — Gemini watches each video once (cached).
@@ -35,7 +36,7 @@ Every step: `guard()` records the run in data/status.json and sends ⚠️ to Te
 ## Phase 2 acceptance (2026-11-06)
 1. Speed (Lighthouse mobile, simulated slow 4G, live domain): home 99 · LCP 2.0 s; video page 99 · LCP 1.9 s; topics 99 · LCP 1.9 s. Real phone check on mobile data: pending (Mohammad).
 2. Video page plays from R2 in the clean player (no iframe; range requests 206). ✅
-3. Search Console: Domain property alsuhaiby.com added (by Mohammad). Verification TXT `google-site-verification=kv_WER5KR1SnBkkW3YsflKHnW-U5Y8sHOZ8VOJRM-Pw` must be on the root of alsuhaiby.com (wrangler's login has no DNS permission, so it is added in the Cloudflare dashboard). Then «Verify» and submit `sitemap-index.xml`.
+3. Search Console: Domain property alsuhaiby.com added (by Mohammad). Verification TXT `google-site-verification=kv_WER5KR1SnBkkW3YsflKHnW-U5Y8sHOZ8VOJRM-Pw` must be on the root of alsuhaiby.com — ADDED 2026-11-06 with scripts/lib/dns.js and resolving on 1.1.1.1 and 8.8.8.8. Remaining: «Verify» + submit `sitemap-index.xml` in Search Console.
 4. Telegram test ✅ sent to «مجموعة التنبيهات» (scripts/lib/status.js --test-alert).
 5. Push to main → Cloudflare deployed by itself 24 s later. ✅
 Bing: DONE via IndexNow — all 25 URLs submitted (HTTP 202); key file at /<key>.txt (data/indexnow-key.txt). No Bing Webmaster account needed.
