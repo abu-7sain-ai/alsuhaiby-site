@@ -42,8 +42,10 @@ Every step: `guard()` records the run in data/status.json and sends ⚠️ to Te
 Bing: DONE via IndexNow — all 25 URLs submitted (HTTP 202); key file at /<key>.txt (data/indexnow-key.txt). No Bing Webmaster account needed.
 UptimeRobot: monitor on https://alsuhaiby.com every 5 min with EMAIL alerts.
 
+## Security log
+- 2026-11-06: the Cloudflare DNS token pasted in chat was rolled. New value in .env verified (DNS read OK); the old value is rejected by Cloudflare ("Invalid API Token").
+
 ## Open items
-- Cloudflare DNS token in .env was pasted in chat once: roll it in Cloudflare (My Profile → API Tokens → Roll) and paste the new value into .env.
 - Real phone speed check on mobile data (Lighthouse already passes).
 - UptimeRobot: email alerts only. Telegram alert contact not added (needs a dashboard sign-in; unclear if Telegram is in the free plan's 5 integrations).
 - After each publish, re-submit new URLs to IndexNow (Phase 3 automates this).
