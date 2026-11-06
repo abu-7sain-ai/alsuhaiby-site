@@ -58,12 +58,12 @@ export async function analyze(v, { script = 'analyze' } = {}) {
 }
 
 // ---- 3. dedup: a new topic, a repeat of a page (live or queued), or not an article at all? ------
-const DEDUP = `You keep the topic list of a car-repair website made from the short videos of محمد الصهيبي, a Kuwaiti mechanic. One page per topic (one symptom / question).
+const DEDUP = `You keep the topic list of a car-repair website made from the short videos of محمد الصهيبي, a Kuwaiti mechanic. One page per topic (one symptom / question / piece of advice).
 You get one new video (his transcript) and the list of pages that already exist or are queued.
 Decide:
 - "duplicate": the video answers the SAME driver question / symptom as one listed page (same causes or signs, even in other words or a shorter version). Give that page's slug. It will be embedded on that page, not become a new page.
 - "new": it answers a question no listed page answers (a different symptom, a different part's failure signs, a different piece of advice).
-- "skip": it is not a car-repair topic that can become an article (greeting, ad, personal clip, garage tour, a joke, only a call to action, no real content).
+- "skip": it has no useful car content a driver would search for (greeting, ad, personal clip, garage tour, a joke, only a call to action). Useful buying, driving or maintenance advice (e.g. which cars use less fuel, habits that hurt the car) IS a topic, not a skip.
 When unsure between duplicate and new, choose "new" only if a driver would search for it with different words AND get a different answer.
 Return ONLY JSON: {"decision":"new|duplicate|skip","slug":"slug of the page, only for duplicate","reason":"one short English sentence"}`;
 
