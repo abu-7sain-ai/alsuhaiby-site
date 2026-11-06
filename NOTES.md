@@ -32,6 +32,15 @@ Every step: `guard()` records the run in data/status.json and sends ⚠️ to Te
 - Telegram: `scripts/lib/telegram.py` → the Reels app's «مجموعة التنبيهات» group (✅ published, ⚠️ failure / low credit / catch-up run).
 - UptimeRobot: monitor on https://alsuhaiby.com every 5 minutes (account Abu.7sain.ai@gmail.com).
 
+## Phase 2 acceptance (2026-11-06)
+1. Speed (Lighthouse mobile, simulated slow 4G, live domain): home 99 · LCP 2.0 s; video page 99 · LCP 1.9 s; topics 99 · LCP 1.9 s. Real phone check on mobile data: pending (Mohammad).
+2. Video page plays from R2 in the clean player (no iframe; range requests 206). ✅
+3. Search Console verified + sitemap: PENDING — needs a Google sign-in inside Claude's built-in browser (Chrome's own profile cannot be automated).
+4. Telegram test ✅ sent to «مجموعة التنبيهات» (scripts/lib/status.js --test-alert).
+5. Push to main → Cloudflare deployed by itself 24 s later. ✅
+Bing: all 25 URLs submitted via IndexNow (202). Bing Webmaster import from Google: pending with item 3.
+UptimeRobot: monitor exists (email alerts); Telegram contact pending the same sign-in.
+
 ## Open items
 - Scheduler (automatic pull of new videos) = Phase 3; status shows "not set (Phase 3)".
 - Garage WhatsApp + location: empty in config/site.json (pages show «[يُعبّى يدويًا]»).
