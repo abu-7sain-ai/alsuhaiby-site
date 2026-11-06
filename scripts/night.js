@@ -5,6 +5,7 @@
 //   4. new topic: Claude (his subscription) writes the Arabic article and reviews it twice, strictly
 //   5. MP4 → R2, page → queue/<id>/ (published later by the cloud job, N per day)
 //   6. commit + push both repos after EVERY video → stoppable any time (Ctrl+C), nothing lost, nothing paid twice.
+//   Telegram: ⚠️ only (failed videos, TikTok block). Nothing on success; the result goes to data/status.json → lastNight.
 //   npm run night                    run until the archive is done (or Claude's limit / TikTok stops it)
 //   npm run night -- --limit 3       stop after 3 videos
 //   npm run night -- --ids a,b       only these videos
@@ -97,4 +98,12 @@ const lines = [
   ...done.failed.slice(0, 5).map((f) => `⚠️ ${f}`),
 ];
 console.log(`\n${lines.join('\n')}`);
-alert(lines.join('\n'));
+// Telegram only when something needs him (his rule 2026-11-07): failed videos or a TikTok block. A normal end, or Claude's
+// subscription limit (just run it again later), sends nothing. The result is kept in data/status.json → lastNight.
+const st = readJson(`${ROOT}/data/status.json`, {});
+st.lastNight = { at: new Date().toISOString(), queued: done.queued, merged: done.merged, skipped: done.skipped, failed: done.failed, stopped: stopReason || null, queueWaiting: queued().length, archiveLeft: left };
+writeJson(`${ROOT}/data/status.json`, st);
+const tiktokBlock = /TikTok rate-limited/.test(stopReason);
+if (done.failed.length || tiktokBlock) {
+  alert(['⚠️ alsuhaiby.com — تشغيل الليل', ...(tiktokBlock ? ['⚠️ تيك توك حدّ الجهاز ووقف التحميل. شغّله بعدين.'] : []), ...done.failed.slice(0, 5).map((f) => `⚠️ ${f}`)].join('\n'));
+}

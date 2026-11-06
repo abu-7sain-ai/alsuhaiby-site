@@ -3,7 +3,8 @@
 //      (a repeat of an existing topic is embedded on that page). Cost guard: stop paid work if today's spend > $2 or key credit < $3.
 //   2. Publish N pages from queue/ (config/site.json → publishPerDay, default 7), highest views first. Published pages leave the
 //      queue and are recorded in data/published.json, so nothing is ever published twice.
-//   3. astro build check → commit + push (Cloudflare deploys) → IndexNow → wait until the pages answer → ONE Telegram summary.
+//   3. astro build check → commit + push (Cloudflare deploys) → IndexNow → wait until the pages answer. Summary → data/status.json (lastDaily).
+//   Telegram ONLY for ⚠️: a failure, the cost guard, site down, an empty queue (nothing published). Nothing on success.
 //   node scripts/daily.js [--dry-run] [--publish N] [--max-new N]
 //   node scripts/daily.js --check     (05:00 Kuwait) if today's run did not happen: ⚠️ + run it now (catch-up)
 import fs from 'node:fs';
@@ -168,21 +169,22 @@ try {
     }
   } else if (!DRY) { s_status(); await refreshStatus(); HAVE_LIB && gitSync(LIB_DIR, ['.'], `daily ${today}: library`); gitSync(ROOT, ['data'], `daily ${today}: nothing to publish`); }
 
-  // 4. the one Telegram message
+  // 4. Telegram ONLY when something needs him or broke (his rule 2026-11-07). Silence = all fine.
+  //    The day's summary lives in data/status.json → lastDaily (ask Claude for it any time).
   const st = await refreshStatus();
-  const lines = [
-    `📰 alsuhaiby.com — ${today}`,
-    `نُشر اليوم: ${all.length}${result.merged.length ? ` · فيديوهات انضافت لصفحات موجودة: ${result.merged.length}` : ''}`,
-    ...all.map((m, i) => `${i + 1}. ${m.title}\n${urls[i]}`),
-    `باقي بالطابور: ${queued().length} · باقي من الأرشيف: ${HAVE_LIB ? remaining().length : '?'}`,
-    `تكلفة اليوم: $${spentToday().toFixed(2)} · رصيد المفتاح: ${st.keyCreditLeftUsd?.usd != null ? `$${st.keyCreditLeftUsd.usd}` : '?'}`,
-    ...(guardTripped ? [`⚠️ حارس التكلفة وقف الشغل المدفوع: ${guardTripped}`] : []),
-    ...(st.siteHealth && !st.siteHealth.up ? ['⚠️ الموقع ما يرد!'] : []),
-    ...errors.map((e) => `⚠️ ${e}`),
+  const warn = [
+    ...(guardTripped ? [`حارس التكلفة وقف الشغل المدفوع: ${guardTripped}`] : []),
+    ...(st.siteHealth && !st.siteHealth.up ? ['الموقع ما يرد!'] : []),
+    ...(!take.length && !result.newPublished.length ? ['الطابور فاضي — ما انتشر شي اليوم. شغّل npm run night على الجهاز.'] : []),
+    ...errors,
   ];
-  log(`\n${lines.join('\n')}`);
+  log(`\npublished ${all.length}: ${all.map((m) => m.slug).join(', ') || '-'} · merged ${result.merged.length} · queue ${queued().length} · archive left ${HAVE_LIB ? remaining().length : '?'} · today $${spentToday().toFixed(2)} · credit ${st.keyCreditLeftUsd?.usd ?? '?'}`);
+  if (warn.length) log(`would warn: ${warn.join(' | ')}`);
   if (DRY) log('\ndry run: nothing paid, moved, pushed or sent.');
-  else { alert(lines.join('\n')); recordRun('daily', true); }
+  else {
+    recordRun('daily', true);
+    if (warn.length) alert([`⚠️ alsuhaiby.com — ${today}`, ...warn.map((w) => `⚠️ ${w}`)].join('\n'));
+  }
 } catch (e) {
   console.error(e);
   if (!DRY) {
@@ -195,6 +197,12 @@ try {
 
 function s_status() {
   const s = readJson(STATUS, {});
-  s.lastDaily = { day: today, at: new Date().toISOString(), published: result.published.length + result.newPublished.length, merged: result.merged.length, errors: errors.length };
+  const all = [...result.newPublished, ...result.published];
+  s.lastDaily = {
+    day: today, at: new Date().toISOString(),
+    published: all.map((m) => ({ title: m.title, url: `${SITE}/${encodeURI(m.slug)}/` })), merged: result.merged.map((m) => `${m.id} → ${m.slug}`),
+    queueLeft: queued().length, archiveLeft: HAVE_LIB ? remaining().length : null, costTodayUsd: Math.round(spentToday() * 1000) / 1000,
+    costGuard: guardTripped || null, errors,
+  };
   writeJson(STATUS, s);
 }
