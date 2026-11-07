@@ -22,11 +22,11 @@ Rules: CONSTITUTION.md · decisions: DECISIONS.md · Arabic how-to: README.md ·
 | Secrets | `.env` on his PC (OPENROUTER_API_KEY, CLOUDFLARE_API_TOKEN = DNS + R2 edit, ZERNIO_API_KEY; git-ignored). On his PC Telegram goes through the Reels app (`C:/Reels/engine`). GitHub Actions secrets: OPENROUTER_API_KEY, CLOUDFLARE_API_TOKEN, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, ZERNIO_API_KEY, LIBRARY_DEPLOY_KEY |
 
 ## Daily pipeline (Phase 3, two lines)
-**LINE 1 — prep on his PC:** `npm run night` (Ctrl+C any time; it resumes). `-- --limit 3` · `-- --ids a,b` · `-- --dry-run`.
+**LINE 1 — prep on his PC:** desktop shortcut «تجهيز الصهيبي» (→ `scripts/night.bat`, «ص» icon `scripts/night.ico`) or `npm run night`. Close the window any time; it resumes. At the end the window shows an Arabic summary (`scripts/night-summary.js`, from `data/run-night.json`, updated after every video; full log `data/run-night.log`; both not committed). Stops cleanly on Claude's subscription limit, a TikTok block, or 3 failures in a row. `-- --limit 3` · `-- --ids a,b` · `-- --dry-run`.
 Per video: yt-dlp → Gemini analysis (cached in the library) → dedup vs live + queued pages (Claude) → merged / skipped / new → Claude writes + strict 2-pass review → MP4 to R2 → `queue/<id>/` → commit + push BOTH repos. Result → data/status.json `lastNight`.
 
-**LINE 2 — publish in the cloud:** `.github/workflows/daily.yml` → `scripts/daily.js`. 02:00 Kuwait (23:00 UTC) daily; 05:00 Kuwait missed-run check (catch-up + ⚠️); "Run workflow" button (dry run by default).
-New TikTok videos (Zernio, max 5/run) end-to-end with Gemini + Sonnet (~$0.22 each), live same day · then N = publishPerDay pages from the queue · astro build check · push · IndexNow · waits until live. Summary → data/status.json `lastDaily` (no message). Cost guard: today's spend > $2 or credit < $3 → paid work stops + ⚠️.
+**LINE 2 — publish in the cloud:** `.github/workflows/daily.yml` → `scripts/daily.js`. ~02:07 Kuwait (23:07 UTC) daily; ~05:37 Kuwait missed-run check (catch-up + ⚠️). GitHub can start scheduled jobs late: the first night (cron on the hour) started 3.5 h late, so the times are now off the hour; "Run workflow" button (dry run by default).
+New TikTok videos (Zernio, max 5/run) end-to-end with Gemini + Sonnet (~$0.22 each), live same day · then N = publishPerDay pages from the queue · astro build check · push · IndexNow · waits until live. Summary → data/status.json `lastDaily` (no message). Cost guard: the cloud pipeline's OWN spend today (spend.json calls with script `daily`) > $2, or credit < $3 → paid work stops + ⚠️. Manual work and the night run are not counted.
 Local check: `node scripts/daily.js --dry-run`.
 
 ## Phase 1b tools (the first 20 pages, data/topics.json)
@@ -71,5 +71,5 @@ UptimeRobot: monitor on https://alsuhaiby.com every 5 min with EMAIL alerts.
 - Garage WhatsApp + location: empty in config/site.json (pages show «[يُعبّى يدويًا]»).
 - Translations: ready, not generated (`node scripts/write.js --langs ar,en,fr,es,ur` then build-page).
 - Archive: 683 videos left (true count from the ledger), handled by `npm run night`. The queue is EMPTY after the test: run `npm run night` or the 02:00 run sends ⚠️ «الطابور فاضي».
-- Cloud download of NEW videos (yt-dlp on GitHub's servers) not proven yet: the first new video was held by the cost guard. If TikTok blocks it, the video is marked failed and the night run takes it.
+- Cloud download of new videos works (7 Nov: video 7705128543423974677 downloaded on GitHub and merged into «سيارتي ترجف وهي واقفة»).
 - `review.ar.json` → `factCheck` note: Claude sometimes leaves it empty (the verdicts and notes are there).
