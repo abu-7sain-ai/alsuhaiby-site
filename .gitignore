@@ -7,3 +7,4 @@ dist/
 data/run-*.log
 data/rebuild.log
 library/
+data/run-*.json

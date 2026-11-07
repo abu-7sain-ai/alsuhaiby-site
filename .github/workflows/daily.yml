@@ -1,13 +1,13 @@
 # LINE 2 — daily publish in the cloud (no PC needed). See NOTES.md → "Daily pipeline".
-#   02:00 Kuwait (23:00 UTC): new TikTok videos end-to-end + publish N pages from queue/ + ONE Telegram summary.
-#   05:00 Kuwait (02:00 UTC): if the 02:00 run did not happen → ⚠️ + catch-up run.
+#   ~02:07 Kuwait (23:07 UTC): new TikTok videos end-to-end + publish N pages from queue/. Telegram only for ⚠️ (no summary).
+#   ~05:37 Kuwait (02:37 UTC): if the daily run did not happen → ⚠️ + catch-up run. GitHub can start scheduled jobs late.
 #   "Run workflow" button: manual run (dry run by default).
 name: daily publish
 
 on:
   schedule:
-    - cron: '0 23 * * *'
-    - cron: '0 2 * * *'
+    - cron: '7 23 * * *'   # 02:07 Kuwait (off the hour: GitHub delays jobs set exactly on the hour)
+    - cron: '37 2 * * *'   # 05:37 Kuwait: missed-run check
   workflow_dispatch:
     inputs:
       dry_run:
@@ -77,7 +77,7 @@ jobs:
           VIDEO_DIR: ${{ runner.temp }}/none
         run: |
           ARGS=""
-          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "0 2 * * *" ]; then ARGS="--check"; fi
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "37 2 * * *" ]; then ARGS="--check"; fi
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             [ "${{ inputs.dry_run }}" = "true" ] && ARGS="--dry-run"
             [ -n "${{ inputs.publish }}" ] && ARGS="$ARGS --publish ${{ inputs.publish }}"

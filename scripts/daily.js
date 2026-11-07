@@ -39,7 +39,9 @@ if (A.check) {
 }
 
 // ---- money ----------------------------------------------------------------------------------------
-const spentToday = () => (readJson(path.join(ROOT, 'data', 'spend.json'), { calls: [] }).calls || []).filter((c) => kuwaitDay(new Date(c.at)) === today).reduce((a, c) => a + (c.costUsd || 0), 0);
+// Only the cloud pipeline's own spend today (calls logged with script 'daily'). Manual work (write / review / analyze)
+// and the night run on his PC are not counted: they are not what this guard protects against.
+const spentToday = () => (readJson(path.join(ROOT, 'data', 'spend.json'), { calls: [] }).calls || []).filter((c) => c.script === 'daily' && kuwaitDay(new Date(c.at)) === today).reduce((a, c) => a + (c.costUsd || 0), 0);
 async function credit() {
   try {
     const k = (await (await fetch('https://openrouter.ai/api/v1/key', { headers: { Authorization: `Bearer ${apiKey()}` } })).json()).data || {};

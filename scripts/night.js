@@ -23,6 +23,25 @@ const LIMIT = A.limit ? Number(A.limit) : Infinity;
 const CLAUDE = 'claude-cli';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// Everything printed also goes to data/run-night.log (not committed), and the running totals to data/run-night.json after
+// every video — so the desktop window's summary (scripts/night-summary.js) is right even if the window is closed mid-run.
+const LOG = `${ROOT}/data/run-night.log`, PROGRESS = `${ROOT}/data/run-night.json`;
+for (const k of ['log', 'warn', 'error']) {
+  const orig = console[k].bind(console);
+  console[k] = (...a) => { orig(...a); try { fs.appendFileSync(LOG, a.map(String).join(' ') + '\n'); } catch {} };
+}
+const startedAt = new Date();
+function saveProgress(extra = {}) {
+  const hours = Math.max((Date.now() - startedAt) / 3600e3, 1 / 60);
+  const n = done.queued.length + done.merged.length + done.skipped.length + done.failed.length;
+  writeJson(PROGRESS, {
+    startedAt: startedAt.toISOString(), updatedAt: new Date().toISOString(), minutes: Math.round(hours * 60),
+    processed: n, written: done.queued.length, merged: done.merged.length, skipped: done.skipped.length, failed: done.failed.length,
+    perHour: Math.round((n / hours) * 10) / 10, writtenPerHour: Math.round((done.queued.length / hours) * 10) / 10,
+    archiveLeft: remaining().length, queueWaiting: queued().length, running: true, stopped: null, ...extra, details: done,
+  });
+}
+
 // pages the cloud published since the last night run: record them in the ledger
 for (const [id, e] of Object.entries(readJson(`${ROOT}/data/published.json`, {}))) if (loadLedger()[id]?.status !== 'published') setLedger(id, { status: 'published', page: e.slug, line: e.line || 'night → cloud' });
 
@@ -41,8 +60,10 @@ if (DRY) {
   process.exit(0);
 }
 
-const done = { queued: [], merged: [], skipped: [], failed: [] };
-let stopReason = '', backoff = 0;
+var done = { queued: [], merged: [], skipped: [], failed: [] };
+let stopReason = '', stopKind = '', backoff = 0, failStreak = 0;
+fs.appendFileSync(LOG, `\n===== night run ${startedAt.toISOString()} =====\n`);
+saveProgress();
 for (const v of todo) {
   if (done.queued.length + done.merged.length + done.skipped.length + done.failed.length >= LIMIT) break;
   console.log(`\n[${new Date().toLocaleTimeString('en-GB')}] ${v.id} · ${v.views.toLocaleString('en')} views`);
@@ -72,13 +93,15 @@ for (const v of todo) {
     }
     gitSync(LIB_DIR, ['.'], `night: ${v.id} ${loadLedger()[v.id].status}`);
     gitSync(ROOT, ['queue', 'content/videos', 'public/covers', 'public/og', 'data/r2.json', 'data/spend.json'], `night: ${v.id} ${loadLedger()[v.id].status}`);
+    failStreak = 0;
+    saveProgress();
     if (!hadFile) await sleep(4000 + Math.random() * 4000); // be gentle with TikTok between downloads
   } catch (e) {
-    if (e instanceof ClaudeLimitError) { stopReason = e.message; break; }
+    if (e instanceof ClaudeLimitError) { stopReason = e.message; stopKind = 'claude-limit'; break; }
     if (e instanceof RateLimitError) {
       backoff++;
       console.warn(`  TikTok rate limit (${backoff}/3): ${e.message}`);
-      if (backoff >= 3) { stopReason = `TikTok rate-limited this PC 3 times in a row (${e.message}). Stopped; run again later.`; break; }
+      if (backoff >= 3) { stopReason = `TikTok rate-limited this PC 3 times in a row (${e.message}). Stopped; run again later.`; stopKind = 'tiktok'; break; }
       await sleep(backoff * 5 * 60e3); // 5, then 10 minutes
       continue;
     }
@@ -86,6 +109,9 @@ for (const v of todo) {
     setLedger(v.id, { status: 'failed', tries, reason: e.message.slice(0, 300), line: 'night' });
     done.failed.push(`${v.id}: ${e.message.slice(0, 120)}`); console.warn(`  ! ${e.message}`);
     try { gitSync(LIB_DIR, ['.'], `night: ${v.id} failed`); } catch {}
+    saveProgress();
+    // 3 different videos failing in a row = something is broken (internet, a key, git): stop instead of burning the list
+    if (++failStreak >= 3) { stopReason = `3 videos failed in a row; last error: ${e.message.slice(0, 150)}`; stopKind = 'errors'; break; }
   }
 }
 
@@ -101,9 +127,10 @@ console.log(`\n${lines.join('\n')}`);
 // Telegram only when something needs him (his rule 2026-11-07): failed videos or a TikTok block. A normal end, or Claude's
 // subscription limit (just run it again later), sends nothing. The result is kept in data/status.json → lastNight.
 const st = readJson(`${ROOT}/data/status.json`, {});
-st.lastNight = { at: new Date().toISOString(), queued: done.queued, merged: done.merged, skipped: done.skipped, failed: done.failed, stopped: stopReason || null, queueWaiting: queued().length, archiveLeft: left };
+saveProgress({ running: false, stopped: stopKind || null, stopReason: stopReason || null });
+st.lastNight = { ...readJson(PROGRESS, {}), at: new Date().toISOString() };
 writeJson(`${ROOT}/data/status.json`, st);
-const tiktokBlock = /TikTok rate-limited/.test(stopReason);
+const tiktokBlock = stopKind === 'tiktok';
 if (done.failed.length || tiktokBlock) {
   alert(['⚠️ alsuhaiby.com — تشغيل الليل', ...(tiktokBlock ? ['⚠️ تيك توك حدّ الجهاز ووقف التحميل. شغّله بعدين.'] : []), ...done.failed.slice(0, 5).map((f) => `⚠️ ${f}`)].join('\n'));
 }

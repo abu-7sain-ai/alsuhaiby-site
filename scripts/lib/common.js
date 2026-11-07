@@ -123,10 +123,14 @@ function claudeCli({ messages, script, label }) {
     '--tools', '""', '--strict-mcp-config', '--system-prompt-file', `"${sp}"`], { input: `${conv}\n\nReturn ONLY the JSON object.`, cwd: dir, env, encoding: 'utf8', shell: true, timeout: 20 * 60e3, maxBuffer: 64 << 20 });
   fs.rmSync(dir, { recursive: true, force: true });
   let j;
-  try { j = JSON.parse(r.stdout); } catch { throw new Error(`claude CLI: ${String(r.stderr || r.stdout || r.error).slice(0, 300)}`); }
+  try { j = JSON.parse(r.stdout); } catch {
+    const raw = String(r.stderr || r.stdout || r.error || '');
+    if (/usage limit|limit reached|hit your limit|rate.?limit|quota|429/i.test(raw)) throw new ClaudeLimitError(`Claude subscription limit: ${raw.slice(0, 200)}`);
+    throw new Error(`claude CLI: ${raw.slice(0, 300)}`);
+  }
   if (j.is_error) {
     const msg = String(j.result || j.api_error_status || 'error');
-    if (/limit|usage|quota|rate|429|overloaded/i.test(msg)) throw new ClaudeLimitError(`Claude subscription limit: ${msg.slice(0, 200)}`);
+    if (/limit|usage|quota|rate|429/i.test(msg)) throw new ClaudeLimitError(`Claude subscription limit: ${msg.slice(0, 200)}`);
     throw new Error(`claude CLI: ${msg.slice(0, 300)}`);
   }
   const u = j.usage || {};
