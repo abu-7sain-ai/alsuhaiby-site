@@ -5,8 +5,8 @@
     "at": "2026-11-06T11:39:27.037Z",
     "ok": true
   },
-  "updatedAt": "2026-11-06T20:37:20.760Z",
-  "nextScheduledRun": "2026-11-07 02:00 Kuwait (GitHub Actions, daily)",
+  "updatedAt": "2026-11-07T02:39:49.800Z",
+  "nextScheduledRun": "2026-11-08 02:00 Kuwait (GitHub Actions, daily)",
   "pagesPublished": {
     "total": 23,
     "byLang": {
@@ -14,20 +14,20 @@
     }
   },
   "videosProcessed": 50,
-  "videosOnR2": 38,
+  "videosOnR2": 39,
   "openRouterSpendUsd": {
-    "total": 8.527,
-    "last30Days": 8.527
+    "total": 8.539,
+    "last30Days": 8.539
   },
   "keyCreditLeftUsd": {
     "usd": 41.47,
     "source": "key limit"
   },
   "siteHealth": {
-    "at": "2026-11-06T20:37:20.759Z",
+    "at": "2026-11-07T02:39:49.799Z",
     "url": "https://alsuhaiby.com/",
     "httpStatus": 200,
-    "ms": 95,
+    "ms": 190,
     "up": true
   },
   "alerts": {},
@@ -47,31 +47,20 @@
     }
   },
   "lastDaily": {
-    "day": "2026-11-06",
-    "at": "2026-11-06T20:37:20.626Z",
-    "published": [
-      {
-        "title": "تبي سيارة توفر بنزين؟ أفضل 5 سيارات حسب EPA آخر سنتين",
-        "url": "https://alsuhaiby.com/%D8%AA%D8%A8%D9%8A-%D8%B3%D9%8A%D8%A7%D8%B1%D8%A9-%D8%AA%D9%88%D9%81%D8%B1-%D8%A8%D9%86%D8%B2%D9%8A%D9%86-%D8%A3%D9%81%D8%B6%D9%84-%D8%B3%D9%8A%D8%A7%D8%B1%D8%A7%D8%AA/"
-      },
-      {
-        "title": "القير يتأخر ويخبط بالتبديل: 4 علامات إن القير ضرب عندك",
-        "url": "https://alsuhaiby.com/%D8%A7%D9%84%D9%82%D9%8A%D8%B1-%D9%8A%D8%AA%D8%A3%D8%AE%D8%B1-%D9%88%D9%8A%D8%AE%D8%A8%D8%B7-%D8%A8%D8%A7%D9%84%D8%AA%D8%A8%D8%AF%D9%8A%D9%84/"
-      },
-      {
-        "title": "سيارتي ما تتحرك أو ثقيلة بالطلعة: 5 علامات تلف صينية القير",
-        "url": "https://alsuhaiby.com/%D8%B9%D9%84%D8%A7%D9%85%D8%A7%D8%AA-%D8%AA%D9%84%D9%81-%D8%B5%D9%8A%D9%86%D9%8A%D8%A9-%D8%A7%D9%84%D9%82%D9%8A%D8%B1-%D8%A7%D9%84%D8%B9%D8%A7%D8%AF%D9%8A/"
-      }
+    "day": "2026-11-07",
+    "at": "2026-11-07T02:39:49.565Z",
+    "published": [],
+    "merged": [
+      "7705128543423974677 → سيارتي-ترجف-وهي-واقفة"
     ],
-    "merged": [],
     "queueLeft": 0,
     "archiveLeft": 683,
-    "costTodayUsd": 8.527,
-    "costGuard": "today's spend $8.53 is over $2",
+    "costTodayUsd": 0.012,
+    "costGuard": null,
     "errors": []
   },
   "queueWaiting": 0,
   "publishPerDay": 7,
-  "videosAnalyzed": 53,
+  "videosAnalyzed": 54,
   "archiveLeft": 683
 }
