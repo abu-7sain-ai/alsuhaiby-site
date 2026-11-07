@@ -14,6 +14,7 @@
 15. Cost guard counts only the cloud pipeline's own spend for the day (script `daily`), not manual work or the night run (7 Nov: a new video was wrongly blocked by $8.53 of Phase 1b work).
 16. Schedule moved off the hour (23:07 and 02:37 UTC) because GitHub delays on-the-hour jobs (first run: 3.5 h late).
 17. Night run starts from a desktop shortcut «تجهيز الصهيبي» (no terminal); its window ends with a short Arabic summary and explains a Claude-limit stop in plain Arabic. 3 failures in a row stop the run.
+18. Night run time limit: `maxMinutes` (config/site.json, default 0 = none) or `--minutes=N`. On the limit, the current video is finished and pushed, then a clean stop (not an error). Second desktop shortcut «تجهيز الصهيبي — ساعة» = 60 minutes; the original shortcut stays unlimited.
 14. The user-level Claude Code Stop hook (C:/Reels/engine/tools/notify_telegram.py) is silent on ✅ done / ⏳ still running for the alsuhaiby-site and alsuhaiby-library folders (SILENT_ON_SUCCESS); ❓ questions, ⚠️ errors and permission prompts still ping. Other projects unchanged.
 11. Secrets in GitHub Actions: OPENROUTER_API_KEY, CLOUDFLARE_API_TOKEN (DNS + R2 edit), TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, ZERNIO_API_KEY, LIBRARY_DEPLOY_KEY. Set from where they already live, never printed.
 12. Headless Claude calls use their own system prompt, no tools, no MCP and no user settings, so his Telegram Stop hook does not fire per call and each call stays small.

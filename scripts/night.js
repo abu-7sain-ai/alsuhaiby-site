@@ -10,6 +10,8 @@
 //   npm run night -- --limit 3       stop after 3 videos
 //   npm run night -- --ids a,b       only these videos
 //   npm run night -- --dry-run       show what it would do (no download, no paid call, no push)
+//   npm run night -- --minutes=60    time limit: when it is reached, the video in progress is finished, then the run stops
+//                                    cleanly (not an error). Default: `maxMinutes` in config/site.json; 0 or empty = no limit.
 import fs from 'node:fs';
 import { ROOT, LIB_DIR, args, cachePath, readJson, writeJson, setLedger, loadLedger, DONE, ClaudeLimitError } from './lib/common.js';
 import { writeArticle, reviewArticle } from './lib/article.js';
@@ -21,6 +23,8 @@ const A = args();
 const DRY = !!A['dry-run'];
 const LIMIT = A.limit ? Number(A.limit) : Infinity;
 const CLAUDE = 'claude-cli';
+// Time limit in minutes: the --minutes flag wins over config/site.json → maxMinutes; 0 / empty / missing = unlimited.
+const MAX_MIN = Number(A.minutes ?? readJson(`${ROOT}/config/site.json`, {}).maxMinutes ?? 0) || 0;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Everything printed also goes to data/run-night.log (not committed), and the running totals to data/run-night.json after
@@ -38,7 +42,7 @@ function saveProgress(extra = {}) {
     startedAt: startedAt.toISOString(), updatedAt: new Date().toISOString(), minutes: Math.round(hours * 60),
     processed: n, written: done.queued.length, merged: done.merged.length, skipped: done.skipped.length, failed: done.failed.length,
     perHour: Math.round((n / hours) * 10) / 10, writtenPerHour: Math.round((done.queued.length / hours) * 10) / 10,
-    archiveLeft: remaining().length, queueWaiting: queued().length, running: true, stopped: null, ...extra, details: done,
+    archiveLeft: remaining().length, queueWaiting: queued().length, maxMinutes: MAX_MIN || null, running: true, stopped: null, ...extra, details: done,
   });
 }
 
@@ -50,7 +54,7 @@ if (A.ids) { const want = String(A.ids).split(','); todo = todo.filter((v) => wa
 const ledger = loadLedger();
 todo = todo.filter((v) => (ledger[v.id]?.tries || 0) < 3); // a video that failed 3 times waits for a human look
 
-console.log(`night: ${todo.length} videos to handle · queue ${queued().length} · library ${LIB_DIR}`);
+console.log(`night: ${todo.length} videos to handle · queue ${queued().length} · library ${LIB_DIR} · time limit ${MAX_MIN ? `${MAX_MIN} min` : 'none'}`);
 if (DRY) {
   for (const v of todo.slice(0, Number.isFinite(LIMIT) ? LIMIT : 10)) {
     const steps = [v.path ? 'local file' : 'download', fs.existsSync(cachePath(v, 'analysis')) ? 'analysis cached' : 'Gemini analysis (~$0.01)', 'dedup (Claude)', 'write + 2 reviews (Claude) if new', 'R2 + queue + push'];
@@ -66,6 +70,8 @@ fs.appendFileSync(LOG, `\n===== night run ${startedAt.toISOString()} =====\n`);
 saveProgress();
 for (const v of todo) {
   if (done.queued.length + done.merged.length + done.skipped.length + done.failed.length >= LIMIT) break;
+  // time limit: checked only between videos, so the one in progress is always finished and pushed first
+  if (MAX_MIN && Date.now() - startedAt >= MAX_MIN * 60e3) { stopReason = `time limit reached (${MAX_MIN} min)`; stopKind = 'time'; break; }
   console.log(`\n[${new Date().toLocaleTimeString('en-GB')}] ${v.id} · ${v.views.toLocaleString('en')} views`);
   try {
     const hadFile = !!v.path;
@@ -115,6 +121,9 @@ for (const v of todo) {
   }
 }
 
+// final push of both repos (normally a no-op: every video is already pushed)
+try { gitSync(LIB_DIR, ['.'], 'night: end of run'); } catch (e) { console.warn(`  ! final push (library): ${e.message}`); }
+try { gitSync(ROOT, ['queue', 'content/videos', 'public/covers', 'public/og', 'data/r2.json', 'data/spend.json'], 'night: end of run'); } catch (e) { console.warn(`  ! final push (site): ${e.message}`); }
 const left = remaining().length;
 const lines = [
   `🌙 alsuhaiby.com — night run ${stopReason ? 'stopped' : 'finished'}`,

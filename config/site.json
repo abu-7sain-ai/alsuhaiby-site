@@ -12,5 +12,6 @@
     "ur"
   ],
   "mediaBase": "https://media.alsuhaiby.com",
-  "publishPerDay": 7
+  "publishPerDay": 7,
+  "maxMinutes": 0
 }

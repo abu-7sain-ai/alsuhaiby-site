@@ -27,7 +27,10 @@ export function args() {
   const out = { _: [] };
   const a = process.argv.slice(2);
   for (let i = 0; i < a.length; i++) {
-    if (a[i].startsWith('--')) {
+    if (a[i].startsWith('--') && a[i].includes('=')) {
+      const [k, ...v] = a[i].slice(2).split('=');
+      out[k] = v.join('=');
+    } else if (a[i].startsWith('--')) {
       const k = a[i].slice(2);
       if (a[i + 1] && !a[i + 1].startsWith('--')) out[k] = a[++i];
       else out[k] = true;
