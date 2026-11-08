@@ -71,7 +71,7 @@ var done = { queued: [], merged: [], skipped: [], failed: [] };
 let stopReason = '', stopKind = '', backoff = 0, failStreak = 0;
 fs.appendFileSync(LOG, `\n===== night run ${startedAt.toISOString()} =====\n`);
 saveProgress();
-startStage('night', { left: todo.length });
+await startStage('night', { left: todo.length });
 for (const v of todo) {
   if (done.queued.length + done.merged.length + done.skipped.length + done.failed.length >= LIMIT) break;
   // time limit: checked only between videos, so the one in progress is always finished and pushed first

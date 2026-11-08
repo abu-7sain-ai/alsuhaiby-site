@@ -6,7 +6,9 @@
 3. Telegram ONLY on a full stop, never on slow / pause. The machine is never shut down or restarted by this.
 4. Temperature is OFF: Windows gives no real CPU temperature without a sensor tool (the ACPI zones read ~28–30°C, not the CPU). He chose not to install anything for now; LibreHardwareMonitor (free, MPL-2.0, v0.9.6, needs admin + its PawnIO driver) is the option if he wants the "> 90°C for 2 min → stop" rule later.
 5. Desktop meters: our own small always-on-top window (`scripts/machine/meters.pyw`, Arabic labels, every 2 s) instead of HWiNFO / Rainmeter (HWiNFO free cuts sensor sharing after 12 h; Rainmeter needs HWiNFO for temperature). It also shows what the pipeline is doing and how many are left (`data/run-stage.json`).
-6. A missing or stale watcher never blocks work (one Arabic warning). Nothing is registered to start with Windows yet: waiting for his yes (`scripts/machine/start.bat` is what would go into the Startup folder).
+6. A missing or stale watcher never blocks work (one Arabic warning).
+7. NO auto-start with Windows (his decision). Desktop shortcut «مراقب الجهاز» opens the window, which starts its own watcher; closing the window stops it. The guard does not depend on the window: night/write start their own watcher when none is alive and it ends with the run.
+8. Temperature check (2026-11-08): no real CPU temperature through built-in Windows means without admin. The ACPI thermal zones are fixed values (did not move under a CPU load test). HP's firmware sensor class (`HP_BIOSNumericSensor`) needs admin; not tried. Nothing installed; waiting for his choice.
 
 ## 2026-11-07 — Phase 3 (two lines)
 1. Two independent lines. LINE 1 (prep) = `npm run night` on his PC: yt-dlp download → Gemini analysis (~$0.01, the only paid call) → dedup → Claude Code (his subscription) writes + reviews twice → MP4 on R2 → page into `queue/`. LINE 2 (publish) = GitHub Actions daily at 02:00 Kuwait + manual button.

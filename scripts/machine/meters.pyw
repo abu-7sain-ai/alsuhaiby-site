@@ -1,9 +1,11 @@
 # meters.pyw — «عدّادات الجهاز»: a small always-on-top window in the top-right corner, updated every 2 s.
 # Shows CPU, free RAM, free disk, network, temperature (off for now), the guard's level (from watcher.py → data/machine.json)
 # and what the pipeline is doing right now (data/run-stage.json, written by night.js / write.js) + how many are left.
-# Drag it with the mouse to move it; right-click → «سكّر». Nothing here changes anything: it only reads.
+# Drag it with the mouse to move it; right-click → «سكّر». Desktop shortcut «مراقب الجهاز» opens it (nothing starts with Windows).
+# It starts its own watcher (watcher.py --parent <this window>), so closing the window stops that watcher. If a night/write run
+# already has one, the window just reads it, and starts its own again when that run's watcher ends.
 #   pythonw scripts/machine/meters.pyw
-import json, os, time, ctypes
+import json, os, sys, time, ctypes, subprocess
 import tkinter as tk
 import psutil
 
@@ -26,6 +28,22 @@ def read(p):
     try:
         with open(p, encoding='utf-8') as f: return json.load(f)
     except Exception: return None
+
+
+WATCHER = os.path.join(ROOT, 'scripts', 'machine', 'watcher.py')
+_last_spawn = 0
+
+
+def ensure_watcher():
+    """Start a watcher tied to this window when none is alive (at most once every 20 s)."""
+    global _last_spawn
+    m = read(MACHINE)
+    if m and m.get('pid') and psutil.pid_exists(m['pid']) and time.time() - m.get('atEpoch', 0) < 120: return
+    if time.time() - _last_spawn < 20: return
+    _last_spawn = time.time()
+    exe = os.path.join(os.path.dirname(sys.executable), 'pythonw.exe')
+    subprocess.Popen([exe if os.path.exists(exe) else sys.executable, WATCHER, '--parent', str(os.getpid())],
+                     creationflags=0x08000000, close_fds=True)  # CREATE_NO_WINDOW
 
 
 def pipeline():
@@ -77,6 +95,7 @@ class Meters:
 
     def tick(self):
         try:
+            ensure_watcher()
             cpu = psutil.cpu_percent(interval=None)
             vm = psutil.virtual_memory(); free = vm.available / 1024**3
             disk = psutil.disk_usage('C:\\').free / 1024**3

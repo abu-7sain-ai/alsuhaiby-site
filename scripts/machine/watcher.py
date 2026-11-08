@@ -5,7 +5,10 @@
 #   pause  → the same pressure still there 3 min later: wait between videos until it clears, then carry on by itself
 #   stop   → free disk < 5 GB: finish the current video, stop cleanly with an Arabic message, ONE Telegram ⚠️
 # Temperature is OFF: Windows gives no real CPU temperature without a sensor tool, and he chose not to install one for now.
-# It never shuts down or restarts the machine. Run hidden: pythonw scripts/machine/watcher.py  (one copy only; a second exits).
+# It never shuts down or restarts the machine. One copy only (a second exits at once). Nothing starts it with Windows:
+#   pythonw scripts/machine/watcher.py --parent PID   the normal way: runs while process PID lives, then exits (within 2 s).
+#       The window «مراقب الجهاز» (meters.pyw) starts one for itself; night.js / write.js start one for the run when none is
+#       alive (scripts/lib/machine.js → ensureWatcher), so the guard works with the window closed and stops with the run.
 #   python scripts/machine/watcher.py --once      one sample, printed (for a quick check)
 import json, os, sys, time, ctypes
 from datetime import datetime, timezone
@@ -59,19 +62,25 @@ def write_status(data):
 def main():
     import psutil
     once = '--once' in sys.argv
+    parent = int(sys.argv[sys.argv.index('--parent') + 1]) if '--parent' in sys.argv else None
     if not once:  # one watcher only
         ctypes.windll.kernel32.CreateMutexW(None, False, 'Global\\alsuhaiby-machine-watcher')
         if ctypes.windll.kernel32.GetLastError() == 183: return
     psutil.cpu_percent(interval=None)  # prime: the next call averages over the time since this one
     mem, started = {}, datetime.now(timezone.utc).isoformat()
+    first = True
     while True:
-        time.sleep(2 if once else EVERY)
+        # first sample after 2 s (a run waiting on it starts quickly), then every 30 s; the owner is checked every 2 s
+        for _ in range(1 if (once or first) else EVERY // 2):
+            if parent and not psutil.pid_exists(parent): return
+            time.sleep(2)
+        first = False
         now = time.time()
         s = sample_now(psutil)
         level, reasons = decide(s, mem, now)
         data = {**s, 'temp': None, 'tempNote': 'الحرارة مو مفعّلة (تحتاج برنامج حساسات)', 'level': level, 'reasons': reasons,
                 'at': datetime.now(timezone.utc).isoformat(), 'atEpoch': now, 'every': EVERY, 'pid': os.getpid(),
-                'watcherStarted': started, 'limits': LIMITS}
+                'watcherStarted': started, 'owner': parent, 'limits': LIMITS}
         try: write_status(data)
         except OSError: pass  # a locked file never kills the watcher; the next sample tries again
         if once:

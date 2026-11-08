@@ -70,7 +70,7 @@ async function translate(t, v, ar, lang) {
 }
 
 if (!topics.length) throw new Error('data/topics.json has no topics');
-startStage('write', { left: topics.length });
+await startStage('write', { left: topics.length });
 let topicsLeft = topics.length, machineStopped = false;
 for (const t of topics) {
   // machine guard (his rule 2026-11-08): between topics; slow / pause wait here, a full stop ends the run cleanly + ONE Telegram

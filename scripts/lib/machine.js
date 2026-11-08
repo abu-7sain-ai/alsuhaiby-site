@@ -1,10 +1,14 @@
 // machine.js — long commands obey the always-on watcher (scripts/machine/watcher.py → data/machine.json).
 //   await machineGate()   call BETWEEN items (videos, topics). ok → returns at once · slow → waits 2 min · pause → waits until
 //                         the pressure clears (checks every 30 s) · stop → throws MachineStopError (finish nothing new, stop cleanly).
+//   ensureWatcher()       the run samples on its own: if no watcher is alive (window «مراقب الجهاز» closed, or never opened) it
+//                         starts one tied to THIS process (watcher.py --parent <pid>), so it stops when the run ends. Called at the
+//                         run's start (startStage) and before every gate check (the window may be closed mid-run).
 //   The watcher missing or stale (no sample for 2 min) = carry on, with one Arabic warning: the guard never blocks work by itself.
 //   setStage(stage, extra) the window («عدّادات الجهاز») shows what the pipeline is doing: data/run-stage.json (not committed).
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawn } from 'node:child_process';
 import { ROOT, readJson, writeJson } from './common.js';
 
 export const MACHINE_FILE = process.env.MACHINE_FILE || path.join(ROOT, 'data', 'machine.json');
@@ -23,9 +27,27 @@ export function readMachine() {
   return h;
 }
 
+const alive = (pid) => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
+const WATCHER = path.join(ROOT, 'scripts', 'machine', 'watcher.py');
+export async function ensureWatcher() {
+  if (process.platform !== 'win32' || process.env.MACHINE_FILE) return false; // cloud runs and tests: no watcher
+  let h = null;
+  try { h = readJson(MACHINE_FILE, null); } catch {}
+  if (h?.pid && alive(h.pid) && Date.now() - h.atEpoch * 1000 < STALE_MS) return false; // one is running (window or another run)
+  try {
+    spawn(process.env.PYTHONW || 'pythonw', [WATCHER, '--parent', String(process.pid)], { detached: true, stdio: 'ignore', windowsHide: true }).unref();
+  } catch { return false; }
+  for (let i = 0; i < 10; i++) { // first sample comes after ~2 s
+    await sleep(1000);
+    try { const n = readJson(MACHINE_FILE, null); if (n && Date.now() - n.atEpoch * 1000 < 5000) return true; } catch {}
+  }
+  return false;
+}
+
 let warnedMissing = false;
 export async function machineGate({ log = console.log } = {}) {
   let pausedAt = 0;
+  await ensureWatcher();
   for (;;) {
     const h = readMachine();
     const why = (h.reasons || []).join(' · ');
@@ -53,6 +75,7 @@ export async function machineGate({ log = console.log } = {}) {
 export function setStage(stage, extra = {}) {
   try { writeJson(STAGE_FILE, { ...readJson(STAGE_FILE, {}), stage, pid: process.pid, at: new Date().toISOString(), ...extra }); } catch {}
 }
-export function startStage(script, extra = {}) {
+export async function startStage(script, extra = {}) {
+  await ensureWatcher();
   try { writeJson(STAGE_FILE, { script, stage: 'starting', pid: process.pid, startedAt: new Date().toISOString(), at: new Date().toISOString(), ...extra }); } catch {}
 }
