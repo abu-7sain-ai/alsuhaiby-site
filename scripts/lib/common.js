@@ -143,6 +143,8 @@ function claudeCli({ messages, script, label }) {
 }
 
 export async function chat({ messages, script, label, json = true, model = MODEL, maxTokens = 12000, temperature = 0.6 }) {
+  // fetch.js (download-only) sets this: any AI call there is a bug, never a cost (no Claude subscription, no Gemini)
+  if (process.env.ALSUHAIBY_NO_AI === '1') throw new Error(`AI call blocked in a download-only run (${label})`);
   if (model === 'claude-cli') {
     let lastErr;
     for (let attempt = 1; attempt <= 2; attempt++) {

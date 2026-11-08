@@ -1,5 +1,10 @@
 # DECISIONS (newest first)
 
+## 2026-11-08 — Download-only line
+1. `npm run fetch` / desktop shortcut «تنزيل الصهيبي»: download → R2 → library record only. No Claude subscription, no Gemini, no dedup, no writing.
+2. The two «تجهيز الصهيبي» shortcuts (download + write together) moved to the Recycle Bin so writing never starts by accident; their scripts stay. Writing runs only by command (`npm run night`) for now.
+3. TikTok: one at a time, 20 s + 0–10 s jitter, exponential back-off on refusals, stop after 5 failures in a row (Arabic message + one ⚠️).
+
 ## 2026-11-08 — Machine-health guard + desktop meters
 1. An always-on watcher (`scripts/machine/watcher.py`, hidden) samples CPU, free RAM and free disk (C:) every 30 s into `data/machine.json` (not committed).
 2. Long commands (`night`, `write`; the download step is inside `night`) check it between videos / topics. There is no parallel work to halve, so: CPU > 85% for 3 min or free RAM < 1.5 GB → "slow" = wait 2 min before the next one; the same pressure 3 min later → "pause" = wait until it clears, then carry on by itself; free disk < 5 GB → "stop" = finish the current video, stop cleanly with an Arabic message.

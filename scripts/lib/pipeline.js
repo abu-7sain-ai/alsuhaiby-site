@@ -139,6 +139,7 @@ const UNION = {
     return { totalUsd: Math.round(calls.reduce((s, c) => s + (c.costUsd || 0), 0) * 1e6) / 1e6, calls };
   },
   'data/published.json': (a, b) => ({ ...a, ...b }),
+  'fetched.json': (a, b) => ({ ...a, ...b }),
   'ledger.json': (a, b) => { const o = { ...a }; for (const [k, v] of Object.entries(b)) if (!o[k] || (v.at || '') >= (o[k].at || '')) o[k] = v; return o; },
   'library.json': (a, b) => { const m = new Map((a.videos || []).map((v) => [v.id, v])); for (const v of b.videos || []) m.set(v.id, { ...m.get(v.id), ...v }); return { ...a, ...b, videos: [...m.values()] }; },
 };
