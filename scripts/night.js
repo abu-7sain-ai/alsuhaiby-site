@@ -10,13 +10,16 @@
 //   npm run night -- --limit 3       stop after 3 videos
 //   npm run night -- --ids a,b       only these videos
 //   npm run night -- --dry-run       show what it would do (no download, no paid call, no push)
-//   npm run night -- --minutes=60    time limit: when it is reached, the video in progress is finished, then the run stops
+//   Machine guard: before every video it obeys scripts/machine/watcher.py (data/machine.json): slow → 2 min wait · pause → waits
+//   until the PC recovers · stop (free disk < 5 GB) → stops cleanly + ONE Telegram ⚠️. Never shuts the PC down.
+//   npm run night -- --minutes=60   time limit: when it is reached, the video in progress is finished, then the run stops
 //                                    cleanly (not an error). Default: `maxMinutes` in config/site.json; 0 or empty = no limit.
 import fs from 'node:fs';
 import { ROOT, LIB_DIR, args, cachePath, readJson, writeJson, setLedger, loadLedger, DONE, ClaudeLimitError } from './lib/common.js';
 import { writeArticle, reviewArticle } from './lib/article.js';
 import { download, analyze, decide, mergeInto, queuePage, remaining, queued, gitSync, RateLimitError } from './lib/pipeline.js';
 import { guard, alert } from './lib/status.js';
+import { machineGate, MachineStopError, setStage, startStage } from './lib/machine.js';
 guard('night');
 
 const A = args();
@@ -68,16 +71,26 @@ var done = { queued: [], merged: [], skipped: [], failed: [] };
 let stopReason = '', stopKind = '', backoff = 0, failStreak = 0;
 fs.appendFileSync(LOG, `\n===== night run ${startedAt.toISOString()} =====\n`);
 saveProgress();
+startStage('night', { left: todo.length });
 for (const v of todo) {
   if (done.queued.length + done.merged.length + done.skipped.length + done.failed.length >= LIMIT) break;
   // time limit: checked only between videos, so the one in progress is always finished and pushed first
   if (MAX_MIN && Date.now() - startedAt >= MAX_MIN * 60e3) { stopReason = `time limit reached (${MAX_MIN} min)`; stopKind = 'time'; break; }
+  // machine guard (his rule 2026-11-08): checked only between videos too, so the one in progress is finished and pushed first
+  try { await machineGate(); } catch (e) {
+    if (e instanceof MachineStopError) { stopReason = e.message; stopKind = 'machine'; console.warn(`  ⛔ ${e.message}`); break; }
+    throw e;
+  }
+  const at = (stage) => setStage(stage, { current: v.id, left: remaining().length });
   console.log(`\n[${new Date().toLocaleTimeString('en-GB')}] ${v.id} · ${v.views.toLocaleString('en')} views`);
   try {
     const hadFile = !!v.path;
+    at('downloading');
     download(v);
     backoff = 0;
+    at('analyzing');
     const an = await analyze(v, { script: 'night' });
+    at('deciding');
     const d = await decide({ v, an, model: CLAUDE, script: 'night' });
     if (d.decision === 'skip') {
       setLedger(v.id, { status: 'skipped', reason: d.reason, line: 'night' });
@@ -88,8 +101,10 @@ for (const v of todo) {
       done.merged.push(`${v.id} → ${d.page.slug}`); console.log(`  merged into ${d.page.where} page ${d.page.slug}: ${d.reason}`);
     } else {
       const key = `tk-${v.id}`;
+      at('writing');
       const draft = readJson(cachePath(v, 'write.ar'), null) || await writeArticle({ key, id: v.id, an, v, model: CLAUDE, script: 'night' });
       writeJson(cachePath(v, 'write.ar'), draft);
+      at('reviewing');
       const { review, final } = await reviewArticle({ key, id: v.id, an, draft, model: CLAUDE, script: 'night' });
       writeJson(cachePath(v, 'review.ar'), review);
       writeJson(cachePath(v, 'final.ar'), final);
@@ -97,6 +112,7 @@ for (const v of todo) {
       setLedger(v.id, { status: 'queued', page: slug, reason: d.reason, line: 'night', words: final.words, score: review.total });
       done.queued.push(`${slug} (${final.words} words, ${review.total}/60)`); console.log(`  queued: ${slug}`);
     }
+    at('pushing');
     gitSync(LIB_DIR, ['.'], `night: ${v.id} ${loadLedger()[v.id].status}`);
     gitSync(ROOT, ['queue', 'content/videos', 'public/covers', 'public/og', 'data/r2.json', 'data/spend.json'], `night: ${v.id} ${loadLedger()[v.id].status}`);
     failStreak = 0;
@@ -139,7 +155,9 @@ const st = readJson(`${ROOT}/data/status.json`, {});
 saveProgress({ running: false, stopped: stopKind || null, stopReason: stopReason || null });
 st.lastNight = { ...readJson(PROGRESS, {}), at: new Date().toISOString() };
 writeJson(`${ROOT}/data/status.json`, st);
-const tiktokBlock = stopKind === 'tiktok';
-if (done.failed.length || tiktokBlock) {
-  alert(['⚠️ alsuhaiby.com — تشغيل الليل', ...(tiktokBlock ? ['⚠️ تيك توك حدّ الجهاز ووقف التحميل. شغّله بعدين.'] : []), ...done.failed.slice(0, 5).map((f) => `⚠️ ${f}`)].join('\n'));
+setStage('idle', { current: null, left, stopped: stopKind || null });
+const tiktokBlock = stopKind === 'tiktok', machineStop = stopKind === 'machine';
+// machine guard: Telegram ONLY on a full stop, never on slow / pause (his rule 2026-11-08)
+if (done.failed.length || tiktokBlock || machineStop) {
+  alert(['⚠️ alsuhaiby.com — تشغيل الليل', ...(tiktokBlock ? ['⚠️ تيك توك حدّ الجهاز ووقف التحميل. شغّله بعدين.'] : []), ...(machineStop ? [`⛔ ${stopReason}`] : []), ...done.failed.slice(0, 5).map((f) => `⚠️ ${f}`)].join('\n'));
 }

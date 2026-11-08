@@ -1,5 +1,13 @@
 # DECISIONS (newest first)
 
+## 2026-11-08 — Machine-health guard + desktop meters
+1. An always-on watcher (`scripts/machine/watcher.py`, hidden) samples CPU, free RAM and free disk (C:) every 30 s into `data/machine.json` (not committed).
+2. Long commands (`night`, `write`; the download step is inside `night`) check it between videos / topics. There is no parallel work to halve, so: CPU > 85% for 3 min or free RAM < 1.5 GB → "slow" = wait 2 min before the next one; the same pressure 3 min later → "pause" = wait until it clears, then carry on by itself; free disk < 5 GB → "stop" = finish the current video, stop cleanly with an Arabic message.
+3. Telegram ONLY on a full stop, never on slow / pause. The machine is never shut down or restarted by this.
+4. Temperature is OFF: Windows gives no real CPU temperature without a sensor tool (the ACPI zones read ~28–30°C, not the CPU). He chose not to install anything for now; LibreHardwareMonitor (free, MPL-2.0, v0.9.6, needs admin + its PawnIO driver) is the option if he wants the "> 90°C for 2 min → stop" rule later.
+5. Desktop meters: our own small always-on-top window (`scripts/machine/meters.pyw`, Arabic labels, every 2 s) instead of HWiNFO / Rainmeter (HWiNFO free cuts sensor sharing after 12 h; Rainmeter needs HWiNFO for temperature). It also shows what the pipeline is doing and how many are left (`data/run-stage.json`).
+6. A missing or stale watcher never blocks work (one Arabic warning). Nothing is registered to start with Windows yet: waiting for his yes (`scripts/machine/start.bat` is what would go into the Startup folder).
+
 ## 2026-11-07 — Phase 3 (two lines)
 1. Two independent lines. LINE 1 (prep) = `npm run night` on his PC: yt-dlp download → Gemini analysis (~$0.01, the only paid call) → dedup → Claude Code (his subscription) writes + reviews twice → MP4 on R2 → page into `queue/`. LINE 2 (publish) = GitHub Actions daily at 02:00 Kuwait + manual button.
 2. The earlier "everything in the cloud with Sonnet, 6 pages/day, ~$90–150 archive" plan is dropped.

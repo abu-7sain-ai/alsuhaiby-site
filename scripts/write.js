@@ -6,7 +6,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, LANGS, args, videoIndex, cachePath, readJson, writeJson, chat, wordCount } from './lib/common.js';
-import { guard } from './lib/status.js';
+import { guard, alert } from './lib/status.js';
+import { machineGate, MachineStopError, setStage, startStage } from './lib/machine.js';
 guard('write');
 
 const A = args();
@@ -69,7 +70,18 @@ async function translate(t, v, ar, lang) {
 }
 
 if (!topics.length) throw new Error('data/topics.json has no topics');
+startStage('write', { left: topics.length });
+let topicsLeft = topics.length, machineStopped = false;
 for (const t of topics) {
+  // machine guard (his rule 2026-11-08): between topics; slow / pause wait here, a full stop ends the run cleanly + ONE Telegram
+  try { await machineGate(); } catch (e) {
+    if (!(e instanceof MachineStopError)) throw e;
+    console.warn(`⛔ ${e.message}`);
+    alert(`⚠️ alsuhaiby.com — الكتابة (write)\n⛔ ${e.message}`);
+    machineStopped = true;
+    break;
+  }
+  setStage('writing', { current: t.key, left: topicsLeft-- });
   const v = videos.get(t.main);
   if (!v?.path) throw new Error(`no local file for main video ${t.main}`);
   const draft = await writeArabic(t, v);
@@ -78,5 +90,6 @@ for (const t of topics) {
   if (langs.length > 1 && !ar.reviewed) console.warn(`  ! ${t.key}: translating an unreviewed draft — run review.js first`);
   for (const lang of langs.filter((l) => l !== 'ar')) await translate(t, v, ar, lang);
 }
+setStage('idle', { current: null, left: machineStopped ? topicsLeft : 0, stopped: machineStopped ? 'machine' : null });
 const spend = readJson(path.join(ROOT, 'data', 'spend.json'), { totalUsd: 0 });
 console.log(`done. OpenRouter spend so far: $${spend.totalUsd.toFixed(4)}`);

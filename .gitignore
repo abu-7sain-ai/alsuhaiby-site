@@ -8,3 +8,5 @@ data/run-*.log
 data/rebuild.log
 library/
 data/run-*.json
+data/machine.json
+data/machine.json.tmp

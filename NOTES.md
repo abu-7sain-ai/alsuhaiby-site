@@ -42,6 +42,7 @@ Every step: `guard()` records the run in data/status.json and sends ⚠️ to Te
 `npm run dev` → http://localhost:4321/review/ (or the Network URL on the phone). «تعديل» edits title, summary, body, FAQ; old version kept in content/_history/. /review/ does not exist on the live site.
 
 ## Alerts and monitoring
+- Machine guard (2026-11-08, DECISIONS): `scripts/machine/watcher.py` → `data/machine.json` (level ok / slow / pause / stop + Arabic reasons) · `scripts/lib/machine.js` `machineGate()` between videos in night.js and topics in write.js · window `scripts/machine/meters.pyw` (top-right, drag to move, right-click → سكّر) · start both: `scripts/machine/start.bat` (not in Windows Startup yet) · tests with fake readings: `python -X utf8 scripts/machine/test_rules.py`, `node scripts/machine/test-gate.js`. Temperature off (no sensor tool installed).
 - Telegram (rule 2026-11-07): ONLY ⚠️ (failed run, cost guard, credit < $3, missed run, site down, empty queue) and ❓ (a question waiting). Nothing on success. `scripts/lib/telegram.py` → the Reels app's «مجموعة التنبيهات» group (on the PC) or TELEGRAM_BOT_TOKEN/CHAT_ID (cloud). The user-level Stop hook is silent on ✅/⏳ for this project (SILENT_ON_SUCCESS in C:/Reels/engine/tools/notify_telegram.py).
 - UptimeRobot: monitor on https://alsuhaiby.com every 5 minutes, email alerts (account Abu.7sain.ai@gmail.com).
 
