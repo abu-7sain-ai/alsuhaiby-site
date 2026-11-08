@@ -1,5 +1,5 @@
 # meters.pyw — «عدّادات الجهاز»: a small always-on-top window in the top-right corner, updated every 2 s.
-# Shows CPU, free RAM, free disk, network, temperature (off for now), the guard's level (from watcher.py → data/machine.json)
+# Shows CPU, free RAM, free disk, network, heat (overheating signal: busy CPU below its base clock; no real degrees here), the guard's level (from watcher.py → data/machine.json)
 # and what the pipeline is doing right now (data/run-stage.json, written by night.js / write.js) + how many are left.
 # Drag it with the mouse to move it; right-click → «سكّر». Desktop shortcut «مراقب الجهاز» opens it (nothing starts with Windows).
 # It starts its own watcher (watcher.py --parent <this window>), so closing the window stops that watcher. If a night/write run
@@ -108,9 +108,15 @@ class Meters:
             self.set('ram', f'{free:.1f} / {vm.total / 1024**3:.0f} GB', RED if free < 1.5 else FG)
             self.set('disk', f'{disk:.0f} GB', RED if disk < 5 else FG)
             self.set('net', f'↓ {down:.1f}   ↑ {up:.1f} MB/s')
-            self.set('temp', 'مو مفعّلة', DIM)
             m = read(MACHINE)
-            lvl = m.get('level') if m and time.time() - m.get('atEpoch', 0) < 120 else 'unknown'
+            fresh = bool(m and time.time() - m.get('atEpoch', 0) < 120)
+            # heat signal (no real temperature on this machine): from the watcher. Arabic only — a number on the same line
+            # scrambles the right-to-left order in this window (the CPU speed is in data/machine.json → perf)
+            if fresh and m.get('heat'):
+                self.set('temp', m['heat'], RED if m.get('heatHot') else DIM if m['heat'] in ('—', 'على البطارية') else GREEN)
+            else:
+                self.set('temp', '—', DIM)
+            lvl = m.get('level') if fresh else 'unknown'
             text, color = LEVEL.get(lvl, LEVEL['unknown'])
             self.set('guard', text, color)
             job, jc, left = pipeline()

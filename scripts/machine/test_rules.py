@@ -20,6 +20,15 @@ checks = [
     ('pressure clears → back to ok', run([{'ramFreeGB': 1.2}] * 8 + [{}]), ['slow'] * 6 + ['pause'] * 2 + ['ok']),
     ('disk < 5 GB stops at once', run([{'diskFreeGB': 4.9}]), ['stop']),
     ('disk stop wins over pause', run([{'ramFreeGB': 1, 'diskFreeGB': 3}] * 8), ['stop'] * 8),
+    # heat signal: busy (> 50%) on mains power AND below base clock (perf < 100) or firmware-limited, for 2 min (5th sample)
+    ('heat: slow after 2 min, pause 3 min later', run([{'cpu': 70, 'perf': 80, 'plugged': True}] * 12),
+     ['ok'] * 4 + ['slow'] * 6 + ['pause'] * 2),
+    ('heat: firmware limit counts too', run([{'cpu': 70, 'perf': 120, 'perfLimit': 60, 'plugged': True}] * 5), ['ok'] * 4 + ['slow']),
+    ('heat: normal turbo (perf > 100) is not heat', run([{'cpu': 100, 'perf': 125, 'perfLimit': 100, 'plugged': True}] * 5), ['ok'] * 5),
+    ('heat: an idle CPU below base clock is not heat', run([{'cpu': 20, 'perf': 40, 'plugged': True}] * 8), ['ok'] * 8),
+    ('heat: ignored on battery', run([{'cpu': 70, 'perf': 60, 'plugged': False}] * 8), ['ok'] * 8),
+    ('heat: no counters → off', run([{'cpu': 70, 'perf': None}] * 8), ['ok'] * 8),
+    ('heat: never stops on its own', 'stop' not in run([{'cpu': 99, 'perf': 50, 'plugged': True}] * 40), True),
 ]
 bad = 0
 for name, got, want in checks:

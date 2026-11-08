@@ -8,7 +8,8 @@
 5. Desktop meters: our own small always-on-top window (`scripts/machine/meters.pyw`, Arabic labels, every 2 s) instead of HWiNFO / Rainmeter (HWiNFO free cuts sensor sharing after 12 h; Rainmeter needs HWiNFO for temperature). It also shows what the pipeline is doing and how many are left (`data/run-stage.json`).
 6. A missing or stale watcher never blocks work (one Arabic warning).
 7. NO auto-start with Windows (his decision). Desktop shortcut «مراقب الجهاز» opens the window, which starts its own watcher; closing the window stops it. The guard does not depend on the window: night/write start their own watcher when none is alive and it ends with the run.
-8. Temperature check (2026-11-08): no real CPU temperature through built-in Windows means without admin. The ACPI thermal zones are fixed values (did not move under a CPU load test). HP's firmware sensor class (`HP_BIOSNumericSensor`) needs admin; not tried. Nothing installed; waiting for his choice.
+8. Temperature check (2026-11-08): no real CPU temperature through built-in Windows means without admin. The ACPI thermal zones are fixed values (did not move under a CPU load test). HP's firmware sensor class (`HP_BIOSNumericSensor`) needs admin; not tried. Nothing installed.
+9. His choice: the overheating SIGNAL, not degrees (no admin, nothing installed). Busy CPU (> 50%) on mains power running below its base clock, or firmware-limited, for 2 min = "hot" → same as other pressure: slow, then pause; never a stop, no Telegram. Ignored on battery. Window row «الحرارة» shows Arabic words only (numbers on the same line scramble the right-to-left order).
 
 ## 2026-11-07 — Phase 3 (two lines)
 1. Two independent lines. LINE 1 (prep) = `npm run night` on his PC: yt-dlp download → Gemini analysis (~$0.01, the only paid call) → dedup → Claude Code (his subscription) writes + reviews twice → MP4 on R2 → page into `queue/`. LINE 2 (publish) = GitHub Actions daily at 02:00 Kuwait + manual button.
