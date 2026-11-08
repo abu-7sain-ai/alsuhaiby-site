@@ -10,3 +10,5 @@ library/
 data/run-*.json
 data/machine.json
 data/machine.json.tmp
+data/meters-pos.json
+data/meters.stop

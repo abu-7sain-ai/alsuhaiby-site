@@ -1,5 +1,9 @@
 # DECISIONS (newest first)
 
+## 2026-11-09 — Meters window as a desktop widget
+1. Asked: pin it into the desktop layer (on the wallpaper, behind all windows, seen with Win+D). Tried and tested: on this PC (Windows 11 build 26300) the desktop window Progman has WS_EX_NOREDIRECTIONBITMAP, so an ordinary window parented there (between icons and wallpaper, above the icons, or inside the wallpaper WorkerW) is placed but never drawn. Not forced (his rule: offer the nearest alternative).
+2. Nearest alternative, now the default here (chosen automatically): frameless, semi-transparent, no taskbar entry; under every app window; rises only while the desktop is in front (Win+D or a click on the desktop) and sinks as soon as an app is used. Drag to move, position remembered; close with right-click «سكّر» or the desktop shortcut «إيقاف المراقب». Waiting for his OK on this alternative.
+
 ## 2026-11-08 — Download-only line
 1. `npm run fetch` / desktop shortcut «تنزيل الصهيبي»: download → R2 → library record only. No Claude subscription, no Gemini, no dedup, no writing.
 2. The two «تجهيز الصهيبي» shortcuts (download + write together) moved to the Recycle Bin so writing never starts by accident; their scripts stay. Writing runs only by command (`npm run night`) for now.
