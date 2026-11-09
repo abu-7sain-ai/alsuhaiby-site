@@ -2,7 +2,7 @@
 //   for each archive video (highest views first) that is not on R2 yet:  yt-dlp download → MP4 to R2 → record in the private library.
 //   ZERO AI: no Claude subscription, no Gemini, no writing, no review, no dedup, no watching. Enforced: ALSUHAIBY_NO_AI=1 makes
 //   any chat() call throw (scripts/lib/common.js), and this file imports no AI step.
-//   Gentle with TikTok: one at a time, 20 s + random 0–10 s between TikTok downloads; a refusal (429 / 403 / blocked) → back-off
+//   Gentle with TikTok: one at a time, 60 s + random 0–10 s between TikTok downloads (was 20 s; TikTok refused 5 in a row on 2026-11-09); a refusal (429 / 403 / blocked) → back-off
 //   1, 2, 4, 8, 16 min (doubling) and the same video again; 5 failures in a row → clean stop with an Arabic message (+ one ⚠️).
 //   A video already on disk (old export or an earlier download) is only uploaded: TikTok is not touched, no wait.
 //   Resumable: done = in data/r2.json (written right after each upload), so a closed window loses nothing.
@@ -26,7 +26,7 @@ const A = args();
 const DRY = !!A['dry-run'];
 const LIMIT = A.limit ? Number(A.limit) : Infinity;
 const MAX_MIN = Number(A.minutes ?? 0) || 0;
-const GAP_MS = Number(process.env.FETCH_GAP_MS || 20e3), JITTER_MS = Number(process.env.FETCH_JITTER_MS || 10e3);
+const GAP_MS = Number(process.env.FETCH_GAP_MS || 60e3), JITTER_MS = Number(process.env.FETCH_JITTER_MS || 10e3);
 const BACKOFF_MS = Number(process.env.FETCH_BACKOFF_MS || 60e3); // first back-off; doubles each refusal in a row
 const MAX_FAILS = 5;
 const FETCHED = path.join(LIB_DIR, 'fetched.json');

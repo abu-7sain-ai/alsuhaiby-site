@@ -139,20 +139,47 @@ def ensure_watcher():
                      creationflags=0x08000000, close_fds=True)  # CREATE_NO_WINDOW
 
 
+LIB_DIR = os.environ.get('LIB_DIR') or os.path.join(os.path.expanduser('~'), 'Desktop', 'alsuhaiby-library')
+LIVE_FILES = [os.path.join(LIB_DIR, 'library.json'), os.path.join(ROOT, 'data', 'r2.json'),
+              os.path.join(LIB_DIR, 'fetched.json'), os.path.join(LIB_DIR, 'ledger.json')]
+_live = {'key': None, 'left': None}
+
+
+def live_left():
+    """Videos still to fetch, counted live the same way fetch.js does: library − on R2 − needs a TikTok login − given up
+    (3 tries) − judged 'skipped'. Re-read only when one of the files changes (fetch.js writes r2.json after every upload)."""
+    try:
+        key = tuple(os.path.getmtime(p) if os.path.exists(p) else 0 for p in LIVE_FILES)
+        if key != _live['key']:
+            lib, r2, fetched, ledger = (read(p) or {} for p in LIVE_FILES)
+            n = 0
+            for v in lib.get('videos', []):
+                i = v.get('id'); f = fetched.get(i) or {}
+                if i in r2 or f.get('needsLogin') or (f.get('tries') or 0) >= 3 or (ledger.get(i) or {}).get('status') == 'skipped': continue
+                n += 1
+            _live.update(key=key, left=n)
+        return _live['left']
+    except Exception:
+        return None
+
+
 def pipeline():
     s = read(STAGE)
     alive = bool(s and s.get('pid') and psutil.pid_exists(s['pid']) and s.get('stage') != 'idle')
     if alive:
         try: alive = 'node' in psutil.Process(s['pid']).name().lower()
         except Exception: alive = False
-    if not alive:
-        n = read(NIGHT) or {}
-        left = n.get('archiveLeft')
-        return 'واقف', DIM, (f'{left}' if left is not None else '—')
+    # «الباقي» = videos not on R2 yet, live from the files (not the old night-run number); a night/write run shows its own count
+    left = live_left()
+    if not alive or s.get('script') == 'fetch':
+        left_txt = f'{left}' if left is not None else '—'
+        if not alive: return 'واقف', DIM, left_txt
+    else:
+        left_txt = f"{s.get('left', '—')}"
     what = STAGE_AR.get(s.get('stage'), s.get('stage', ''))
     who = SCRIPT_AR.get(s.get('script'), '')
     color = AMBER if s.get('stage') in ('slow', 'paused') else GREEN
-    return f'{who}: {what}' if who else what, color, f"{s.get('left', '—')}"
+    return f'{who}: {what}' if who else what, color, left_txt
 
 
 class Meters:
