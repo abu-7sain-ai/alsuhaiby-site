@@ -52,11 +52,11 @@ if (DRY) {
 
 const startedAt = Date.now();
 const kw = (ms) => { const d = new Date(ms + 3 * 3600e3).toISOString(); return `${d.slice(8, 10)}-${d.slice(5, 7)} ${d.slice(11, 16)}`; };
-const st = { done: 0, fromTiktok: 0, fromDisk: 0, mb: 0, failed: [], needsLogin: [], refusals: 0 };
+const st = { done: 0, fromTiktok: 0, fromDisk: 0, mb: 0, failed: [], needsLogin: [], postBlocked: [], refusals: 0 };
 let stopKind = '', stopReason = '';
 function progress(extra = {}) {
   const hours = Math.max((Date.now() - startedAt) / 3600e3, 1 / 60);
-  const left = total - st.done - st.failed.length - st.needsLogin.length;
+  const left = total - st.done - st.failed.length - st.needsLogin.length - st.postBlocked.length;
   const perHour = st.done / hours;
   const eta = perHour > 0 ? Date.now() + (left / perHour) * 3600e3 : null;
   const p = { startedAt: new Date(startedAt).toISOString(), updatedAt: new Date().toISOString(), minutes: Math.round(hours * 60), total, ...st,
@@ -80,7 +80,7 @@ liveLine(progress());
 let failStreak = 0, sinceTiktok = null;
 for (let i = 0; i < todo.length; i++) {
   const v = todo[i];
-  if (st.done + st.failed.length + st.needsLogin.length >= LIMIT) break;
+  if (st.done + st.failed.length + st.needsLogin.length + st.postBlocked.length >= LIMIT) break;
   if (MAX_MIN && Date.now() - startedAt >= MAX_MIN * 60e3) { stopKind = 'time'; stopReason = `time limit reached (${MAX_MIN} min)`; break; }
   try { await machineGate(); } catch (e) {
     if (e instanceof MachineStopError) { stopKind = 'machine'; stopReason = e.message; console.warn(`  ⛔ ${e.message}`); break; }
@@ -111,6 +111,28 @@ for (let i = 0; i < todo.length; i++) {
       writeJson(FETCHED, f);
       st.needsLogin.push(v.id);
       console.warn(`  – needs a TikTok login (age-restricted): skipped for good, not counted as a failure`);
+      liveLine(progress());
+      continue;
+    }
+    // "Your IP address is blocked from accessing this post": on 2026-11-09/10 this hit ONE post again and again while the posts
+    // before it downloaded fine, so it is a block on that post for his region, not on his connection. Note it and move on
+    // (no retry of the same post). It still counts toward the stop: 5 DIFFERENT posts blocked in a row = a real block on
+    // his connection → stop, and those 5 are un-noted so a later run tries them again.
+    if (/blocked from accessing this post/i.test(e.message)) {
+      failStreak++; st.refusals++;
+      const f = readJson(FETCHED, {});
+      f[v.id] = { ...(f[v.id] || {}), postBlocked: true, tries: 3, failed: 'TikTok: this post is blocked for this IP/region', at: new Date().toISOString() };
+      writeJson(FETCHED, f);
+      st.postBlocked.push(v.id);
+      console.warn(`  – TikTok blocks this post for this connection (${failStreak}/${MAX_FAILS} in a row): skipped, moving on`);
+      if (failStreak >= MAX_FAILS) {
+        const g = readJson(FETCHED, {});
+        for (const id of st.postBlocked.slice(-MAX_FAILS)) if (g[id]) { delete g[id].postBlocked; g[id].tries = 0; g[id].failed = 'blocked during an IP-wide block; retry later'; }
+        writeJson(FETCHED, g);
+        st.postBlocked = st.postBlocked.slice(0, -MAX_FAILS);
+        stopKind = 'tiktok'; stopReason = `${MAX_FAILS} different posts blocked in a row: TikTok is blocking this connection`;
+        break;
+      }
       liveLine(progress());
       continue;
     }
@@ -157,6 +179,7 @@ console.log([
   `رفض تيك توك: ${p.refusals} مرة`,
   `فشلت: ${p.failed.length}`,
   `تحتاج دخول تيك توك (مقيّدة بالعمر، تخطّيناها): ${p.needsLogin.length}`,
+  `تيك توك حاجبها عن منطقتنا (تخطّيناها): ${p.postBlocked.length}`,
   `باقي: ${p.left} من ${total}`,
   ...(p.etaKuwait && p.left ? [`لو كمّل بنفس السرعة يخلص تقريبًا: ${p.etaKuwait} (توقيت الكويت)`] : []),
   '',
