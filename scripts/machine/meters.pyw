@@ -234,7 +234,11 @@ class Meters:
         """Rise while the desktop is in front (Win+D / desktop clicked), sink under every app window otherwise."""
         try:
             fg = u32.GetForegroundWindow()
-            on_desktop = bool(fg) and (fg == self.hwnd or win_class(fg) in ('Progman', 'WorkerW'))
+            pid = wintypes.DWORD()
+            if fg: u32.GetWindowThreadProcessId(fg, ctypes.byref(pid))
+            # our own windows count as "desktop in front" too: the right-click menu takes focus, and the widget must not
+            # sink behind the desktop while its menu is open
+            on_desktop = bool(fg) and (pid.value == os.getpid() or win_class(fg) in ('Progman', 'WorkerW'))
             if on_desktop and not self.raised:
                 u32.SetWindowPos(self.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_SHOWWINDOW)
                 self.raised = True
