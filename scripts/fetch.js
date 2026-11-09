@@ -2,8 +2,11 @@
 //   for each archive video (highest views first) that is not on R2 yet:  yt-dlp download → MP4 to R2 → record in the private library.
 //   ZERO AI: no Claude subscription, no Gemini, no writing, no review, no dedup, no watching. Enforced: ALSUHAIBY_NO_AI=1 makes
 //   any chat() call throw (scripts/lib/common.js), and this file imports no AI step.
-//   Gentle with TikTok: one at a time, 60 s + random 0–10 s between TikTok downloads (was 20 s; TikTok refused 5 in a row on 2026-11-09); a refusal (429 / 403 / blocked) → back-off
-//   1, 2, 4, 8, 16 min (doubling) and the same video again; 5 failures in a row → clean stop with an Arabic message (+ one ⚠️).
+//   Gentle with TikTok: one at a time, 60 s + random 0–10 s between TikTok downloads.
+//   A video that fails is set aside ("deferred", with the reason and date in fetched.json) on its FIRST failure: no retry, no
+//   back-off wait, straight to the next video; later runs skip it until he asks. Only 5 DIFFERENT videos failing in a row
+//   (= an IP block or the network) stops the run (Arabic message + one ⚠️); those 5 are un-deferred so a later run tries them.
+//   (2026-11-10: the "IP block" of 9 Nov was ONE post, 7679351937430539540, refused again and again, not his IP.)
 //   A video already on disk (old export or an earlier download) is only uploaded: TikTok is not touched, no wait.
 //   Resumable: done = in data/r2.json (written right after each upload), so a closed window loses nothing.
 //   Machine guard between videos (slow / pause / stop), like night.js.
@@ -27,19 +30,20 @@ const DRY = !!A['dry-run'];
 const LIMIT = A.limit ? Number(A.limit) : Infinity;
 const MAX_MIN = Number(A.minutes ?? 0) || 0;
 const GAP_MS = Number(process.env.FETCH_GAP_MS || 60e3), JITTER_MS = Number(process.env.FETCH_JITTER_MS || 10e3);
-const BACKOFF_MS = Number(process.env.FETCH_BACKOFF_MS || 60e3); // first back-off; doubles each refusal in a row
 const MAX_FAILS = 5;
 const FETCHED = path.join(LIB_DIR, 'fetched.json');
 const PROGRESS = path.join(ROOT, 'data', 'run-fetch.json'), LOG = path.join(ROOT, 'data', 'run-fetch.log');
+const KIND_EN = { login: 'age-restricted, needs a TikTok login', blocked: 'TikTok blocks this post', refused: 'TikTok refused', error: 'error' };
+const KIND_AR = { login: 'تحتاج دخول تيك توك (مقيّدة بالعمر)', blocked: 'تيك توك حاجب هالمقطع عن منطقتنا', refused: 'تيك توك رفض', error: 'خطأ ثاني (محذوف أو خاص أو الإنترنت أو الرفع)' };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 for (const k of ['log', 'warn', 'error']) {
   const orig = console[k].bind(console);
   console[k] = (...a) => { orig(...a); try { fs.appendFileSync(LOG, a.map(String).join(' ') + '\n'); } catch {} };
 }
 
-// to do: not on R2 yet, not judged "skipped" (no page will ever show it), not failed 3 times (waits for a human look)
+// to do: not on R2 yet, not judged "skipped" (no page will ever show it), not deferred (old records: tries >= 3) — those wait for him
 const r2 = readJson(R2_MANIFEST, {}), ledger = loadLedger(), fetched = readJson(FETCHED, {});
-let todo = [...videoIndex().values()].filter((v) => !r2[v.id] && ledger[v.id]?.status !== 'skipped' && (fetched[v.id]?.tries || 0) < 3)
+let todo = [...videoIndex().values()].filter((v) => !r2[v.id] && ledger[v.id]?.status !== 'skipped' && !fetched[v.id]?.deferred && (fetched[v.id]?.tries || 0) < 3)
   .sort((a, b) => b.views - a.views);
 const total = todo.length;
 const onDisk = todo.filter((v) => v.path && fs.existsSync(v.path)).length;
@@ -52,11 +56,11 @@ if (DRY) {
 
 const startedAt = Date.now();
 const kw = (ms) => { const d = new Date(ms + 3 * 3600e3).toISOString(); return `${d.slice(8, 10)}-${d.slice(5, 7)} ${d.slice(11, 16)}`; };
-const st = { done: 0, fromTiktok: 0, fromDisk: 0, mb: 0, failed: [], needsLogin: [], postBlocked: [], refusals: 0 };
+const st = { done: 0, fromTiktok: 0, fromDisk: 0, mb: 0, deferred: [], refusals: 0 }; // deferred: [{ id, kind, reason }]
 let stopKind = '', stopReason = '';
 function progress(extra = {}) {
   const hours = Math.max((Date.now() - startedAt) / 3600e3, 1 / 60);
-  const left = total - st.done - st.failed.length - st.needsLogin.length - st.postBlocked.length;
+  const left = total - st.done - st.deferred.length;
   const perHour = st.done / hours;
   const eta = perHour > 0 ? Date.now() + (left / perHour) * 3600e3 : null;
   const p = { startedAt: new Date(startedAt).toISOString(), updatedAt: new Date().toISOString(), minutes: Math.round(hours * 60), total, ...st,
@@ -80,7 +84,7 @@ liveLine(progress());
 let failStreak = 0, sinceTiktok = null;
 for (let i = 0; i < todo.length; i++) {
   const v = todo[i];
-  if (st.done + st.failed.length + st.needsLogin.length + st.postBlocked.length >= LIMIT) break;
+  if (st.done + st.deferred.length >= LIMIT) break;
   if (MAX_MIN && Date.now() - startedAt >= MAX_MIN * 60e3) { stopKind = 'time'; stopReason = `time limit reached (${MAX_MIN} min)`; break; }
   try { await machineGate(); } catch (e) {
     if (e instanceof MachineStopError) { stopKind = 'machine'; stopReason = e.message; console.warn(`  ⛔ ${e.message}`); break; }
@@ -103,60 +107,31 @@ for (let i = 0; i < todo.length; i++) {
     console.log(`  ✓ on R2 (${(bytes / 1e6).toFixed(1)} MB)`);
     if (st.done % 5 === 0) { setStage('pushing'); push(`fetch: ${st.done} videos on R2`); }
   } catch (e) {
-    // age-restricted on TikTok ("may not be comfortable… Log in for access"): needs his TikTok login, which we do not use.
-    // Not a failure of the run: note it once (never retried) and move on without counting toward the 5-in-a-row stop.
-    if (/log in for access|not be comfortable|login required|age.?restrict/i.test(e.message)) {
-      const f = readJson(FETCHED, {});
-      f[v.id] = { ...(f[v.id] || {}), needsLogin: true, tries: 3, failed: 'age-restricted on TikTok: needs a login', at: new Date().toISOString() };
-      writeJson(FETCHED, f);
-      st.needsLogin.push(v.id);
-      console.warn(`  – needs a TikTok login (age-restricted): skipped for good, not counted as a failure`);
-      liveLine(progress());
-      continue;
-    }
-    // "Your IP address is blocked from accessing this post": on 2026-11-09/10 this hit ONE post again and again while the posts
-    // before it downloaded fine, so it is a block on that post for his region, not on his connection. Note it and move on
-    // (no retry of the same post). It still counts toward the stop: 5 DIFFERENT posts blocked in a row = a real block on
-    // his connection → stop, and those 5 are un-noted so a later run tries them again.
-    if (/blocked from accessing this post/i.test(e.message)) {
-      failStreak++; st.refusals++;
-      const f = readJson(FETCHED, {});
-      f[v.id] = { ...(f[v.id] || {}), postBlocked: true, tries: 3, failed: 'TikTok: this post is blocked for this IP/region', at: new Date().toISOString() };
-      writeJson(FETCHED, f);
-      st.postBlocked.push(v.id);
-      console.warn(`  – TikTok blocks this post for this connection (${failStreak}/${MAX_FAILS} in a row): skipped, moving on`);
-      if (failStreak >= MAX_FAILS) {
-        const g = readJson(FETCHED, {});
-        for (const id of st.postBlocked.slice(-MAX_FAILS)) if (g[id]) { delete g[id].postBlocked; g[id].tries = 0; g[id].failed = 'blocked during an IP-wide block; retry later'; }
-        writeJson(FETCHED, g);
-        st.postBlocked = st.postBlocked.slice(0, -MAX_FAILS);
-        stopKind = 'tiktok'; stopReason = `${MAX_FAILS} different posts blocked in a row: TikTok is blocking this connection`;
-        break;
-      }
-      liveLine(progress());
-      continue;
-    }
-    failStreak++;
-    const refused = e instanceof RateLimitError || /403|forbidden/i.test(e.message);
-    if (refused) st.refusals++;
-    console.warn(`  ! ${refused ? 'TikTok refused' : 'failed'} (${failStreak}/${MAX_FAILS} in a row): ${e.message.slice(0, 200)}`);
+    // ANY failure: set this video aside on its first failure (no retry, no back-off) and go to the next one.
+    const msg = e.message || String(e);
+    const kind = /log in for access|not be comfortable|login required|age.?restrict/i.test(msg) ? 'login'
+      : /blocked from accessing this post/i.test(msg) ? 'blocked'
+      : (e instanceof RateLimitError || /403|forbidden|429|too many/i.test(msg)) ? 'refused' : 'error';
+    if (kind === 'refused' || kind === 'blocked') st.refusals++;
+    const reason = msg.replace(/\s+/g, ' ').slice(0, 200);
+    const f = readJson(FETCHED, {});
+    f[v.id] = { ...(f[v.id] || {}), deferred: { kind, reason, at: new Date().toISOString() } };
+    writeJson(FETCHED, f);
+    st.deferred.push({ id: v.id, kind, reason: reason.slice(0, 120) });
+    // age-restricted is a property of the video (needs his TikTok login), not a sign of a block: it never counts toward the stop
+    if (kind !== 'login') failStreak++;
+    console.warn(`  – set aside (${KIND_EN[kind]}${kind === 'login' ? '' : `, ${failStreak}/${MAX_FAILS} different videos in a row`}): ${reason.slice(0, 160)}`);
     if (failStreak >= MAX_FAILS) {
-      stopKind = refused ? 'tiktok' : 'errors';
-      stopReason = `${MAX_FAILS} failures in a row; last: ${e.message.slice(0, 150)}`;
-      if (!refused) st.failed.push(`${v.id}: ${e.message.slice(0, 120)}`);
+      // 5 DIFFERENT videos in a row = his connection or the network, not the videos: un-defer them so a later run tries them
+      const last = st.deferred.filter((d) => d.kind !== 'login').slice(-MAX_FAILS);
+      const g = readJson(FETCHED, {});
+      for (const d of last) if (g[d.id]) delete g[d.id].deferred;
+      writeJson(FETCHED, g);
+      st.deferred = st.deferred.filter((d) => !last.includes(d));
+      stopKind = last.some((d) => d.kind === 'refused' || d.kind === 'blocked') ? 'tiktok' : 'errors';
+      stopReason = `${MAX_FAILS} different videos failed in a row; last: ${reason.slice(0, 150)}`;
       break;
     }
-    if (refused) { // exponential back-off, then the SAME video again
-      const wait = BACKOFF_MS * 2 ** (failStreak - 1);
-      console.warn(`  ⏳ waiting ${Math.round(wait / 60e3)} min before trying again (TikTok back-off)`);
-      setStage('paused', { why: 'TikTok back-off' });
-      await sleep(wait);
-      i--; continue;
-    }
-    const f = readJson(FETCHED, {}); // not a refusal (deleted / private video...): note it, move on
-    f[v.id] = { ...(f[v.id] || {}), failed: e.message.slice(0, 200), tries: (f[v.id]?.tries || 0) + 1, at: new Date().toISOString() };
-    writeJson(FETCHED, f);
-    st.failed.push(`${v.id}: ${e.message.slice(0, 120)}`);
   }
   liveLine(progress());
 }
@@ -167,8 +142,8 @@ const p = progress({ running: false, stopped: stopKind || null, stopReason: stop
 const line = '═'.repeat(44);
 const why = {
   time: `وقف لأن الوقت المحدد (${MAX_MIN} دقيقة) خلص — هذا مو خطأ. شغّله مرة ثانية ويكمل.`,
-  tiktok: `وقف لأن تيك توك رفض ${MAX_FAILS} مرات ورا بعض — هذا تيك توك يقول «بس». خلّه ساعتين وبعدين شغّله؛ يكمل من وين ما وقف.`,
-  errors: `${MAX_FAILS} فيديوهات فشلت ورا بعض — في شي خربان (الإنترنت أو الرفع). شيّك الإنترنت وشغّله مرة ثانية؛ لو تكرر قول لكلود.`,
+  tiktok: `وقف لأن ${MAX_FAILS} فيديوهات مختلفة رفضها تيك توك ورا بعض — هذا تيك توك يقول «بس». خلّه ساعتين وبعدين شغّله؛ يكمل من وين ما وقف.`,
+  errors: `${MAX_FAILS} فيديوهات مختلفة فشلت ورا بعض — في شي خربان (الإنترنت أو الرفع). شيّك الإنترنت وشغّله مرة ثانية؛ لو تكرر قول لكلود.`,
   machine: `وقف عشان الجهاز: ${stopReason}`,
 }[stopKind];
 console.log([
@@ -177,14 +152,13 @@ console.log([
   `انرفعت: ${p.done}   (من تيك توك ${p.fromTiktok} · كانت على الجهاز ${p.fromDisk})`,
   `بالساعة: ${p.perHour}`,
   `رفض تيك توك: ${p.refusals} مرة`,
-  `فشلت: ${p.failed.length}`,
-  `تحتاج دخول تيك توك (مقيّدة بالعمر، تخطّيناها): ${p.needsLogin.length}`,
-  `تيك توك حاجبها عن منطقتنا (تخطّيناها): ${p.postBlocked.length}`,
+  `انحطّت على جنب (ما نعيدها إلا إذا طلبت): ${p.deferred.length}`,
+  ...Object.keys(KIND_AR).map((k) => [k, p.deferred.filter((d) => d.kind === k).length]).filter(([, n]) => n).map(([k, n]) => `   - ${KIND_AR[k]}: ${n}`),
   `باقي: ${p.left} من ${total}`,
   ...(p.etaKuwait && p.left ? [`لو كمّل بنفس السرعة يخلص تقريبًا: ${p.etaKuwait} (توقيت الكويت)`] : []),
   '',
   why || (p.left === 0 ? 'خلص التنزيل كله. 🎉' : 'خلص التشغيل بدون مشاكل.'),
-  ...(p.failed.length ? ['', 'الأخطاء:', ...p.failed.slice(0, 5).map((f) => `   - ${f}`)] : []),
+  ...(p.deferred.length ? ['', 'اللي انحطّت على جنب:', ...p.deferred.map((d) => `   - ${d.id} — ${KIND_AR[d.kind]}`), '   (السبب الكامل في fetched.json)'] : []),
   '', 'ما استخدم Claude ولا Gemini أبدًا — تنزيل ورفع بس.',
 ].join('\n'));
 // Telegram only when something needs him (his rule): a stop on refusals / errors / the machine. Nothing on success or a time stop.

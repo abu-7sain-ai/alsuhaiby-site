@@ -7,7 +7,9 @@
 ## 2026-11-08 — Download-only line
 1. `npm run fetch` / desktop shortcut «تنزيل الصهيبي»: download → R2 → library record only. No Claude subscription, no Gemini, no dedup, no writing.
 2. The two «تجهيز الصهيبي» shortcuts (download + write together) moved to the Recycle Bin so writing never starts by accident; their scripts stay. Writing runs only by command (`npm run night`) for now.
-3. TikTok: one at a time, 60 s + 0–10 s jitter (20 s until 2026-11-10; the 9 Nov run stopped after 5 refusals in a row), exponential back-off on refusals, stop after 5 failures in a row (Arabic message + one ⚠️).
+3. TikTok: one at a time, 60 s + 0–10 s jitter (20 s until 2026-11-10).
+4. Failures (his rule, 2026-11-10): a failing video is set aside ("deferred", reason + date) on its first failure, never retried and never retried by later runs unless he asks; no back-off wait. The run stops only when 5 DIFFERENT videos fail in a row (the real sign of an IP block or a network problem; Arabic message + one ⚠️). The end summary lists how many were deferred and why. Replaces the back-off-and-retry rule.
+5. Learned 2026-11-10: the 9 Nov "IP block" was one single post (7679351937430539540) refusing again and again, not a block on his IP. With it set aside, downloads run normally.
 
 ## 2026-11-08 — Machine-health guard + desktop meters
 1. An always-on watcher (`scripts/machine/watcher.py`, hidden) samples CPU, free RAM and free disk (C:) every 30 s into `data/machine.json` (not committed).

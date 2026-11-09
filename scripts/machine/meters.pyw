@@ -147,7 +147,7 @@ _live = {'key': None, 'left': None}
 
 def live_left():
     """Videos still to fetch, counted live the same way fetch.js does: library − on R2 − needs a TikTok login − given up
-    (3 tries) − judged 'skipped'. Re-read only when one of the files changes (fetch.js writes r2.json after every upload)."""
+    (3 tries) − deferred − judged 'skipped'. Re-read only when one of the files changes (fetch.js writes r2.json after every upload)."""
     try:
         key = tuple(os.path.getmtime(p) if os.path.exists(p) else 0 for p in LIVE_FILES)
         if key != _live['key']:
@@ -155,7 +155,7 @@ def live_left():
             n = 0
             for v in lib.get('videos', []):
                 i = v.get('id'); f = fetched.get(i) or {}
-                if i in r2 or f.get('needsLogin') or (f.get('tries') or 0) >= 3 or (ledger.get(i) or {}).get('status') == 'skipped': continue
+                if i in r2 or f.get('deferred') or f.get('needsLogin') or (f.get('tries') or 0) >= 3 or (ledger.get(i) or {}).get('status') == 'skipped': continue
                 n += 1
             _live.update(key=key, left=n)
         return _live['left']
