@@ -14,6 +14,7 @@
     "status": "node scripts/lib/status.js",
     "night": "node scripts/night.js",
     "fetch": "node scripts/fetch.js",
+    "meta": "node scripts/meta.js",
     "daily": "node scripts/daily.js"
   },
   "dependencies": {

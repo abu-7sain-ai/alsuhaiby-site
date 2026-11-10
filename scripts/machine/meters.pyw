@@ -113,8 +113,8 @@ GREEN, AMBER, RED = '#4cc38a', '#f0b429', '#ef5350'
 LEVEL = {'ok': ('تمام', GREEN), 'slow': ('يبطّئ', AMBER), 'pause': ('وقفة مؤقتة', AMBER),
          'stop': ('وقف', RED), 'unknown': ('المراقب مو شغّال', DIM)}
 STAGE_AR = {'starting': 'يبدأ', 'downloading': 'يحمّل', 'analyzing': 'يحلّل الفيديو', 'deciding': 'يقرر الموضوع',
-            'writing': 'يكتب', 'reviewing': 'يراجع', 'uploading': 'يرفع الفيديو', 'pushing': 'يحفظ', 'slow': 'يبطّئ', 'paused': 'وقفة مؤقتة', 'idle': 'واقف'}
-SCRIPT_AR = {'night': 'تشغيل الليل', 'write': 'الكتابة', 'fetch': 'التنزيل'}
+            'writing': 'يكتب', 'reviewing': 'يراجع', 'uploading': 'يرفع الفيديو', 'pushing': 'يحفظ', 'working': 'يجمع البيانات', 'slow': 'يبطّئ', 'paused': 'وقفة مؤقتة', 'idle': 'واقف'}
+SCRIPT_AR = {'night': 'تشغيل الليل', 'write': 'الكتابة', 'fetch': 'التنزيل', 'meta': 'البيانات'}
 
 
 def read(p):
