@@ -48,7 +48,8 @@ for (const k of ['log', 'warn', 'error']) {
 
 // to do: not on R2 yet, not judged "skipped" (no page will ever show it), not deferred (old records: tries >= 3) — those wait for him
 const r2 = readJson(R2_MANIFEST, {}), ledger = loadLedger(), fetched = readJson(FETCHED, {});
-let todo = [...videoIndex().values()].filter((v) => !r2[v.id] && (IDS ? IDS.has(v.id) : ledger[v.id]?.status !== 'skipped' && !fetched[v.id]?.deferred && (fetched[v.id]?.tries || 0) < 3))
+// removed by TikTok (community guidelines) = no file exists anywhere: never downloaded, even when named with --ids
+let todo = [...videoIndex().values()].filter((v) => !r2[v.id] && fetched[v.id]?.status !== 'removed_by_tiktok' && (IDS ? IDS.has(v.id) : ledger[v.id]?.status !== 'skipped' && !fetched[v.id]?.deferred && (fetched[v.id]?.tries || 0) < 3))
   .sort((a, b) => b.views - a.views);
 const total = todo.length;
 const onDisk = todo.filter((v) => v.path && fs.existsSync(v.path)).length;
