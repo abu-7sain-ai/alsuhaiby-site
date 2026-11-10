@@ -14,6 +14,8 @@
 //     npm run fetch -- --minutes=60         time limit (the video in progress is finished first)
 //     npm run fetch -- --limit 10           stop after 10 videos
 //     npm run fetch -- --dry-run            show what it would do
+//     npm run fetch -- --ids a,b            only these videos, even if set aside (retry on his request); success clears "deferred"
+//     npm run fetch -- --cookies-from-browser=firefox   his browser's TikTok login, read by yt-dlp at run time only (never stored or printed)
 //   Records: library repo fetched.json (id → { at, bytes, from }) · progress data/run-fetch.json · log data/run-fetch.log.
 process.env.ALSUHAIBY_NO_AI = '1';
 import fs from 'node:fs';
@@ -29,6 +31,8 @@ const A = args();
 const DRY = !!A['dry-run'];
 const LIMIT = A.limit ? Number(A.limit) : Infinity;
 const MAX_MIN = Number(A.minutes ?? 0) || 0;
+const IDS = A.ids ? new Set(String(A.ids).split(',').map((s) => s.trim()).filter(Boolean)) : null;
+const COOKIES = A['cookies-from-browser'] ? String(A['cookies-from-browser']) : '';
 const GAP_MS = Number(process.env.FETCH_GAP_MS || 60e3), JITTER_MS = Number(process.env.FETCH_JITTER_MS || 10e3);
 const MAX_FAILS = 5;
 const FETCHED = path.join(LIB_DIR, 'fetched.json');
@@ -43,7 +47,7 @@ for (const k of ['log', 'warn', 'error']) {
 
 // to do: not on R2 yet, not judged "skipped" (no page will ever show it), not deferred (old records: tries >= 3) — those wait for him
 const r2 = readJson(R2_MANIFEST, {}), ledger = loadLedger(), fetched = readJson(FETCHED, {});
-let todo = [...videoIndex().values()].filter((v) => !r2[v.id] && ledger[v.id]?.status !== 'skipped' && !fetched[v.id]?.deferred && (fetched[v.id]?.tries || 0) < 3)
+let todo = [...videoIndex().values()].filter((v) => !r2[v.id] && (IDS ? IDS.has(v.id) : ledger[v.id]?.status !== 'skipped' && !fetched[v.id]?.deferred && (fetched[v.id]?.tries || 0) < 3))
   .sort((a, b) => b.views - a.views);
 const total = todo.length;
 const onDisk = todo.filter((v) => v.path && fs.existsSync(v.path)).length;
@@ -97,11 +101,11 @@ for (let i = 0; i < todo.length; i++) {
   }
   console.log(`\n[${new Date().toLocaleTimeString('en-GB')}] ${v.id} · ${v.views.toLocaleString('en')} views · ${local ? 'on disk' : 'TikTok'}`);
   try {
-    if (!local) { setStage('downloading', { current: v.id, left: total - st.done }); sinceTiktok = Date.now(); download(v); }
+    if (!local) { setStage('downloading', { current: v.id, left: total - st.done }); sinceTiktok = Date.now(); download(v, { cookiesFrom: COOKIES }); }
     setStage('uploading', { current: v.id });
     uploadVideo(v);
     const bytes = fs.statSync(v.path).size;
-    writeJson(FETCHED, { ...readJson(FETCHED, {}), [v.id]: { at: new Date().toISOString(), bytes, from: local ? 'disk' : 'tiktok' } });
+    writeJson(FETCHED, { ...readJson(FETCHED, {}), [v.id]: { at: new Date().toISOString(), bytes, from: local ? 'disk' : 'tiktok', ...(COOKIES ? { withLogin: COOKIES } : {}) } });
     st.done++; st.mb += bytes / 1e6; local ? st.fromDisk++ : st.fromTiktok++;
     failStreak = 0;
     console.log(`  ✓ on R2 (${(bytes / 1e6).toFixed(1)} MB)`);
