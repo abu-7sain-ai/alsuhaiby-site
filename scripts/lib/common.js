@@ -6,13 +6,17 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-export const VIDEO_DIR = process.env.VIDEO_DIR || path.join(os.homedir(), 'Videos', 'ChatExport_2026-10-30', 'video_files');
+// One parent folder (2026-11-10): <parent>alsuhaiby-site, <parent>alsuhaiby-library, <parent>media{downloads,telegram-export}.
+// PARENT = the folder that holds this repo. The old places (Desktop, Videos) are still found until the move is done.
+export const PARENT = path.dirname(ROOT);
+const firstThere = (...ps) => ps.find((p) => fs.existsSync(p)) || ps[0];
+export const VIDEO_DIR = process.env.VIDEO_DIR || firstThere(path.join(PARENT, 'media', 'telegram-export', 'video_files'), path.join(os.homedir(), 'Videos', 'ChatExport_2026-10-30', 'video_files'));
 export const EXPORT_DIR = path.dirname(VIDEO_DIR);
 // Private library repo (abu-7sain-ai/alsuhaiby-library): transcripts, analyses, articles, review logs, dedup ledger. Never public.
-export const LIB_DIR = process.env.LIB_DIR || path.join(os.homedir(), 'Desktop', 'alsuhaiby-library');
+export const LIB_DIR = process.env.LIB_DIR || path.join(PARENT, 'alsuhaiby-library'); // next to this repo, never inside it (it is private)
 export const LIBRARY = process.env.LIBRARY_JSON || path.join(LIB_DIR, 'library.json');
 // Videos fetched with yt-dlp (never committed; the copy everyone plays is on R2).
-export const DOWNLOAD_DIR = process.env.DOWNLOAD_DIR || path.join(os.homedir(), 'Videos', 'alsuhaiby-downloads');
+export const DOWNLOAD_DIR = process.env.DOWNLOAD_DIR || firstThere(path.join(PARENT, 'media', 'downloads'), path.join(os.homedir(), 'Videos', 'alsuhaiby-downloads'));
 export const OLD_ANALYSES = process.env.OLD_ANALYSES || path.join(os.homedir(), 'Desktop', 'KatibSuhaibi', 'data', 'files', 'بيانات-الحساب-والفيديوهات.txt');
 export const MODEL = process.env.OPENROUTER_MODEL || 'google/gemini-3.8-flash';
 export const LANGS = ['ar', 'en', 'fr', 'es', 'ur'];

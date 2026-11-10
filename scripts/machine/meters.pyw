@@ -139,7 +139,7 @@ def ensure_watcher():
                      creationflags=0x08000000, close_fds=True)  # CREATE_NO_WINDOW
 
 
-LIB_DIR = os.environ.get('LIB_DIR') or os.path.join(os.path.expanduser('~'), 'Desktop', 'alsuhaiby-library')
+LIB_DIR = os.environ.get('LIB_DIR') or os.path.join(os.path.dirname(ROOT), 'alsuhaiby-library')  # next to the site repo
 LIVE_FILES = [os.path.join(LIB_DIR, 'library.json'), os.path.join(ROOT, 'data', 'r2.json'),
               os.path.join(LIB_DIR, 'fetched.json'), os.path.join(LIB_DIR, 'ledger.json')]
 _live = {'key': None, 'left': None}
