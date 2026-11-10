@@ -5,8 +5,8 @@
     "at": "2026-11-06T11:39:27.037Z",
     "ok": true
   },
-  "updatedAt": "2026-11-09T02:37:24.969Z",
-  "nextScheduledRun": "2026-11-10 02:00 Kuwait (GitHub Actions, daily)",
+  "updatedAt": "2026-11-10T04:36:37.190Z",
+  "nextScheduledRun": "2026-11-11 02:00 Kuwait (GitHub Actions, daily)",
   "pagesPublished": {
     "total": 25,
     "byLang": {
@@ -14,20 +14,20 @@
     }
   },
   "videosProcessed": 50,
-  "videosOnR2": 352,
+  "videosOnR2": 624,
   "openRouterSpendUsd": {
-    "total": 8.742,
-    "last30Days": 8.742
+    "total": 8.755,
+    "last30Days": 8.755
   },
   "keyCreditLeftUsd": {
-    "usd": 41.27,
+    "usd": 41.26,
     "source": "key limit"
   },
   "siteHealth": {
-    "at": "2026-11-09T02:37:24.969Z",
+    "at": "2026-11-10T04:36:37.190Z",
     "url": "https://alsuhaiby.com/",
     "httpStatus": 200,
-    "ms": 156,
+    "ms": 143,
     "up": true
   },
   "alerts": {},
@@ -47,25 +47,20 @@
     }
   },
   "lastDaily": {
-    "day": "2026-11-09",
-    "at": "2026-11-09T02:37:24.755Z",
-    "published": [
-      {
-        "title": "حرارة سيارتي تتغير فجأة: 4 علامات إن بلف الحرارة عطلان",
-        "url": "https://alsuhaiby.com/%D8%AD%D8%B1%D8%A7%D8%B1%D8%A9-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%AA%D8%BA%D9%8A%D8%B1-%D8%A8%D9%84%D9%81-%D8%A7%D9%84%D8%AD%D8%B1%D8%A7%D8%B1%D8%A9/"
-      }
-    ],
+    "day": "2026-11-10",
+    "at": "2026-11-10T04:36:37.020Z",
+    "published": [],
     "merged": [
-      "7705883172306717958 → سيارتي-ترجف-اول-ما-ادوس-بنزين"
+      "7706237772511726869 → سيارتي-ترجف-وهي-واقفة"
     ],
     "queueLeft": 0,
     "archiveLeft": 682,
-    "costTodayUsd": 0.009,
+    "costTodayUsd": 0.013,
     "costGuard": null,
     "errors": []
   },
   "queueWaiting": 0,
   "publishPerDay": 7,
-  "videosAnalyzed": 57,
+  "videosAnalyzed": 58,
   "archiveLeft": 682
 }
