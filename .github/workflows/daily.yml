@@ -1,6 +1,7 @@
 # LINE 2 — daily publish in the cloud (no PC needed). See NOTES.md → "Daily pipeline".
 #   ~02:07 Kuwait (23:07 UTC): new TikTok videos end-to-end + publish N pages from queue/. Telegram only for ⚠️ (no summary).
 #   ~05:37 Kuwait (02:37 UTC): if the daily run did not happen → ⚠️ + catch-up run. GitHub can start scheduled jobs late.
+#     Also checks the live site is on main's HEAD (scripts/deploy-check.js) → ⚠️ if a Cloudflare build failed overnight.
 #   "Run workflow" button: manual run (dry run by default).
 name: daily publish
 
@@ -21,6 +22,7 @@ on:
 
 permissions:
   contents: write
+  checks: read
 
 concurrency:
   group: daily-publish
@@ -63,6 +65,15 @@ jobs:
             git -C "$d" config user.name "alsuhaiby daily"
             git -C "$d" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           done
+
+      - name: Deploy check (05:37 only — is the live site on main's HEAD?)
+        if: github.event_name == 'schedule' && github.event.schedule == '37 2 * * *'
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: node scripts/deploy-check.js
 
       - name: Run
         env:

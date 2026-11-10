@@ -1,0 +1,49 @@
+# Deploy watch (added 2026-11-10 after Cloudflare build e14f8189 for 642a6d2 failed silently).
+#   Every push to main: wait until the live site's /build.json shows this commit (silent), or ⚠️ Telegram if it is
+#   still on an older commit 10 minutes after the push. A newer push cancels this run (its own run takes over).
+#   The 05:37 missed-run check in daily.yml runs the same check once, so an overnight failure is caught by morning.
+#   "Run workflow" with test_alert = send one «🧪 اختبار» alert to prove the Telegram path works.
+# Note: pushes made by the daily job (GITHUB_TOKEN) do not start workflows; the 05:37 check covers those.
+name: deploy check
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      test_alert:
+        description: 'Send one test alert (pretend the deploy failed)'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  checks: read
+
+concurrency:
+  group: deploy-check
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check the deploy
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            if [ "${{ inputs.test_alert }}" = "true" ]; then node scripts/deploy-check.js --test; else node scripts/deploy-check.js; fi
+          else
+            node scripts/deploy-check.js --watch "${{ github.sha }}" --pushed-at "${{ github.event.repository.pushed_at }}"
+          fi

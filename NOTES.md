@@ -72,6 +72,15 @@ UptimeRobot: monitor on https://alsuhaiby.com every 5 min with EMAIL alerts.
 - Nothing incomplete goes live: a page needs the video file on R2 AND the numbers in the library. Check = scripts/lib/publishable.js, used by publishQueued, queuePage, mergeInto, daily.js and night.js; `npm test` runs its tests.
 - Publishable now: 721 of 725. Blocked: only the 4 excluded ids (no file) — 7642038037601324309, 7678048203056401685, 7679351937430539540, 7695835055603748097. 7188529307562609922 got its numbers by hand on 2026-11-10 (likes, saves, shares rounded from TikTok's K display, numbers_rounded: true; comments exact). 7696203758933380372 (removed by TikTok, file + numbers kept) is publishable.
 
+## Deploy watch (2026-11-10)
+- The live site publishes the commit it was built from at https://alsuhaiby.com/build.json ({sha, builtAt}; Cloudflare's WORKERS_CI_COMMIT_SHA, git locally).
+- `.github/workflows/deploy-check.yml`: after every push to main, `scripts/deploy-check.js --watch <sha>` polls every 30 s. Silent once the live site is on that commit; ⚠️ Telegram (commit, push time in Kuwait, what the site is on, the Cloudflare build link) if it is still older 10 minutes after the push. A newer push cancels the older watch.
+- The 05:37 missed-run check in daily.yml runs the same check once, so an overnight failure (including pushes by the daily job, which do not start workflows) is caught by morning.
+- Test the alert path: Actions → «deploy check» → Run workflow (test_alert) sends one «🧪 اختبار» alert.
+
+## Incidents
+- 2026-11-10: Cloudflare Workers Build e14f8189 for commit 642a6d2 (garage contact details) failed with a zero-second build (start = finish, 19:11:52 UTC). No code fault: a clean clone of 642a6d2 builds fine. The live site stayed on 5eacc96 and nothing alerted; found by checking the site by hand. Fixed by an empty commit (5df44bf), which rebuilt and deployed (build 3e521a60, version 9f12527b). Led to the deploy watch above.
+
 ## Security log
 - 2026-11-06: the Cloudflare DNS token pasted in chat was rolled. New value in .env verified (DNS read OK); the old value is rejected by Cloudflare ("Invalid API Token").
 
