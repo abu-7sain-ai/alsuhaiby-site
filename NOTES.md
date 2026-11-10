@@ -70,7 +70,7 @@ UptimeRobot: monitor on https://alsuhaiby.com every 5 min with EMAIL alerts.
 
 ## Publishing rule (2026-11-10, owner)
 - Nothing incomplete goes live: a page needs the video file on R2 AND the numbers in the library. Check = scripts/lib/publishable.js, used by publishQueued, queuePage, mergeInto, daily.js and night.js; `npm test` runs its tests.
-- Publishable now: 720 of 725. Blocked: the 4 excluded ids (no file) — 7642038037601324309, 7678048203056401685, 7679351937430539540, 7695835055603748097 — plus 7188529307562609922 (5M views, age-restricted: file on R2 but only views, no likes/comments/saves) — blocked by the code until its numbers are added by hand. 7696203758933380372 (removed by TikTok, file + numbers kept) is publishable.
+- Publishable now: 721 of 725. Blocked: only the 4 excluded ids (no file) — 7642038037601324309, 7678048203056401685, 7679351937430539540, 7695835055603748097. 7188529307562609922 got its numbers by hand on 2026-11-10 (likes, saves, shares rounded from TikTok's K display, numbers_rounded: true; comments exact). 7696203758933380372 (removed by TikTok, file + numbers kept) is publishable.
 
 ## Security log
 - 2026-11-06: the Cloudflare DNS token pasted in chat was rolled. New value in .env verified (DNS read OK); the old value is rejected by Cloudflare ("Invalid API Token").
