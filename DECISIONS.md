@@ -1,5 +1,9 @@
 # DECISIONS (newest first)
 
+## 2026-11-10 — One project folder
+1. Everything lives under Desktop\alsuhaiby: alsuhaiby-site (PUBLIC repo) and alsuhaiby-library (PRIVATE repo) side by side, each with its own .git (never merged, the library never inside the site); media\downloads and media\telegram-export (the videos, were in Videos); archive\ (one-of-a-kind files not in git). KatibSuhaibi stays on the Desktop (separate app).
+2. The move is done by the Desktop click-file «نقل المشروع» (scripts/move-project.ps1): refuses while a project process runs; folder moves are single renames; any failure undoes everything; shortcuts (target, working folder, icon) and Claude Code memory updated; verified before anything is removed; removals go to the Recycle Bin only (duplicates re-checked byte for byte).
+
 ## 2026-11-10 — Garage contact details filled
 1. WhatsApp 99168778 (click-to-chat https://wa.me/96599168778). Address shown line by line exactly as the owner wrote it (الشويخ الصناعية 2 / قطعة 1 / شارع 24 / قسيمة 27و / الرقم الآلي للعنوان: 90129093), with the button «اضغط للموقع على قوقل ماب» (Google Maps, new tab).
 2. One garage entity in JSON-LD (AutoRepair, @id alsuhaiby.com/#garage): streetAddress, addressLocality, addressCountry KW, telephone +96599168778, hasMap, PACI number. Same object on the about, contact and every video page (Person.worksFor).
