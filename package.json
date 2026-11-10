@@ -14,7 +14,8 @@
     "status": "node scripts/lib/status.js",
     "night": "node scripts/night.js",
     "fetch": "node scripts/fetch.js",
-    "meta": "node scripts/meta.js",
+    "numbers": "node scripts/meta.js --part=numbers",
+    "comments": "node scripts/meta.js --part=comments",
     "daily": "node scripts/daily.js"
   },
   "dependencies": {

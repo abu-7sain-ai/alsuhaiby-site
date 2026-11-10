@@ -14,5 +14,6 @@
   "mediaBase": "https://media.alsuhaiby.com",
   "publishPerDay": 7,
   "maxMinutes": 0,
-  "zernioPerMinute": 45
+  "zernioPerMinute": 45,
+  "zernioCommentsPerHour": 1700
 }

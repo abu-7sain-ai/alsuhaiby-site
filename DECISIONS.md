@@ -7,6 +7,9 @@
 4. Comments come from Zernio (it answers by video id even for old videos); numbers from Zernio where it tracks the post, yt-dlp metadata otherwise; every number records its source and capture date. yt-dlp cannot fetch TikTok comments (no code for it in 2026.10.26).
 5. Instagram posts are matched to TikTok videos by caption + date; matched ones get their link, numbers and comments.
 6. Order: highest views first, so an early stop still has the biggest videos. Zernio pace is a setting (zernioPerMinute, 45).
+7. Split (his decision, 2026-11-10): NUMBERS now (yt-dlp only, no Zernio, under an hour, «بيانات الصهيبي») and COMMENTS later as a slow background project that runs only when he starts it («تعليقات الصهيبي»), no deadline. The combined run was stopped with 16 videos of comments kept.
+8. Zernio's real limit for comment reads is 1,800 per hour; the comments pass is paced under it (zernioCommentsPerHour 1700).
+9. TikTok's API (through Zernio) returns fewer top-level comments than TikTok's own count; replies come back complete. We store what it returns and record the expected count beside it.
 
 ## 2026-11-09 — Meters window as a desktop widget
 1. Asked: pin it into the desktop layer (on the wallpaper, behind all windows, seen with Win+D). Tried and tested: on this PC (Windows 11 build 26300) the desktop window Progman has WS_EX_NOREDIRECTIONBITMAP, so an ordinary window parented there (between icons and wallpaper, above the icons, or inside the wallpaper WorkerW) is placed but never drawn. Not forced (his rule: offer the nearest alternative).

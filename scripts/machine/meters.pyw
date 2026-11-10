@@ -114,7 +114,7 @@ LEVEL = {'ok': ('تمام', GREEN), 'slow': ('يبطّئ', AMBER), 'pause': ('و
          'stop': ('وقف', RED), 'unknown': ('المراقب مو شغّال', DIM)}
 STAGE_AR = {'starting': 'يبدأ', 'downloading': 'يحمّل', 'analyzing': 'يحلّل الفيديو', 'deciding': 'يقرر الموضوع',
             'writing': 'يكتب', 'reviewing': 'يراجع', 'uploading': 'يرفع الفيديو', 'pushing': 'يحفظ', 'working': 'يجمع البيانات', 'slow': 'يبطّئ', 'paused': 'وقفة مؤقتة', 'idle': 'واقف'}
-SCRIPT_AR = {'night': 'تشغيل الليل', 'write': 'الكتابة', 'fetch': 'التنزيل', 'meta': 'البيانات'}
+SCRIPT_AR = {'night': 'تشغيل الليل', 'write': 'الكتابة', 'fetch': 'التنزيل', 'numbers': 'الأرقام', 'comments': 'التعليقات'}
 
 
 def read(p):
