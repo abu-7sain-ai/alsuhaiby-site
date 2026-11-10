@@ -3,7 +3,8 @@
 //   ZERO AI: no Claude subscription, no Gemini, no writing, no review, no dedup, no watching. Enforced: ALSUHAIBY_NO_AI=1 makes
 //   any chat() call throw (scripts/lib/common.js), and this file imports no AI step.
 //   Gentle with TikTok: one at a time, 60 s + random 0–10 s between TikTok downloads.
-//   A video that fails is set aside ("deferred", with the reason and date in fetched.json) on its FIRST failure: no retry, no
+//   His rule (2026-11-10): never wait more than 30 s — a download or upload that stalls > 30 s is stopped and the video goes to
+//   «معلّقة». A video that fails is set aside ("deferred", with the reason and date in fetched.json) on its FIRST failure: no retry, no
 //   back-off wait, straight to the next video; later runs skip it until he asks. Only 5 DIFFERENT videos failing in a row
 //   (= an IP block or the network) stops the run (Arabic message + one ⚠️); those 5 are un-deferred so a later run tries them.
 //   (2026-11-10: the "IP block" of 9 Nov was ONE post, 7679351937430539540, refused again and again, not his IP.)
@@ -156,13 +157,13 @@ console.log([
   `انرفعت: ${p.done}   (من تيك توك ${p.fromTiktok} · كانت على الجهاز ${p.fromDisk})`,
   `بالساعة: ${p.perHour}`,
   `رفض تيك توك: ${p.refusals} مرة`,
-  `انحطّت على جنب (ما نعيدها إلا إذا طلبت): ${p.deferred.length}`,
+  `معلّقة (ما نعيدها إلا إذا طلبت): ${p.deferred.length}`,
   ...Object.keys(KIND_AR).map((k) => [k, p.deferred.filter((d) => d.kind === k).length]).filter(([, n]) => n).map(([k, n]) => `   - ${KIND_AR[k]}: ${n}`),
   `باقي: ${p.left} من ${total}`,
   ...(p.etaKuwait && p.left ? [`لو كمّل بنفس السرعة يخلص تقريبًا: ${p.etaKuwait} (توقيت الكويت)`] : []),
   '',
   why || (p.left === 0 ? 'خلص التنزيل كله. 🎉' : 'خلص التشغيل بدون مشاكل.'),
-  ...(p.deferred.length ? ['', 'اللي انحطّت على جنب:', ...p.deferred.map((d) => `   - ${d.id} — ${KIND_AR[d.kind]}`), '   (السبب الكامل في fetched.json)'] : []),
+  ...(p.deferred.length ? ['', 'معلّقة (الرقم والسبب):', ...p.deferred.map((d) => `   - ${d.id} — ${KIND_AR[d.kind]}`), '   (السبب الكامل في fetched.json)'] : []),
   '', 'ما استخدم Claude ولا Gemini أبدًا — تنزيل ورفع بس.',
 ].join('\n'));
 // Telegram only when something needs him (his rule): a stop on refusals / errors / the machine. Nothing on success or a time stop.

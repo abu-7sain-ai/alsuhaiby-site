@@ -8,15 +8,16 @@
 //   COMMENTS (`npm run comments`, desktop shortcut «تعليقات الصهيبي»): slow background project, runs only when he starts it.
 //     Zernio (asked by video id, works for old videos too) → comments/<id>.json; Instagram posts matched to TikTok videos by
 //     caption + date get their link, numbers and comments too. Done = meta.json[id].comments.capturedAt.
-//     Zernio's real limit for comment reads is 1,800 per hour (measured 2026-11-10; its general docs say 60/min): paced at
-//     `zernioCommentsPerHour` (config/site.json, 1700) and `zernioPerMinute` (45); a 429 waits what Zernio asks.
+//     Zernio's real limit for comment reads is 1,800 per hour (measured 2026-11-10; its general docs say 60/min): calls are
+//     spaced evenly under `zernioCommentsPerHour` (config/site.json, 1700) and `zernioPerMinute` (45), ≈ one every 2.1 s.
 //     Privacy: commenter names, handles, ids and pictures are NEVER written — only text, date, likes, reply flags.
 //     His account's replies are kept apart (accountReplies[], account_reply: true, ai_written: true): an employee wrote them
 //     with an AI, so they are never a source of his words, only a record of which questions were already answered.
 //     TikTok's comment count is higher than what its API returns (replies come back complete, top-level comments do not):
 //     expectedCount vs gotCount is kept per video.
 //
-//   Both: a video that fails is set aside (numbersDeferred / commentsDeferred: reason + date), no retry; 5 different videos
+//   Both (his rule, 2026-11-10): NEVER wait more than 30 s, never retry, no back-off. A video whose step fails, stalls or is
+//   told to wait goes to «معلّقة» (numbersDeferred / commentsDeferred: reason + date) and the run moves on; 5 different videos
 //   failing in a row = stop (+ one ⚠️). Resumable, `--minutes=N`, `--limit N`, `--ids a,b` (redo these), `--dry-run`,
 //   machine guard, live window, pushes the library as it goes.
 process.env.ALSUHAIBY_NO_AI = '1';
@@ -65,40 +66,25 @@ const KEY = DRY || NUM ? '' : zernioKey();
 if (!DRY && !NUM && !KEY) { console.error('ZERNIO_API_KEY is missing in .env'); process.exit(1); }
 const hide = (s) => (KEY ? String(s).replaceAll(KEY, '[secret]') : String(s));
 
-// ---- Zernio calls: ≤ RATE per minute and ≤ HOURLY per hour (sliding windows); 429 → wait what Zernio asks --------
-const recent = [];
-let zCalls = 0;
+// ---- Zernio calls (his rule 2026-11-10: never wait more than 30 s, never retry) ---------------------------
+// Calls are spaced evenly so we stay under both limits without ever being told to wait: one call every
+// max(60/RATE, 3600/HOURLY) s (≈ 2.1 s at 1700/h). Anything that answers 429, errors, or takes > 30 s throws at once:
+// the video goes to «معلّقة» and the run moves on.
+const GAP_Z = Math.max(60e3 / RATE, 3600e3 / HOURLY);
+let lastZ = 0, zCalls = 0;
 async function zget(p, q = {}) {
-  for (let attempt = 1; ; attempt++) {
-    const now = Date.now();
-    while (recent.length && now - recent[0] > 3600e3) recent.shift();
-    const lastMin = recent.filter((t) => now - t < 60e3);
-    if (lastMin.length >= RATE) { await sleep(60e3 - (now - lastMin[0]) + 50); attempt--; continue; }
-    if (recent.length >= HOURLY) {
-      const wait = 3600e3 - (now - recent[0]) + 1e3;
-      setStage('paused', { why: 'Zernio hourly limit' });
-      console.log(`  ⏳ Zernio hourly limit (${HOURLY}/h): waiting ${Math.round(wait / 60e3)} min`);
-      await sleep(wait); setStage('working'); attempt--; continue;
-    }
-    recent.push(Date.now()); zCalls++;
-    const u = new URL('https://zernio.com/api' + p);
-    for (const [k, v] of Object.entries(q)) if (v !== undefined && v !== null && v !== '') u.searchParams.set(k, String(v));
-    let r;
-    try { r = await fetch(u, { headers: { Authorization: `Bearer ${KEY}` } }); } catch (e) {
-      if (attempt >= 4) throw new Error(`Zernio network: ${hide(e.message).slice(0, 150)}`);
-      await sleep(15e3 * attempt); continue;
-    }
-    if (r.status === 429) {
-      const wait = ((Number(r.headers.get('retry-after')) || 60) + 2) * 1e3;
-      setStage('paused', { why: 'Zernio asks to wait' });
-      console.warn(`  ⏳ Zernio asks to wait ${Math.round(wait / 60e3) || 1} min`);
-      await sleep(wait); setStage('working'); attempt--; continue;
-    }
-    if (r.status >= 500 && attempt < 4) { await sleep(10e3 * attempt); continue; }
-    const t = await r.text();
-    if (!r.ok) throw new Error(`Zernio ${r.status}: ${hide(t).slice(0, 300)}`);
-    return JSON.parse(t);
-  }
+  const wait = GAP_Z - (Date.now() - lastZ);
+  if (wait > 0) await sleep(wait);
+  lastZ = Date.now(); zCalls++;
+  const u = new URL('https://zernio.com/api' + p);
+  for (const [k, v] of Object.entries(q)) if (v !== undefined && v !== null && v !== '') u.searchParams.set(k, String(v));
+  let r;
+  try { r = await fetch(u, { headers: { Authorization: `Bearer ${KEY}` }, signal: AbortSignal.timeout(30e3) }); }
+  catch (e) { throw new Error(e.name === 'TimeoutError' ? 'Zernio: no answer within 30 s' : `Zernio network: ${hide(e.message).slice(0, 150)}`); }
+  if (r.status === 429) throw new Error(`Zernio asks to wait ${r.headers.get('retry-after') || '?'} s (429): ${hide(await r.text()).slice(0, 160)}`);
+  const t = await r.text();
+  if (!r.ok) throw new Error(`Zernio ${r.status}: ${hide(t).slice(0, 300)}`);
+  return JSON.parse(t);
 }
 
 // ---- comments of one post: top-level pages + the replies of every comment that has any -------------
@@ -136,7 +122,8 @@ async function ytMeta(id) {
   const wait = YT_GAP_MS + Math.random() * YT_JITTER_MS - (Date.now() - lastYt);
   if (lastYt && wait > 0) await sleep(wait);
   lastYt = Date.now();
-  const r = spawnSync('python', ['-m', 'yt_dlp', '-q', '--no-warnings', '--skip-download', '-J', `https://www.tiktok.com/@m_alsuhaiby/video/${id}`], { encoding: 'utf8', timeout: 120e3, maxBuffer: 64e6 });
+  const r = spawnSync('python', ['-m', 'yt_dlp', '-q', '--no-warnings', '--skip-download', '-J', `https://www.tiktok.com/@m_alsuhaiby/video/${id}`], { encoding: 'utf8', timeout: 30e3, maxBuffer: 64e6 });
+  if (r.error?.code === 'ETIMEDOUT') throw new Error('yt-dlp: no answer within 30 s');
   if (r.status !== 0 || !r.stdout) throw new Error(String(r.stderr || r.error || 'yt-dlp failed').trim().split('\n').pop().slice(0, 200));
   return JSON.parse(r.stdout);
 }
@@ -314,7 +301,7 @@ for (const v of todo) {
     saveMeta(v.id, (x) => ({ ...x, [field]: { reason, at: new Date().toISOString() } }));
     st.deferred.push({ id: v.id, views: v.views || 0, reason: reason.slice(0, 160) });
     failStreak++;
-    console.warn(`  – set aside (${failStreak}/${MAX_FAILS} different videos in a row): ${reason.slice(0, 200)}`);
+    console.warn(`  – معلّقة, skipped (${failStreak}/${MAX_FAILS} different videos in a row): ${reason.slice(0, 200)}`);
     if (failStreak >= MAX_FAILS) {
       const last = st.deferred.slice(-MAX_FAILS);
       for (const d of last) saveMeta(d.id, (x) => { delete x[field]; return x; });
@@ -346,12 +333,12 @@ console.log([
   ...(NUM ? [] : [
     `تعليقات الناس: ${p.comments.toLocaleString('en')}   · ردود الحساب (مكتوبة بالذكاء، للتسجيل بس): ${p.accountReplies.toLocaleString('en')}`,
     `انستقرام: ${p.igMatched} فيديو مربوط · ${p.igComments.toLocaleString('en')} تعليق`]),
-  `انحطّت على جنب: ${p.deferred.length}`,
+  `معلّقة: ${p.deferred.length}`,
   `باقي: ${p.left} من ${total}`,
   ...(p.etaKuwait && p.left ? [`لو كمّل بنفس السرعة يخلص تقريبًا: ${p.etaKuwait} (توقيت الكويت)`] : []),
   '',
   why || (p.left === 0 ? 'خلص كله. 🎉' : 'خلص التشغيل بدون مشاكل.'),
-  ...(p.deferred.length ? ['', 'اللي انحطّت على جنب:', ...p.deferred.map((d) => `   - ${d.id} — ${d.reason}`)] : []),
+  ...(p.deferred.length ? ['', 'معلّقة (تحتاجك — الرقم والسبب):', ...p.deferred.map((d) => `   - ${d.id} — ${d.reason}`)] : []),
   '', NUM ? 'ما استخدم Claude ولا Gemini ولا Zernio — أرقام من yt-dlp بس.' : 'ما استخدم Claude ولا Gemini أبدًا — تعليقات بس، بدون أسماء الناس.',
 ].join('\n'));
 if (['errors', 'machine'].includes(stopKind)) alert(`⚠️ alsuhaiby.com — ${NUM ? 'الأرقام' : 'التعليقات'} وقفت\n${why}`);

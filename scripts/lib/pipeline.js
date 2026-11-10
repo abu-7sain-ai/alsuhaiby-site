@@ -28,7 +28,8 @@ export function download(v, { cookiesFrom } = {}) {
   if (v.path && fs.existsSync(v.path)) return v.path;
   fs.mkdirSync(DOWNLOAD_DIR, { recursive: true });
   const out = path.join(DOWNLOAD_DIR, `${v.id}.mp4`);
-  const r = spawnSync('python', ['-m', 'yt_dlp', '-q', '--no-warnings', '--no-progress', ...(cookiesFrom ? ['--cookies-from-browser', cookiesFrom] : []), '-f', 'mp4/best', '-o', out, `https://www.tiktok.com/@m_alsuhaiby/video/${v.id}`], { encoding: 'utf8', timeout: 5 * 60e3 });
+  const r = spawnSync('python', ['-m', 'yt_dlp', '-q', '--no-warnings', '--no-progress', ...(cookiesFrom ? ['--cookies-from-browser', cookiesFrom] : []), '-f', 'mp4/best', '-o', out, `https://www.tiktok.com/@m_alsuhaiby/video/${v.id}`], { encoding: 'utf8', timeout: 30e3 }); // his rule: nothing may stall more than 30 s
+  if (r.error?.code === 'ETIMEDOUT') { try { fs.rmSync(out, { force: true }); fs.rmSync(out + '.part', { force: true }); } catch {} throw new Error(`download ${v.id}: no answer within 30 s (skipped)`); }
   if (r.status !== 0 || !fs.existsSync(out)) {
     const err = String(r.stderr || r.error || 'yt-dlp failed').trim().split('\n').pop().slice(0, 300);
     if (/429|too many|rate.?limit|blocked|captcha/i.test(err)) throw new RateLimitError(err);

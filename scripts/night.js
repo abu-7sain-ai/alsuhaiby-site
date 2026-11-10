@@ -120,20 +120,16 @@ for (const v of todo) {
     if (!hadFile) await sleep(4000 + Math.random() * 4000); // be gentle with TikTok between downloads
   } catch (e) {
     if (e instanceof ClaudeLimitError) { stopReason = e.message; stopKind = 'claude-limit'; break; }
-    if (e instanceof RateLimitError) {
-      backoff++;
-      console.warn(`  TikTok rate limit (${backoff}/3): ${e.message}`);
-      if (backoff >= 3) { stopReason = `TikTok rate-limited this PC 3 times in a row (${e.message}). Stopped; run again later.`; stopKind = 'tiktok'; break; }
-      await sleep(backoff * 5 * 60e3); // 5, then 10 minutes
-      continue;
-    }
+    // His rule (2026-11-10): never wait. A TikTok rate limit no longer means a 5–10 min back-off: the video is skipped
+    // like any failure («معلّقة») and the run moves on; 3 different videos in a row still stop the run.
+    if (e instanceof RateLimitError) { backoff++; if (backoff >= 3) { stopReason = `TikTok rate-limited this PC 3 times in a row (${e.message}). Stopped; run again later.`; stopKind = 'tiktok'; } }
     const tries = (loadLedger()[v.id]?.tries || 0) + 1;
     setLedger(v.id, { status: 'failed', tries, reason: e.message.slice(0, 300), line: 'night' });
     done.failed.push(`${v.id}: ${e.message.slice(0, 120)}`); console.warn(`  ! ${e.message}`);
     try { gitSync(LIB_DIR, ['.'], `night: ${v.id} failed`); } catch {}
     saveProgress();
     // 3 different videos failing in a row = something is broken (internet, a key, git): stop instead of burning the list
-    if (++failStreak >= 3) { stopReason = `3 videos failed in a row; last error: ${e.message.slice(0, 150)}`; stopKind = 'errors'; break; }
+    if (++failStreak >= 3) { if (!stopKind) { stopReason = `3 videos failed in a row; last error: ${e.message.slice(0, 150)}`; stopKind = 'errors'; } break; }
   }
 }
 

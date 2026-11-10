@@ -35,7 +35,7 @@ export function uploadVideo(v, { dryRun = false } = {}) {
   const size = fs.statSync(v.path).size;
   if (r2[v.id] || dryRun) return false;
   console.log(`  upload ${v.id}.mp4 to R2 (${(size / 1e6).toFixed(1)} MB)`);
-  execFileSync(process.execPath, [WRANGLER, 'r2', 'object', 'put', `alsuhaiby-media/${v.id}.mp4`, '--file', v.path, '--content-type', 'video/mp4', '--cache-control', 'public, max-age=31536000, immutable', '--remote'], { stdio: ['ignore', 'ignore', 'inherit'] });
+  execFileSync(process.execPath, [WRANGLER, 'r2', 'object', 'put', `alsuhaiby-media/${v.id}.mp4`, '--file', v.path, '--content-type', 'video/mp4', '--cache-control', 'public, max-age=31536000, immutable', '--remote'], { stdio: ['ignore', 'ignore', 'inherit'], timeout: 30e3 }); // his rule: no step may stall more than 30 s
   writeJson(R2_MANIFEST, { ...readJson(R2_MANIFEST, {}), [v.id]: { bytes: size, uploadedAt: new Date().toISOString() } });
   return true;
 }
