@@ -15,7 +15,7 @@ Rules: CONSTITUTION.md · decisions: DECISIONS.md · Arabic how-to: README.md ·
 | Queue | `queue/<id>/` (page.md + cover/thumb/og + meta.json) — written by the night run, published by the cloud |
 | Published log | `data/published.json` (id → slug, date; never republished) |
 | Pages | `content/videos/<lang>/<slug>.md` (archived pages: `content/_archive/`, hand-edit history: `content/_history/`) |
-| User settings | `config/site.json` — garage WhatsApp, garage location, enabled languages, media host, `publishPerDay` (default 7) |
+| User settings | `config/site.json` — garage WhatsApp, address lines + JSON-LD address fields, Google Maps link, enabled languages, media host, `publishPerDay` (default 7) |
 | Status ("dashboard") | `data/status.json` — refresh with `npm run status` |
 | Spend log | `data/spend.json` · R2 upload log: `data/r2.json` · IndexNow key: `data/indexnow-key.txt` |
 | DNS | `node scripts/lib/dns.js list|add-txt` (CLOUDFLARE_API_TOKEN in .env, Zone:DNS:Edit for alsuhaiby.com) |
@@ -78,7 +78,6 @@ UptimeRobot: monitor on https://alsuhaiby.com every 5 min with EMAIL alerts.
 ## Open items
 - Real phone speed check on mobile data (Lighthouse already passes).
 - UptimeRobot: email alerts only. Telegram alert contact not added (needs a dashboard sign-in; unclear if Telegram is in the free plan's 5 integrations).
-- Garage WhatsApp + location: empty in config/site.json (pages show «[يُعبّى يدويًا]»).
 - Translations: ready, not generated (`node scripts/write.js --langs ar,en,fr,es,ur` then build-page).
 - Archive: 683 videos left (true count from the ledger), handled by `npm run night`. The queue is EMPTY after the test: run `npm run night` or the 02:00 run sends ⚠️ «الطابور فاضي».
 - Cloud download of new videos works (7 Nov: video 7705128543423974677 downloaded on GitHub and merged into «سيارتي ترجف وهي واقفة»).

@@ -1,0 +1,14 @@
+---
+// Garage address (line by line, exactly as the owner wrote it), Google Maps button and WhatsApp click-to-chat.
+// Data: config/site.json → garage. Used by the contact and about pages.
+import { GARAGE, PERSON } from '../i18n';
+const P = PERSON.ar;
+---
+<h2>موقع الكراج</h2>
+<address class="addr">
+  {GARAGE.address.lines.map((l) => <span>{l}</span>)}
+</address>
+<p><a class="btn" href={GARAGE.mapsUrl} target="_blank" rel="noopener">اضغط للموقع على قوقل ماب</a></p>
+
+<h2>واتساب الكراج</h2>
+<p><a class="btn" href={`https://wa.me/${GARAGE.whatsapp}`} target="_blank" rel="noopener">راسل {P.garage} على واتساب:&nbsp;&rlm;<span dir="ltr">{GARAGE.whatsappLocal}</span></a></p>

@@ -85,4 +85,6 @@ input[type=search]{width:100%;min-height:52px;border-radius:12px;border:2px soli
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 18px;border:2px solid var(--fg);border-radius:12px;font-weight:700;text-decoration:none;background:var(--bg);color:var(--fg)}
 
 .hero p{font-size:16px;max-width:560px}
+.addr{font-style:normal;line-height:1.9;margin:0 0 14px}
+.addr span{display:block}
 .note{border:1px dashed var(--fg);border-radius:12px;padding:10px 14px;font-size:14px}

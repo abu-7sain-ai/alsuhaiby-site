@@ -1,8 +1,21 @@
 {
-  "_help": "Settings the site reads at build time. Edit on GitHub; a push to main redeploys. Empty value = the page shows «[يُعبّى يدويًا]».",
+  "_help": "Settings the site reads at build time. Edit on GitHub; a push to main redeploys. garage.address.lines is shown line by line exactly as written; the other address fields feed the JSON-LD.",
   "garage": {
-    "whatsapp": "",
-    "location": ""
+    "whatsapp": "+965 99168778",
+    "address": {
+      "lines": [
+        "الشويخ الصناعية 2",
+        "قطعة 1",
+        "شارع 24",
+        "قسيمة 27و",
+        "الرقم الآلي للعنوان: 90129093"
+      ],
+      "streetAddress": "قطعة 1، شارع 24، قسيمة 27و",
+      "addressLocality": "الشويخ الصناعية 2",
+      "addressCountry": "KW",
+      "paci": "90129093"
+    },
+    "mapsUrl": "https://maps.app.goo.gl/VPSfW5pmyPvDztGv9"
   },
   "languages": [
     "ar",

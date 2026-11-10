@@ -3,7 +3,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Player from './Player.astro';
 import Card from './Card.astro';
-import { t, videoUrl, formatDate, formatViews, SITE, PERSON, SOCIAL, videoSrc, type Lang } from '../i18n';
+import { t, videoUrl, formatDate, formatViews, SITE, PERSON, SOCIAL, videoSrc, garageLd, type Lang } from '../i18n';
 
 interface Props { entry: CollectionEntry<'videos'> }
 const { entry } = Astro.props;
@@ -26,7 +26,7 @@ const abs = (p: string) => new URL(p, SITE).href;
 const iso = (s?: number) => (s ? `PT${Math.floor(s / 60) ? Math.floor(s / 60) + 'M' : ''}${s % 60}S` : undefined);
 const person = {
   '@type': 'Person', '@id': `${SITE}/about/#person`, name: PERSON[lang].name, jobTitle: PERSON[lang].job,
-  worksFor: { '@type': 'AutoRepair', name: PERSON[lang].garage, address: { '@type': 'PostalAddress', addressCountry: 'KW' } },
+  worksFor: garageLd(lang),
   url: `${SITE}/about/`, sameAs: [SOCIAL.tiktok, SOCIAL.instagram],
 };
 const videoLd = (id: string, name: string, cover: string, date: Date, views: number, duration?: number) => ({

@@ -1,16 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
-import { PERSON, SOCIAL, GARAGE } from '../i18n';
+import GarageContact from '../components/GarageContact.astro';
+import { PERSON, SOCIAL, garageLd } from '../i18n';
 const P = PERSON.ar;
-const WHATSAPP = GARAGE.whatsapp; // set in config/site.json
+const jsonLd = [{ '@context': 'https://schema.org', ...garageLd('ar') }];
 ---
-<Base lang="ar" title="تواصل" description={`تواصل مع ${P.garage} عن طريق واتساب الكراج، أو تابع ${P.name} على تيك توك وانستقرام.`} path="/contact/" current="contact">
+<Base lang="ar" title="تواصل" description={`تواصل مع ${P.garage} عن طريق واتساب الكراج أو زوره في الشويخ الصناعية، أو تابع ${P.name} على تيك توك وانستقرام.`} path="/contact/" jsonLd={jsonLd} current="contact">
   <div class="wrap article">
     <h1 class="ptitle">تواصل</h1>
-    <h2>واتساب الكراج</h2>
-    {WHATSAPP
-      ? <p><a class="btn" href={`https://wa.me/${WHATSAPP}`} rel="noopener">راسل {P.garage} على واتساب</a></p>
-      : <p>رقم واتساب الكراج: [يُعبّى يدويًا]</p>}
+    <GarageContact />
     <h2>الحسابات</h2>
     <ul>
       <li><a href={SOCIAL.tiktok} rel="me">تيك توك</a></li>

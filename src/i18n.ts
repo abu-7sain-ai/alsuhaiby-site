@@ -13,7 +13,8 @@ export const LANGS: Record<Lang, { dir: 'rtl' | 'ltr'; name: string; prefix: str
 
 // User-editable settings (config/site.json): garage contact, enabled languages, video host.
 import SITE_CONFIG from '../config/site.json';
-export const CONFIG = SITE_CONFIG as { garage: { whatsapp: string; location: string }; languages: string[]; mediaBase: string };
+type GarageAddress = { lines: string[]; streetAddress: string; addressLocality: string; addressCountry: string; paci?: string };
+export const CONFIG = SITE_CONFIG as { garage: { whatsapp: string; address: GarageAddress; mapsUrl: string }; languages: string[]; mediaBase: string };
 
 // Languages other than Arabic that are switched on in config/site.json (a language also needs content to get pages).
 export const OTHER_LANGS: Lang[] = (['en', 'fr', 'es', 'ur'] as Lang[]).filter((l) => CONFIG.languages.includes(l));
@@ -35,8 +36,23 @@ export const SOCIAL = {
   instagram: 'https://www.instagram.com/mohammad_alsuhaiby/',
 };
 
-// Filled in config/site.json (empty = the page shows «[يُعبّى يدويًا]»). Only the garage number is published, never a personal one.
-export const GARAGE = { location: CONFIG.garage.location.trim(), whatsapp: CONFIG.garage.whatsapp.replace(/\D/g, '') };
+// Garage contact from config/site.json. Only the garage number is published, never a personal one.
+const waDigits = CONFIG.garage.whatsapp.replace(/\D/g, '');
+export const GARAGE = {
+  whatsapp: waDigits, // international digits for wa.me (96599168778)
+  whatsappLocal: waDigits.replace(/^965/, ''), // as people in Kuwait write it (99168778)
+  telephone: `+${waDigits}`,
+  address: CONFIG.garage.address,
+  mapsUrl: CONFIG.garage.mapsUrl,
+};
+
+// The garage as ONE schema.org entity (same @id, address and phone on every page) for Google and the AI engines.
+export const garageLd = (lang: Lang) => ({
+  '@type': 'AutoRepair', '@id': `${SITE}/#garage`, name: PERSON[lang].garage, telephone: GARAGE.telephone,
+  url: `${SITE}/contact/`, hasMap: GARAGE.mapsUrl,
+  address: { '@type': 'PostalAddress', streetAddress: GARAGE.address.streetAddress, addressLocality: GARAGE.address.addressLocality, addressCountry: GARAGE.address.addressCountry },
+  ...(GARAGE.address.paci ? { identifier: { '@type': 'PropertyValue', propertyID: 'PACI address number', value: GARAGE.address.paci } } : {}),
+});
 
 const UI = {
   ar: {

@@ -1,5 +1,10 @@
 # DECISIONS (newest first)
 
+## 2026-11-10 — Garage contact details filled
+1. WhatsApp 99168778 (click-to-chat https://wa.me/96599168778). Address shown line by line exactly as the owner wrote it (الشويخ الصناعية 2 / قطعة 1 / شارع 24 / قسيمة 27و / الرقم الآلي للعنوان: 90129093), with the button «اضغط للموقع على قوقل ماب» (Google Maps, new tab).
+2. One garage entity in JSON-LD (AutoRepair, @id alsuhaiby.com/#garage): streetAddress, addressLocality, addressCountry KW, telephone +96599168778, hasMap, PACI number. Same object on the about, contact and every video page (Person.worksFor).
+3. Shown on the contact and about pages (components/GarageContact.astro); data in config/site.json → garage. No placeholder text is left in the repo.
+
 ## 2026-11-10 — Incomplete data is never published (owner's standing rule)
 1. A video is published only when it has BOTH its video file on R2 and its interaction numbers (likes, comments and saves; shares and views may be null). Missing either = no page, no embed, no queue slot.
 2. Enforced in code (scripts/lib/publishable.js): publishQueued refuses an incomplete video even if it is already in the queue; queuePage / mergeInto refuse it; daily.js picks only complete videos for its slots and checks a new video's numbers before any paid step; night.js does not spend writing on one. If the private library cannot be read, nothing is published. Test: `npm test` (fakes only).
@@ -78,7 +83,7 @@
 1. One video → one long article (800–1500 words): the transcript is the starting point, expanded with correct general knowledge.
 2. Sonnet review only fixes/cuts errors, contradictions with the video, filler and non-Kuwaiti wording. A fix may not shrink a sentence by 40%+ (rejected and logged).
 3. «تعديل» editor on /review/ (dev only); hand-edited pages are never overwritten; history in content/_history/.
-4. Newspaper name: «سراة نيوز». Garage location / WhatsApp: «[يُعبّى يدويًا]» until filled.
+4. Newspaper name: «سراة نيوز». Garage location / WhatsApp: a visible placeholder until filled (filled 2026-11-10).
 5. Archive size: 721 videos (not 615). Always «كراج», never «ورشة».
 
 ## 2026-11-05 — Phase 1

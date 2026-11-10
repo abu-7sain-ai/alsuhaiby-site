@@ -1,7 +1,8 @@
 ---
-// About: written only from known facts (constitution + account data). Garage location and WhatsApp come from config/site.json (empty = «[يُعبّى يدويًا]»).
+// About: written only from known facts (constitution + account data). Garage address, map and WhatsApp come from config/site.json (components/GarageContact.astro).
 import Base from '../layouts/Base.astro';
-import { PERSON, SITE, SOCIAL, GARAGE } from '../i18n';
+import GarageContact from '../components/GarageContact.astro';
+import { PERSON, SITE, SOCIAL, garageLd } from '../i18n';
 const P = PERSON.ar;
 const media = [
   { name: 'تلفزيون الكويت', note: 'ظهر فيه 5 مرات' },
@@ -13,7 +14,7 @@ const media = [
 const jsonLd = [{
   '@context': 'https://schema.org', '@type': 'ProfilePage',
   mainEntity: { '@type': 'Person', '@id': `${SITE}/about/#person`, name: P.name, alternateName: 'Mohammad Al-Suhaiby', jobTitle: P.job,
-    nationality: 'Kuwaiti', worksFor: { '@type': 'AutoRepair', name: P.garage, address: { '@type': 'PostalAddress', addressCountry: 'KW' } },
+    nationality: 'Kuwaiti', worksFor: garageLd('ar'),
     sameAs: [SOCIAL.tiktok, SOCIAL.instagram] },
 }];
 ---
@@ -24,10 +25,7 @@ const jsonLd = [{
 
     <h2>الكراج</h2>
     <p>{P.garage} متخصص بصيانة وتصليح السيارات الألمانية، وفاتح من سنة 2022.</p>
-    <ul>
-      <li>موقع الكراج: {GARAGE.location || '[يُعبّى يدويًا]'}</li>
-      <li>واتساب الكراج: {GARAGE.whatsapp ? <a href={`https://wa.me/${GARAGE.whatsapp}`} rel="noopener">{GARAGE.whatsapp}</a> : '[يُعبّى يدويًا]'}</li>
-    </ul>
+    <GarageContact />
 
     <h2>المحتوى</h2>
     <p>من سبتمبر 2022 ومحمد ينشر فيديوهات قصيرة عن أعطال السيارات وعلاماتها وأسبابها وشلون تتصرف، بلهجة كويتية يفهمها كل الخليج. في هالموقع كل فيديو مكتوب بالتفصيل عشان تلقى الجواب حتى لو ما تقدر تشغّل الصوت.</p>
