@@ -1,11 +1,11 @@
 {
   "errors": [],
   "lastRun": {
-    "script": "build-page",
-    "at": "2026-11-06T11:39:27.037Z",
+    "script": "fetch",
+    "at": "2026-11-10T10:59:22.560Z",
     "ok": true
   },
-  "updatedAt": "2026-11-10T04:36:37.190Z",
+  "updatedAt": "2026-11-10T10:59:23.179Z",
   "nextScheduledRun": "2026-11-11 02:00 Kuwait (GitHub Actions, daily)",
   "pagesPublished": {
     "total": 25,
@@ -14,20 +14,20 @@
     }
   },
   "videosProcessed": 50,
-  "videosOnR2": 712,
+  "videosOnR2": 714,
   "openRouterSpendUsd": {
     "total": 8.755,
     "last30Days": 8.755
   },
   "keyCreditLeftUsd": {
-    "usd": 41.26,
+    "usd": 41.25,
     "source": "key limit"
   },
   "siteHealth": {
-    "at": "2026-11-10T04:36:37.190Z",
+    "at": "2026-11-10T10:59:23.178Z",
     "url": "https://alsuhaiby.com/",
     "httpStatus": 200,
-    "ms": 143,
+    "ms": 172,
     "up": true
   },
   "alerts": {},
