@@ -16,7 +16,8 @@
     "fetch": "node scripts/fetch.js",
     "numbers": "node scripts/meta.js --part=numbers",
     "comments": "node scripts/meta.js --part=comments",
-    "daily": "node scripts/daily.js"
+    "daily": "node scripts/daily.js",
+    "test": "node --test scripts/test-publishable.js"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

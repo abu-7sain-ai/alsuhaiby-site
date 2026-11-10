@@ -1,5 +1,11 @@
 # DECISIONS (newest first)
 
+## 2026-11-10 — Incomplete data is never published (owner's standing rule)
+1. A video is published only when it has BOTH its video file on R2 and its interaction numbers (likes, comments and saves; shares and views may be null). Missing either = no page, no embed, no queue slot.
+2. Enforced in code (scripts/lib/publishable.js): publishQueued refuses an incomplete video even if it is already in the queue; queuePage / mergeInto refuse it; daily.js picks only complete videos for its slots and checks a new video's numbers before any paid step; night.js does not spend writing on one. If the private library cannot be read, nothing is published. Test: `npm test` (fakes only).
+3. Excluded permanently (numbers but no file; excludeFromPublishing in meta.json, ledger status "excluded"): 7642038037601324309, 7678048203056401685, 7679351937430539540, 7695835055603748097.
+4. Removal by TikTok is NOT by itself a reason to exclude: 7696203758933380372 was removed but has its file and numbers, so it stays publishable. Missing data is the reason.
+
 ## 2026-11-10 — Numbers + comments pass
 1. `npm run meta` / shortcut «بيانات الصهيبي»: for every video, numbers, details, platform links and the COMMENTS go into the private library (meta.json, comments/<id>.json). No Claude, no Gemini.
 2. Comments are stored WITHOUT names or handles (the questions people ask, not who asked). Other people's replies are kept, marked as replies.

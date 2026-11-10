@@ -17,6 +17,7 @@
 import fs from 'node:fs';
 import { ROOT, LIB_DIR, args, cachePath, readJson, writeJson, setLedger, loadLedger, DONE, ClaudeLimitError } from './lib/common.js';
 import { writeArticle, reviewArticle } from './lib/article.js';
+import { checkPublishable, publishData } from './lib/publishable.js';
 import { download, analyze, decide, mergeInto, queuePage, remaining, queued, gitSync, RateLimitError } from './lib/pipeline.js';
 import { guard, alert } from './lib/status.js';
 import { machineGate, MachineStopError, setStage, startStage } from './lib/machine.js';
@@ -56,6 +57,11 @@ let todo = remaining().sort((a, b) => b.views - a.views);
 if (A.ids) { const want = String(A.ids).split(','); todo = todo.filter((v) => want.includes(v.id)); }
 const ledger = loadLedger();
 todo = todo.filter((v) => (ledger[v.id]?.tries || 0) < 3); // a video that failed 3 times waits for a human look
+// owner's rule (2026-11-10): no writing for a video that can never be published (no file, or no numbers); the file itself is
+// downloaded/uploaded in this run, so only has_video_file === false counts against it here
+{ const data = publishData(); const blocked = todo.filter((v) => !checkPublishable(v.id, data, { needFile: false }).ok);
+  if (blocked.length) console.log(`night: ${blocked.length} video(s) left out — incomplete data, never published: ${blocked.map((v) => v.id).slice(0, 10).join(', ')}${blocked.length > 10 ? ' …' : ''}`);
+  todo = todo.filter((v) => !blocked.includes(v)); }
 
 console.log(`night: ${todo.length} videos to handle · queue ${queued().length} · library ${LIB_DIR} · time limit ${MAX_MIN ? `${MAX_MIN} min` : 'none'}`);
 if (DRY) {

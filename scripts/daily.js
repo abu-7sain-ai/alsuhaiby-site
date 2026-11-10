@@ -13,6 +13,7 @@ import { execFileSync } from 'node:child_process';
 import { ROOT, LIB_DIR, LIBRARY, args, readJson, writeJson, cachePath, setLedger, loadLedger, kuwaitDay, videoIndex, apiKey } from './lib/common.js';
 import { writeArticle, reviewArticle } from './lib/article.js';
 import { download, analyze, decide, mergeInto, queuePage, publishQueued, queued, remaining, gitSync } from './lib/pipeline.js';
+import { checkPublishable, publishData, numbersComplete } from './lib/publishable.js';
 import { alert, recordRun, refreshStatus } from './lib/status.js';
 
 const A = args();
@@ -73,6 +74,8 @@ async function newVideos() {
     date: String(p.publishedAt || p.createdAt || '').slice(0, 10),
     views: Math.round(p.analytics?.views ?? p.views ?? 0),
     cap: String(p.content || '').slice(0, 300),
+    // numbers from Zernio (owner's rule: no page without them); recorded in the library before anything is written
+    stats: p.analytics ? { views: p.analytics.views ?? null, likes: p.analytics.likes ?? null, comments: p.analytics.comments ?? null, shares: p.analytics.shares ?? null, saves: p.analytics.saves ?? null } : null,
   })).filter((p) => p.id && !known.has(p.id) && !ledger[p.id]);
   return posts;
 }
@@ -81,6 +84,15 @@ async function handleNew(p, maxNew) {
   // add to the shared library first, so the night run knows it even if the cloud cannot finish it
   const lib = readJson(LIBRARY, { videos: [] });
   if (!lib.videos.some((v) => v.id === p.id)) { lib.videos.push({ id: p.id, date: p.date, views: p.views, cap: p.cap }); writeJson(LIBRARY, lib); }
+  // record its numbers (owner's rule: a video without numbers is never published) — before any paid step
+  const META = path.join(LIB_DIR, 'meta.json');
+  if (p.stats && numbersComplete(p.stats)) {
+    const meta = readJson(META, {}); const now = new Date().toISOString();
+    meta[p.id] = { ...(meta[p.id] || {}), numbersAt: now, stats: { ...p.stats, source: 'zernio', capturedAt: now }, links: { ...(meta[p.id]?.links || {}), tiktok: `https://www.tiktok.com/@m_alsuhaiby/video/${p.id}` } };
+    writeJson(META, meta);
+  }
+  const pre = checkPublishable(p.id, publishData(), { needFile: false });
+  if (!pre.ok) { errors.push(`new video ${p.id}: not handled — ${pre.reasons.join('; ')}`); return null; }
   const v = videoIndex().get(p.id);
   try { download(v); } catch (e) {
     setLedger(p.id, { status: 'failed', tries: 0, reason: `cloud download: ${e.message.slice(0, 200)}`, line: 'cloud' });
@@ -136,7 +148,13 @@ try {
   const pub = readJson(PUBLISHED, {});
   const q = queued().sort((a, b) => b.views - a.views);
   for (const m of q.filter((m) => pub[m.id])) { log(`  ${m.id} was already published — removed from the queue`); if (!DRY) fs.rmSync(path.join(ROOT, 'queue', m.id), { recursive: true, force: true }); }
-  const take = q.filter((m) => !pub[m.id]).slice(0, N);
+  // owner's rule: only videos with BOTH their file on R2 and their numbers; an incomplete one stays out (and does not take a slot)
+  const data = publishData();
+  const take = q.filter((m) => !pub[m.id]).filter((m) => {
+    const c = checkPublishable(m.id, data);
+    if (!c.ok) log(`  ${m.id} not published (incomplete data): ${c.reasons.join('; ')}`);
+    return c.ok;
+  }).slice(0, N);
   for (const m of take) {
     if (DRY) { log(`  would publish ${m.slug} (${m.views} views)`); continue; }
     try {

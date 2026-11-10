@@ -5,6 +5,7 @@ import os from 'node:os';
 import { spawnSync, execFileSync } from 'node:child_process';
 import { ROOT, LIB_DIR, DOWNLOAD_DIR, MODEL, readJson, writeJson, cachePath, chat, loadLedger, DONE, videoIndex } from './common.js';
 import { images, uploadVideo, pageMarkdown, addOtherVideo, pageIndex, slugify, clean, duration, QUEUE, PAGES_AR } from './page.js';
+import { assertPublishable, publishData } from './publishable.js';
 
 export const ANALYZE_PROMPT = `You are watching a short car-repair video by Mohammad Al-Suhaiby (محمد الصهيبي), a Kuwaiti mechanic. Watch it fully, with sound and picture.
 Return ONLY a JSON object with these keys, all text in Arabic exactly as spoken (Kuwaiti dialect, do not correct or rephrase his words):
@@ -83,6 +84,7 @@ export async function decide({ v, an, model = MODEL, script = 'dedup' }) {
 
 // ---- 4a. merge: embed the video on the existing page -------------------------------------------
 export function mergeInto(page, v, an) {
+  assertPublishable(v.id, publishData(), { needFile: false }); // owner's rule: no embed for a video with incomplete data (it uploads the file itself)
   const dir = page.where === 'queue' ? path.dirname(page.file) : null;
   const img = images(v, dir);
   uploadVideo(v);
@@ -97,6 +99,7 @@ export function uniqueSlug(s) {
   return slug;
 }
 export function queuePage(v, final, { topic } = {}) {
+  assertPublishable(v.id, publishData(), { needFile: false }); // owner's rule: no page for a video with incomplete data (it uploads the file itself)
   const dir = path.join(QUEUE, v.id);
   fs.mkdirSync(dir, { recursive: true });
   const img = images(v, dir);
@@ -109,6 +112,7 @@ export function queuePage(v, final, { topic } = {}) {
 
 /** Moves a queued page live: page.md → content/videos/ar/<slug>.md, its images → public/covers and public/og. */
 export function publishQueued(id) {
+  assertPublishable(id); // owner's rule: nothing goes live without its file on R2 AND its numbers, even if it is in the queue
   const dir = path.join(QUEUE, id);
   const meta = readJson(path.join(dir, 'meta.json'));
   const dest = path.join(PAGES_AR, `${meta.slug}.md`);

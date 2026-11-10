@@ -2,10 +2,10 @@
   "errors": [],
   "lastRun": {
     "script": "fetch",
-    "at": "2026-11-10T11:51:40.094Z",
+    "at": "2026-11-10T17:55:59.229Z",
     "ok": true
   },
-  "updatedAt": "2026-11-10T11:51:41.083Z",
+  "updatedAt": "2026-11-10T17:55:59.907Z",
   "nextScheduledRun": "2026-11-11 02:00 Kuwait (GitHub Actions, daily)",
   "pagesPublished": {
     "total": 25,
@@ -24,10 +24,10 @@
     "source": "key limit"
   },
   "siteHealth": {
-    "at": "2026-11-10T11:51:41.082Z",
+    "at": "2026-11-10T17:55:59.907Z",
     "url": "https://alsuhaiby.com/",
     "httpStatus": 200,
-    "ms": 353,
+    "ms": 184,
     "up": true
   },
   "alerts": {},
