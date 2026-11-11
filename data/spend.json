@@ -13939,6 +13939,26 @@
       "completionTokens": 78,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.220464
+    },
+    {
+      "at": "2026-11-11T20:44:33.629Z",
+      "script": "night",
+      "label": "tk-7282443302031330578 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1376,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0895944
+    },
+    {
+      "at": "2026-11-11T20:44:33.653Z",
+      "script": "night",
+      "label": "tk-7389713274369035538 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 2623,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.108562
     }
   ]
 }
