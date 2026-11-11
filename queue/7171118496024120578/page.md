@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7171118496024120578"
 tiktokId: "7171118496024120578"
 duration: 27
-otherVideos: []
+otherVideos:
+  - tiktokId: "7254638186138242305"
+    title: "أربع علامات تدل على تلف مسمار التوازن"
+    views: 512400
+    published: "2023-07-11"
+    cover: "/covers/7254638186138242305.webp"
 tags:
   - "مسمار التوازن"
   - "طقطقة"
