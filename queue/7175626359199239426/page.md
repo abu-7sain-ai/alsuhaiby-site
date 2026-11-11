@@ -25,6 +25,11 @@ otherVideos:
     views: 207000
     published: "2023-08-07"
     cover: "/covers/7264657912339942657.webp"
+  - tiktokId: "7590439246620642572"
+    title: "أربع أعراض تدل على أن دبة التلوث عندك تلفانة."
+    views: 99400
+    published: "2026-01-01"
+    cover: "/covers/7590439246620642572.webp"
 tags:
   - "دبة التلوث"
   - "قزوز"
