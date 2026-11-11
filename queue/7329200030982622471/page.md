@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7329200030982622471"
 tiktokId: "7329200030982622471"
 duration: 25
-otherVideos: []
+otherVideos:
+  - tiktokId: "7505116890688130312"
+    title: "أربع أسباب تخرب التيربو عندك."
+    views: 185700
+    published: "2025-05-16"
+    cover: "/covers/7505116890688130312.webp"
 tags:
   - "تيربو"
   - "محرك"
