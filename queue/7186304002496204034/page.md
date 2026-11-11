@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7186304002496204034"
 tiktokId: "7186304002496204034"
 duration: 36
-otherVideos: []
+otherVideos:
+  - tiktokId: "7245731358276914434"
+    title: "خمس علامات تدل على تلف الديلكو."
+    views: 88100
+    published: "2023-06-17"
+    cover: "/covers/7245731358276914434.webp"
 tags:
   - "ديلكو"
   - "تفتفة"
