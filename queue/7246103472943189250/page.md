@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7246103472943189250"
 tiktokId: "7246103472943189250"
 duration: 29
-otherVideos: []
+otherVideos:
+  - tiktokId: "7203757731780644098"
+    title: "خمسة أسباب تخلي سنسر الرجوع ما يشتغل بسيارتك."
+    views: 81300
+    published: "2023-02-24"
+    cover: "/covers/7203757731780644098.webp"
 tags:
   - "سنسر الرجوع"
   - "حساسات"
