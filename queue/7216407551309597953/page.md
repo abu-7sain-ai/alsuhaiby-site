@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7216407551309597953"
 tiktokId: "7216407551309597953"
 duration: 26
-otherVideos: []
+otherVideos:
+  - tiktokId: "7414115016791608583"
+    title: "أربع علامات لتلف جلود المقصات."
+    views: 286500
+    published: "2024-09-13"
+    cover: "/covers/7414115016791608583.webp"
 tags:
   - "جلود المقصات"
   - "تعليق"
