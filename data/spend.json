@@ -1,5 +1,5 @@
 {
-  "totalUsd": 9.296853,
+  "totalUsd": 9.308262,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -5685,6 +5685,65 @@
       "completionTokens": 71,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.102796
+    },
+    {
+      "at": "2026-11-11T11:18:49.847Z",
+      "script": "night",
+      "label": "7608234199065103637 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 5202,
+      "completionTokens": 2002,
+      "costUsd": 0.011409
+    },
+    {
+      "at": "2026-11-11T11:18:51.965Z",
+      "script": "night",
+      "label": "tk-7266532583150767362 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 8759,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2311242
+    },
+    {
+      "at": "2026-11-11T11:18:57.178Z",
+      "script": "night",
+      "label": "7608234199065103637 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 231,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.10597200000000001
+    },
+    {
+      "at": "2026-11-11T11:18:58.860Z",
+      "script": "night",
+      "label": "tk-7204141432469277953 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7137,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.19983620000000002
+    },
+    {
+      "at": "2026-11-11T11:19:17.061Z",
+      "script": "night",
+      "label": "tk-7204141432469277953 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1329,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0939264
+    },
+    {
+      "at": "2026-11-11T11:19:40.497Z",
+      "script": "night",
+      "label": "tk-7204141432469277953 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 2168,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.101406
     }
   ]
 }
