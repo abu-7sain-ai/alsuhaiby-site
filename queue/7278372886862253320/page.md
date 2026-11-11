@@ -20,6 +20,11 @@ otherVideos:
     views: 290900
     published: "2024-01-04"
     cover: "/covers/7320297471471652104.webp"
+  - tiktokId: "7285420810838215954"
+    title: "خمس أسباب تخلي دخان أسود يطلع من سيارتك."
+    views: 69300
+    published: "2023-10-02"
+    cover: "/covers/7285420810838215954.webp"
 tags:
   - "محرك"
   - "دخان أسود"
