@@ -1,5 +1,5 @@
 {
-  "totalUsd": 11.485631,
+  "totalUsd": 11.495514,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -16885,6 +16885,65 @@
       "completionTokens": 1188,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.077438
+    },
+    {
+      "at": "2026-11-11T21:13:07.196Z",
+      "script": "night",
+      "label": "tk-7493572490338290962 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1556,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0893864
+    },
+    {
+      "at": "2026-11-11T21:13:07.220Z",
+      "script": "night",
+      "label": "7173354350079659265 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 81,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.256788
+    },
+    {
+      "at": "2026-11-11T21:13:21.188Z",
+      "script": "night",
+      "label": "tk-7493572490338290962 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1004,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.071326
+    },
+    {
+      "at": "2026-11-11T21:13:35.116Z",
+      "script": "night",
+      "label": "7656138084550970644 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 5747,
+      "completionTokens": 1486,
+      "costUsd": 0.00988275
+    },
+    {
+      "at": "2026-11-11T21:13:39.566Z",
+      "script": "night",
+      "label": "tk-7493572490338290962 expand",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1170,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.06856
+    },
+    {
+      "at": "2026-11-11T21:13:40.450Z",
+      "script": "night",
+      "label": "7656138084550970644 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 87,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.25882000000000005
     }
   ]
 }
