@@ -1,5 +1,5 @@
 {
-  "totalUsd": 9.21266,
+  "totalUsd": 9.216913,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -5116,6 +5116,65 @@
       "completionTokens": 819,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.030694399999999997
+    },
+    {
+      "at": "2026-11-11T11:06:07.327Z",
+      "script": "night",
+      "label": "7382635624299318535 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1470,
+      "completionTokens": 840,
+      "costUsd": 0.0042525
+    },
+    {
+      "at": "2026-11-11T11:06:13.826Z",
+      "script": "night",
+      "label": "7382635624299318535 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 151,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.09152400000000001
+    },
+    {
+      "at": "2026-11-11T11:06:30.608Z",
+      "script": "night",
+      "label": "tk-7387100399330708743 write (resize 2)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7533,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2507562
+    },
+    {
+      "at": "2026-11-11T11:06:32.515Z",
+      "script": "night",
+      "label": "tk-7310650942301506824 write",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 9683,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2046202
+    },
+    {
+      "at": "2026-11-11T11:06:51.651Z",
+      "script": "night",
+      "label": "tk-7387100399330708743 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1666,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.09389040000000001
+    },
+    {
+      "at": "2026-11-11T11:07:16.238Z",
+      "script": "night",
+      "label": "tk-7387100399330708743 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 2535,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.10348199999999999
     }
   ]
 }
