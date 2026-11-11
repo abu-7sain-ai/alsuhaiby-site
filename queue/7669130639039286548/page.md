@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7669130639039286548"
 tiktokId: "7669130639039286548"
 duration: 9
-otherVideos: []
+otherVideos:
+  - tiktokId: "7418258399575526663"
+    title: "سويت لكم سلسلة بعنوان لا يقصون عليك."
+    views: 82400
+    published: "2024-09-24"
+    cover: "/covers/7418258399575526663.webp"
 tags:
   - "محرك"
   - "زيت المكينة"
