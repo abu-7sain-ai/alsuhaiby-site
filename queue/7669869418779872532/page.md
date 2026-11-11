@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7669869418779872532"
 tiktokId: "7669869418779872532"
 duration: 10
-otherVideos: []
+otherVideos:
+  - tiktokId: "7434628433105194258"
+    title: "العنوان: لا يقصون عليك."
+    views: 112000
+    published: "2024-11-07"
+    cover: "/covers/7434628433105194258.webp"
 tags:
   - "مكيف"
   - "كمبريسر"
