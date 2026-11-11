@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7203759160297606401"
 tiktokId: "7203759160297606401"
 duration: 44
-otherVideos: []
+otherVideos:
+  - tiktokId: "7644264097843891476"
+    title: "خمسة من علامات تلف مضخة الماي ولا يشترط توفرها كلها."
+    views: 102183
+    published: "2026-05-26"
+    cover: "/covers/7644264097843891476.webp"
 tags:
   - "تبريد"
   - "مضخة الماي"
