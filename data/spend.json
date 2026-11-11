@@ -1,5 +1,5 @@
 {
-  "totalUsd": 8.932763,
+  "totalUsd": 8.938216,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -2823,6 +2823,65 @@
       "completionTokens": 2947,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.108538
+    },
+    {
+      "at": "2026-11-11T09:28:02.547Z",
+      "script": "night",
+      "label": "7325863253597244679 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 2560,
+      "completionTokens": 942,
+      "costUsd": 0.0054525
+    },
+    {
+      "at": "2026-11-11T09:28:08.601Z",
+      "script": "night",
+      "label": "7325863253597244679 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 58,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.054936000000000006
+    },
+    {
+      "at": "2026-11-11T09:29:50.636Z",
+      "script": "night",
+      "label": "tk-7325863253597244679 write",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 9659,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2036144
+    },
+    {
+      "at": "2026-11-11T09:30:57.870Z",
+      "script": "night",
+      "label": "tk-7325863253597244679 write (resize)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7939,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.20915840000000002
+    },
+    {
+      "at": "2026-11-11T09:31:16.871Z",
+      "script": "night",
+      "label": "tk-7325863253597244679 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1496,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0864614
+    },
+    {
+      "at": "2026-11-11T09:31:34.233Z",
+      "script": "night",
+      "label": "tk-7325863253597244679 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1484,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.078654
     }
   ]
 }
