@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7267252737123962114"
 tiktokId: "7267252737123962114"
 duration: 38
-otherVideos: []
+otherVideos:
+  - tiktokId: "7290609225338768658"
+    title: "ليش لازم نبدل الزيت قبل موعده؟"
+    views: 404900
+    published: "2023-10-16"
+    cover: "/covers/7290609225338768658.webp"
 tags:
   - "زيت"
   - "صيانة"
