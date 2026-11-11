@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7249442043192167682"
 tiktokId: "7249442043192167682"
 duration: 26
-otherVideos: []
+otherVideos:
+  - tiktokId: "7325118422340177170"
+    title: "أربع أسباب تخلي سنسر التواير يولع عندك."
+    views: 100700
+    published: "2024-01-17"
+    cover: "/covers/7325118422340177170.webp"
 tags:
   - "تواير"
   - "سنسر التواير"
