@@ -20,6 +20,11 @@ otherVideos:
     views: 260100
     published: "2023-12-25"
     cover: "/covers/7316579274742353170.webp"
+  - tiktokId: "7260941424462466305"
+    title: "خمس علامات تدل على تلف فلتر البنزين."
+    views: 157700
+    published: "2023-07-28"
+    cover: "/covers/7260941424462466305.webp"
 tags:
   - "فلتر البنزين"
   - "تقطيع"
