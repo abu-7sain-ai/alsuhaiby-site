@@ -20,6 +20,11 @@ otherVideos:
     views: 360700
     published: "2023-12-03"
     cover: "/covers/7308423803464437010.webp"
+  - tiktokId: "7293956187035307282"
+    title: "٤ أسباب تطلعلك علامة الزيت"
+    views: 157200
+    published: "2023-10-25"
+    cover: "/covers/7293956187035307282.webp"
 tags:
   - "محرك"
   - "لمبة الزيت"
