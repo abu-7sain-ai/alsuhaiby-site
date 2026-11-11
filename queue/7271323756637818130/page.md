@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7271323756637818130"
 tiktokId: "7271323756637818130"
 duration: 63
-otherVideos: []
+otherVideos:
+  - tiktokId: "7218658381970672898"
+    title: "ستة من الدلائل اللي تدل على تلف الكانستر بسيارتك"
+    views: 217100
+    published: "2023-04-05"
+    cover: "/covers/7218658381970672898.webp"
 tags:
   - "كانستر"
   - "ريحة بنزين"
