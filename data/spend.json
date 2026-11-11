@@ -1,5 +1,5 @@
 {
-  "totalUsd": 11.27618,
+  "totalUsd": 11.281951,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -16172,6 +16172,65 @@
       "completionTokens": 2786,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.112262
+    },
+    {
+      "at": "2026-11-11T21:07:08.630Z",
+      "script": "night",
+      "label": "tk-7470601505083608328 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 2293,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.1057264
+    },
+    {
+      "at": "2026-11-11T21:07:12.559Z",
+      "script": "night",
+      "label": "tk-7371137595209813266 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1710,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0955464
+    },
+    {
+      "at": "2026-11-11T21:07:14.518Z",
+      "script": "night",
+      "label": "tk-7295071391588584706 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 6902,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.1983122
+    },
+    {
+      "at": "2026-11-11T21:07:18.722Z",
+      "script": "night",
+      "label": "tk-7248328416938708225 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 2366,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.1102824
+    },
+    {
+      "at": "2026-11-11T21:07:21.918Z",
+      "script": "night",
+      "label": "7378574998308392199 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1835,
+      "completionTokens": 1172,
+      "costUsd": 0.00577125
+    },
+    {
+      "at": "2026-11-11T21:07:26.938Z",
+      "script": "night",
+      "label": "tk-7470601505083608328 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1544,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.082038
     }
   ]
 }
