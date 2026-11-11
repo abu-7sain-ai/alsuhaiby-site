@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7175626359199239426"
 tiktokId: "7175626359199239426"
 duration: 71
-otherVideos: []
+otherVideos:
+  - tiktokId: "7395241140317998354"
+    title: "أربع علامات تدل على انسداد دبة البيئة"
+    views: 231400
+    published: "2024-07-24"
+    cover: "/covers/7395241140317998354.webp"
 tags:
   - "دبة التلوث"
   - "قزوز"
