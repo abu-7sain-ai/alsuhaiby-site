@@ -30,6 +30,11 @@ otherVideos:
     views: 214200
     published: "2023-11-26"
     cover: "/covers/7305824047798013202.webp"
+  - tiktokId: "7246844487538904321"
+    title: "شنو أسباب تلف كراسي المكينة؟"
+    views: 118400
+    published: "2023-06-20"
+    cover: "/covers/7246844487538904321.webp"
 tags:
   - "محرك"
   - "رجفة"
