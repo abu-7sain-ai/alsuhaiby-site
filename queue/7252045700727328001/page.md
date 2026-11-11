@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7252045700727328001"
 tiktokId: "7252045700727328001"
 duration: 45
-otherVideos: []
+otherVideos:
+  - tiktokId: "7373373559189687559"
+    title: "أربعة من أسباب وجود ريحة بنزين في زيت السيارة"
+    views: 119300
+    published: "2024-05-26"
+    cover: "/covers/7373373559189687559.webp"
 tags:
   - "محرك"
   - "زيت"
