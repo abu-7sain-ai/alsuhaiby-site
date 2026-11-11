@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7456486182566808850"
 tiktokId: "7456486182566808850"
 duration: 19
-otherVideos: []
+otherVideos:
+  - tiktokId: "7632736990089284885"
+    title: "اذا ترتفع حرارة السيارة عندك اذا شغلت المكيف"
+    views: 87847
+    published: "2026-04-25"
+    cover: "/covers/7632736990089284885.webp"
 tags:
   - "تبريد"
   - "رديتر"
