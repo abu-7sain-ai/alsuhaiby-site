@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7282443766982577426"
 tiktokId: "7282443766982577426"
 duration: 45
-otherVideos: []
+otherVideos:
+  - tiktokId: "7209352119617473793"
+    title: "ستة من اسباب وجود رائحة البنزين داخل سيارتك"
+    views: 311600
+    published: "2023-03-11"
+    cover: "/covers/7209352119617473793.webp"
 tags:
   - "ريحة بنزين"
   - "وقود"
