@@ -30,6 +30,11 @@ otherVideos:
     views: 428800
     published: "2023-06-10"
     cover: "/covers/7243130140300004610.webp"
+  - tiktokId: "7417086170099666184"
+    title: "سويت لكم سلسلة بعنوان: لا يقصون عليك"
+    views: 152800
+    published: "2024-09-21"
+    cover: "/covers/7417086170099666184.webp"
 tags:
   - "تبريد"
   - "رديتر"
