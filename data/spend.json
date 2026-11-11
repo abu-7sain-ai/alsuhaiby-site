@@ -1,5 +1,5 @@
 {
-  "totalUsd": 10.413645,
+  "totalUsd": 10.421111,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -12222,6 +12222,65 @@
       "completionTokens": 1289,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.083514
+    },
+    {
+      "at": "2026-11-11T14:04:08.355Z",
+      "script": "night",
+      "label": "tk-7368917534839508242 write (resize 2)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 6958,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.23986420000000003
+    },
+    {
+      "at": "2026-11-11T14:04:20.694Z",
+      "script": "night",
+      "label": "tk-7254637727910530306 write (resize 2)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7960,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2582162
+    },
+    {
+      "at": "2026-11-11T14:04:26.205Z",
+      "script": "night",
+      "label": "7303605757218508040 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 2745,
+      "completionTokens": 1442,
+      "costUsd": 0.00746625
+    },
+    {
+      "at": "2026-11-11T14:04:26.773Z",
+      "script": "night",
+      "label": "tk-7368917534839508242 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1423,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0910144
+    },
+    {
+      "at": "2026-11-11T14:04:33.239Z",
+      "script": "night",
+      "label": "7303605757218508040 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 191,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2055
+    },
+    {
+      "at": "2026-11-11T14:04:44.458Z",
+      "script": "night",
+      "label": "tk-7368917534839508242 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1430,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.08287
     }
   ]
 }
