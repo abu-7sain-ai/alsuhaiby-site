@@ -14149,6 +14149,26 @@
       "completionTokens": 197,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.22554000000000002
+    },
+    {
+      "at": "2026-11-11T20:46:17.835Z",
+      "script": "night",
+      "label": "tk-7284691668203261202 write (resize 2)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 6612,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.22788819999999999
+    },
+    {
+      "at": "2026-11-11T20:46:18.504Z",
+      "script": "night",
+      "label": "7243129742168198401 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 83,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.223332
     }
   ]
 }
