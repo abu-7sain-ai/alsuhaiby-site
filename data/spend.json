@@ -1,5 +1,5 @@
 {
-  "totalUsd": 11.608667,
+  "totalUsd": 11.616725,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -17489,6 +17489,65 @@
       "completionTokens": 90,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.26383199999999996
+    },
+    {
+      "at": "2026-11-11T21:19:17.851Z",
+      "script": "night",
+      "label": "tk-7223835887254162690 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 2746,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.10933400000000001
+    },
+    {
+      "at": "2026-11-11T21:19:25.608Z",
+      "script": "night",
+      "label": "tk-7278372373991050504 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7258,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2030002
+    },
+    {
+      "at": "2026-11-11T21:19:33.823Z",
+      "script": "night",
+      "label": "tk-7625218736026324244 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7840,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2143922
+    },
+    {
+      "at": "2026-11-11T21:19:33.843Z",
+      "script": "night",
+      "label": "7615311645354495253 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3649,
+      "completionTokens": 1419,
+      "costUsd": 0.008058
+    },
+    {
+      "at": "2026-11-11T21:19:38.693Z",
+      "script": "night",
+      "label": "tk-7223835887254162690 expand",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1365,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.07446
+    },
+    {
+      "at": "2026-11-11T21:19:40.256Z",
+      "script": "night",
+      "label": "7615311645354495253 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 88,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.264392
     }
   ]
 }

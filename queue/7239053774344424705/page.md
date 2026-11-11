@@ -25,6 +25,11 @@ otherVideos:
     views: 110500
     published: "2025-10-20"
     cover: "/covers/7563367327081811208.webp"
+  - tiktokId: "7615311645354495253"
+    title: "خمس علامات تدل على تلف مخ القير."
+    views: 71500
+    published: "2026-03-09"
+    cover: "/covers/7615311645354495253.webp"
 tags:
   - "قير"
   - "مخ القير"
