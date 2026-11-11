@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7259092809259519233"
 tiktokId: "7259092809259519233"
 duration: 26
-otherVideos: []
+otherVideos:
+  - tiktokId: "7311392408518823176"
+    title: "خمس أسباب تخلي مؤشر الحرارة يخربط عندك مع أن حرارة السيارة طبيعية لكن المؤشر معلق."
+    views: 60200
+    published: "2023-12-11"
+    cover: "/covers/7311392408518823176.webp"
 tags:
   - "مؤشر الحرارة"
   - "سنسر الحرارة"
