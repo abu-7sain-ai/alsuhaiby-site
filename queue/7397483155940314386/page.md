@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7397483155940314386"
 tiktokId: "7397483155940314386"
 duration: 25
-otherVideos: []
+otherVideos:
+  - tiktokId: "7489501353040039175"
+    title: "خمس أخطاء لا تسويها عشان تحافظ على سيارتك."
+    views: 70200
+    published: "2025-04-04"
+    cover: "/covers/7489501353040039175.webp"
 tags:
   - "صيانة"
   - "زيت"
