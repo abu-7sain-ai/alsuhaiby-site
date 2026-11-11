@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7274666706641931528"
 tiktokId: "7274666706641931528"
 duration: 31
-otherVideos: []
+otherVideos:
+  - tiktokId: "7214933700264480002"
+    title: "ست علامات تقول لك انه صمام الـ EGR تعطل عندك."
+    views: 121200
+    published: "2023-03-26"
+    cover: "/covers/7214933700264480002.webp"
 tags:
   - "محرك"
   - "صمام EGR"
