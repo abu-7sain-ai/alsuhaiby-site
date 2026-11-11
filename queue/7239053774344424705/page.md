@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7239053774344424705"
 tiktokId: "7239053774344424705"
 duration: 37
-otherVideos: []
+otherVideos:
+  - tiktokId: "7389713734618352903"
+    title: "خمس اعراض إذا شفتها معناته تلف كنترول القير عندك."
+    views: 314500
+    published: "2024-07-09"
+    cover: "/covers/7389713734618352903.webp"
 tags:
   - "قير"
   - "مخ القير"
