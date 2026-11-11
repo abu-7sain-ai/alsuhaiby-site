@@ -20,6 +20,11 @@ otherVideos:
     views: 217100
     published: "2023-04-05"
     cover: "/covers/7218658381970672898.webp"
+  - tiktokId: "7508804970930588935"
+    title: "ستة من الدلائل اللي تدل على تلف الكانستر بسيارتك"
+    views: 86800
+    published: "2025-05-26"
+    cover: "/covers/7508804970930588935.webp"
 tags:
   - "كانستر"
   - "ريحة بنزين"
