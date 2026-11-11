@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7197103652752903425"
 tiktokId: "7197103652752903425"
 duration: 50
-otherVideos: []
+otherVideos:
+  - tiktokId: "7229034870129921281"
+    title: "ست علامات تعرف منها إن قازقيت راس المكينة تالف ومو شرط توفرها كلها"
+    views: 374000
+    published: "2023-05-03"
+    cover: "/covers/7229034870129921281.webp"
 tags:
   - "محرك"
   - "قازقيت"
