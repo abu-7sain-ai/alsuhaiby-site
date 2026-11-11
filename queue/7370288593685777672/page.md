@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7370288593685777672"
 tiktokId: "7370288593685777672"
 duration: 36
-otherVideos: []
+otherVideos:
+  - tiktokId: "7483933674174532882"
+    title: "خمسة أشياء لازم تعرفها إذا البطارية حاشها ماي."
+    views: 68500
+    published: "2025-03-20"
+    cover: "/covers/7483933674174532882.webp"
 tags:
   - "بطارية"
   - "ماي"
