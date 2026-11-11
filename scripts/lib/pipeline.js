@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { spawnSync, execFileSync } from 'node:child_process';
-import { ROOT, LIB_DIR, DOWNLOAD_DIR, MODEL, readJson, writeJson, cachePath, chat, loadLedger, DONE, videoIndex } from './common.js';
+import { ROOT, LIB_DIR, DOWNLOAD_DIR, MODEL, readJson, writeJson, writeFileAtomic, withLock, cachePath, chat, loadLedger, DONE, videoIndex } from './common.js';
 import { images, uploadVideo, pageMarkdown, addOtherVideo, pageIndex, slugify, clean, duration, QUEUE, PAGES_AR } from './page.js';
 import { assertPublishable, publishData } from './publishable.js';
 
@@ -69,8 +69,8 @@ Decide:
 When unsure between duplicate and new, choose "new" only if a driver would search for it with different words AND get a different answer.
 Return ONLY JSON: {"decision":"new|duplicate|skip","slug":"slug of the page, only for duplicate","reason":"one short English sentence"}`;
 
-export async function decide({ v, an, model = MODEL, script = 'dedup' }) {
-  const pages = pageIndex();
+export async function decide({ v, an, model = MODEL, script = 'dedup', inflight = [] }) {
+  const pages = [...pageIndex(), ...inflight.map((x) => ({ slug: `in-progress-${x.id}`, title: x.topic, summary: '(being written right now)', where: 'inflight', id: x.id }))];
   const list = pages.map((p) => `- ${p.slug} | ${p.title} | ${p.summary}`).join('\n') || '(no pages yet)';
   const d = await chat({
     script, label: `${v.id} dedup`, model, temperature: 0, maxTokens: 800,
@@ -100,14 +100,20 @@ export function uniqueSlug(s) {
 }
 export function queuePage(v, final, { topic } = {}) {
   assertPublishable(v.id, publishData(), { needFile: false }); // owner's rule: no page for a video with incomplete data (it uploads the file itself)
-  const dir = path.join(QUEUE, v.id);
-  fs.mkdirSync(dir, { recursive: true });
-  const img = images(v, dir);
+  // whole or nothing: the page is built in queue/.tmp-<id>/ and renamed to queue/<id>/ only when every file is there
+  const dir = path.join(QUEUE, v.id), tmp = path.join(QUEUE, `.tmp-${v.id}`);
+  fs.rmSync(tmp, { recursive: true, force: true });
+  fs.mkdirSync(tmp, { recursive: true });
+  const img = images(v, tmp);
   uploadVideo(v);
-  const slug = uniqueSlug(final.slug || final.title);
-  fs.writeFileSync(path.join(dir, 'page.md'), pageMarkdown({ topic: topic || `tk-${v.id}`, main: v, w: final, img, dur: duration(v.path), slug, updated: new Date().toISOString().slice(0, 10) }), 'utf8');
-  writeJson(path.join(dir, 'meta.json'), { id: v.id, slug, title: clean(final.title), views: v.views, queuedAt: new Date().toISOString() });
-  return slug;
+  return withLock('queue', () => { // slug choice + rename in one step, so two workers can never take the same slug
+    const slug = uniqueSlug(final.slug || final.title);
+    writeFileAtomic(path.join(tmp, 'page.md'), pageMarkdown({ topic: topic || `tk-${v.id}`, main: v, w: final, img, dur: duration(v.path), slug, updated: new Date().toISOString().slice(0, 10) }));
+    writeJson(path.join(tmp, 'meta.json'), { id: v.id, slug, title: clean(final.title), views: v.views, queuedAt: new Date().toISOString() });
+    fs.rmSync(dir, { recursive: true, force: true });
+    fs.renameSync(tmp, dir);
+    return slug;
+  });
 }
 
 /** Moves a queued page live: page.md → content/videos/ar/<slug>.md, its images → public/covers and public/og. */
@@ -126,7 +132,7 @@ export function publishQueued(id) {
   return meta;
 }
 
-export const queued = () => (fs.existsSync(QUEUE) ? fs.readdirSync(QUEUE).filter((d) => fs.existsSync(path.join(QUEUE, d, 'meta.json'))).map((d) => readJson(path.join(QUEUE, d, 'meta.json'))) : []);
+export const queued = () => (fs.existsSync(QUEUE) ? fs.readdirSync(QUEUE).filter((d) => !d.startsWith('.') && fs.existsSync(path.join(QUEUE, d, 'meta.json'))).map((d) => readJson(path.join(QUEUE, d, 'meta.json'))) : []);
 
 /** The true remaining archive: library videos not yet published, queued, merged or skipped. */
 export function remaining() {
@@ -148,7 +154,8 @@ const UNION = {
   'ledger.json': (a, b) => { const o = { ...a }; for (const [k, v] of Object.entries(b)) if (!o[k] || (v.at || '') >= (o[k].at || '')) o[k] = v; return o; },
   'library.json': (a, b) => { const m = new Map((a.videos || []).map((v) => [v.id, v])); for (const v of b.videos || []) m.set(v.id, { ...m.get(v.id), ...v }); return { ...a, ...b, videos: [...m.values()] }; },
 };
-export function gitSync(cwd, paths, message, { push = true } = {}) {
+export function gitSync(cwd, paths, message, opts = {}) { return withLock(`git-${path.basename(cwd)}`, () => gitSyncNow(cwd, paths, message, opts)); }
+function gitSyncNow(cwd, paths, message, { push = true } = {}) {
   const mine = {};
   for (const f of Object.keys(UNION)) if (fs.existsSync(path.join(cwd, f))) mine[f] = readJson(path.join(cwd, f));
   const real = paths.filter((x) => fs.existsSync(path.join(cwd, x)) || git(cwd, 'ls-files', '--', x)); // a path that never existed would stop git add

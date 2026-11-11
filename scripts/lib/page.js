@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { ROOT, readJson, writeJson } from './common.js';
+import { ROOT, readJson, writeJson, writeFileAtomic } from './common.js';
 
 export const COVERS = path.join(ROOT, 'public', 'covers');
 export const OG = path.join(ROOT, 'public', 'og');
@@ -109,7 +109,7 @@ export function addOtherVideo(file, item) {
     hl.splice(j, 0, ...lines);
     out = hl.join('\n');
   }
-  fs.writeFileSync(file, out + rest, 'utf8');
+  writeFileAtomic(file, out + rest); // whole or nothing
   return true;
 }
 
@@ -121,6 +121,6 @@ export function pageIndex() {
     out.push({ where, file, id: id || fmValue(txt, 'tiktokId'), slug: fmValue(txt, 'slug'), title: fmValue(txt, 'title'), summary: String(fmValue(txt, 'summary') || '').split(/[.!؟]/)[0], system: fmValue(txt, 'system') });
   };
   if (fs.existsSync(PAGES_AR)) for (const f of fs.readdirSync(PAGES_AR).filter((x) => x.endsWith('.md'))) read(path.join(PAGES_AR, f), 'live');
-  if (fs.existsSync(QUEUE)) for (const d of fs.readdirSync(QUEUE)) if (fs.existsSync(path.join(QUEUE, d, 'page.md'))) read(path.join(QUEUE, d, 'page.md'), 'queue', d);
+  if (fs.existsSync(QUEUE)) for (const d of fs.readdirSync(QUEUE)) if (!d.startsWith(".") && fs.existsSync(path.join(QUEUE, d, 'page.md'))) read(path.join(QUEUE, d, 'page.md'), 'queue', d);
   return out;
 }

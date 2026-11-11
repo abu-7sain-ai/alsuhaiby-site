@@ -28,5 +28,6 @@
   "publishPerDay": 7,
   "maxMinutes": 0,
   "zernioPerMinute": 45,
-  "zernioCommentsPerHour": 1700
+  "zernioCommentsPerHour": 1700,
+  "nightConcurrency": 3
 }

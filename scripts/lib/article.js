@@ -26,7 +26,7 @@ STRUCTURE AND SEO:
 - slug: 3–6 Arabic words from the title joined with "-", no digits, no punctuation.
 - intro: 1 short paragraph (40–80 words) after the summary, no repetition of the summary.
 - sections: one per cause/sign/step he mentioned (+ optionally one «متى توديها الكراج؟» section). heading = short (2–6 words) and specific. body = 130–230 words, plain paragraphs separated by \\n\\n, may contain a short "- " list.
-- The whole article (summary + intro + sections) must be 1150–1400 Arabic words.
+- The whole article (summary + intro + sections) must be 1250–1350 Arabic words (hard limits 1150–1400; a review will cut some sentences, so aim for 1300).
 - faq: 3–5 questions written exactly the way people ask in Gulf dialect (as in comments and Google searches); the FIRST sentence of each answer is the direct answer; answers 25–60 words.
 - keywords: 3–5 search phrases (mix فصحى and عامية), used naturally in title, summary and FAQ without stuffing.
 - system: exactly one of: ${SYSTEMS}.
@@ -92,10 +92,10 @@ export const PASS1 = `You are a skeptical Kuwaiti master mechanic with 25 years 
 The article starts from his transcript and is EXPANDED ON PURPOSE with general automotive knowledge. That expansion is wanted: correct general knowledge is KEEP by default, even if he did not say it.
 The article is split into numbered units (sentences, headings, FAQ questions). Check EVERY factual claim in every unit against what a master mechanic knows for certain. Flag ONLY the units that need action:
 - FIX: the idea is right but a detail is wrong, exaggerated or too specific, OR the wording is literary / Modern Standard / not natural Kuwaiti-Gulf dialect. Give the corrected sentence in Arabic (same dialect, no new facts).
-  A FIX changes ONLY the wrong detail or the wording: it keeps every other correct detail of the sentence and stays about the same length (never under 75% of the original's words). Do not summarise or tighten in a FIX. If most of a sentence is wrong, CUT it instead.
+  A FIX changes ONLY the wrong detail or the wording: it keeps every other correct detail of the sentence and stays about the same length (never under 75% of the original's words; a shorter FIX is rejected by the code). Do not summarise, tighten or drop details of a sentence in a FIX. If most of a sentence is wrong, CUT it instead.
 - CUT: factually WRONG and not fixable in one sentence, CONTRADICTS the video, invented prices / km or month intervals / statistics / brand-specific claims, pure filler or repetition of an earlier sentence, AI phrases («في عالم السيارات»، «لا شك»، «في الختام»...), on-video CTAs.
 - DOUBT: a factual claim you cannot confirm as correct for most cars (it may be true, but you are not sure). It is removed and logged for a human look; say what is doubtful in the reason.
-Do NOT cut a sentence only because it is not in the transcript. Do NOT cut correct explanation to make the article shorter: the article must stay 800–1500 words.
+Do NOT cut a sentence only because it is not in the transcript. Do NOT cut correct explanation to make the article shorter: the article must stay 1150–1400 words.
 Summary units are the first two lines on the page: they must fully answer the question. Prefer FIX over CUT there.
 Also judge the whole article: dialect/tone (Kuwaiti, natural, same tone as the video; uses «كراج» not «ورشة») and whether the first two lines answer the question.
 Return ONLY JSON:
@@ -143,15 +143,18 @@ Spoken: ${an.transcript}
 On screen: ${an.onScreenText || '-'}${an.items ? `\nItems: ${JSON.stringify(an.items)}` : ''}`;
 }
 
-/** Draft (1150–1400 words, one resize retry). model: an OpenRouter model id or 'claude-cli'. */
+// Length rules (owner, 2026-11-11): the writer aims 1250–1350; the final article must be 1150–1400 or it is held, never queued.
+export const TARGET = [1250, 1350], LIMITS = [1150, 1400], MAX_RESIZES = 2, FIX_FLOOR = 0.75;
+
+/** Draft (target 1250–1350 words, up to 2 resizes). model: an OpenRouter model id or 'claude-cli'. */
 export async function writeArticle({ key, id, an, v, model = WRITE_MODEL, script = 'write' }) {
   const messages = [{ role: 'system', content: AR_RULES }, { role: 'user', content: `Topic: ${key}\n\n${sourceOf(id, an, v)}` }];
   let a = await chat({ script, label: `${key} write`, model, messages });
   let n = words(a);
-  if (n < 1050 || n > 1500) {
-    console.log(`  ${n} words — asking for a ${n < 1050 ? 'longer' : 'shorter'} version`);
-    messages.push({ role: 'assistant', content: JSON.stringify(a) }, { role: 'user', content: `The article is ${n} words. Rewrite it to 1150–1400 words following every rule: expand each section with correct general explanation (how to check it, what the fix is), never padding or repeating. Return the full JSON again.` });
-    a = await chat({ script, label: `${key} write (resize)`, model, messages });
+  for (let r = 1; r <= MAX_RESIZES && (n < TARGET[0] || n > TARGET[1] + 100); r++) { // owner (2026-11-11): target 1250–1350, up to 2 resizes
+    console.log(`  ${n} words — asking for a ${n < TARGET[0] ? 'longer' : 'shorter'} version (${r}/${MAX_RESIZES})`);
+    messages.push({ role: 'assistant', content: JSON.stringify(a) }, { role: 'user', content: `The article is ${n} words. Rewrite it to ${TARGET[0]}–${TARGET[1]} words following every rule: ${n < TARGET[0] ? 'expand each section with correct general explanation (how to check it, what the fix is), never padding or repeating' : 'tighten wording without dropping any point'}. Return the full JSON again.` });
+    a = await chat({ script, label: `${key} write (resize ${r})`, model, messages });
     n = words(a);
   }
   return { topic: key, lang: 'ar', mainId: id, otherIds: [], words: n, writtenAt: new Date().toISOString(), model: model === 'claude-cli' ? 'claude (subscription)' : model, ...a };
@@ -172,8 +175,8 @@ export async function reviewArticle({ key, id, an, draft, model = REVIEW_MODEL, 
     if (!u) continue;
     let verdict = String(vd.verdict).toUpperCase();
     if (verdict === 'CUT' || verdict === 'DOUBT') u.cut = true; // a claim that cannot be confirmed is removed, never published
-    if (verdict === 'FIX' && vd.fixed && u.text.split(/\s+/).length >= 8 && vd.fixed.split(/\s+/).length < 0.6 * u.text.split(/\s+/).length) {
-      log.push({ id: u.id, where: u.where, verdict: 'SHRINK-REJECTED', text: vd.fixed, reason: `fix rejected (would shrink the sentence by 40%+): ${vd.reason}`, original: u.text });
+    if (verdict === 'FIX' && vd.fixed && u.text.split(/\s+/).length >= 8 && vd.fixed.split(/\s+/).length < FIX_FLOOR * u.text.split(/\s+/).length) {
+      log.push({ id: u.id, where: u.where, verdict: 'SHRINK-REJECTED', text: vd.fixed, reason: `fix rejected (would shrink the sentence below ${FIX_FLOOR * 100}%): ${vd.reason}`, original: u.text });
       continue;
     }
     if (verdict === 'FIX' && vd.fixed) u.text = vd.fixed;
@@ -198,3 +201,40 @@ export async function reviewArticle({ key, id, an, draft, model = REVIEW_MODEL, 
   console.log(`  ${draft.words} → ${finalWords} words · fixed ${counts.fixed} · cut ${counts.cut} · doubtful ${counts.doubtful} · score ${review.total}/60`);
   return { review, final };
 }
+
+// ---- after review: one expand pass if the article fell under 1150, then a fact-check of the ADDED sentences only ----
+export const EXPAND = `You are the writer of this Arabic article for محمد الصهيبي's site (same voice rules: spoken Kuwaiti dialect, short sentences, «كراج» never «ورشة», no prices, no km/month intervals, no statistics, no brand-specific claims, no filler).
+The article is too short after a strict review. ADD new sentences only — never change or repeat existing text. Each addition is correct, well-established general automotive knowledge that fits its section (why it happens, how to check it, what the fix is, what happens if ignored).
+Return ONLY JSON: {"additions":[{"section":0,"text":"one or more new Arabic sentences for the END of that section"}]}`;
+
+/** Returns { final, expand } — final is unchanged when no expand was needed. */
+export async function expandArticle({ key, id, an, final, model, script }) {
+  const before = words(final);
+  if (before >= LIMITS[0]) return { final, expand: null };
+  const need = TARGET[0] + 25 - before;
+  const ex = await chat({ script, label: `${key} expand`, model, temperature: 0.4,
+    messages: [{ role: 'system', content: EXPAND }, { role: 'user', content: `${sourceOf(id, an)}\n\nThe article is ${before} words; add about ${need} words, spread over the sections.\n\nSECTIONS (index | heading | body)\n${final.sections.map((x, i) => `${i} | ${x.heading} | ${x.body}`).join('\n')}` }] });
+  const added = [];
+  for (const a of ex.additions || []) if (final.sections[a.section] && typeof a.text === 'string') splitSentences(a.text).forEach((u) => added.push({ id: `A${added.length + 1}`, section: +a.section, text: u.text }));
+  if (!added.length) return { final, expand: { before, after: before, added: 0, kept: 0, log: [] } };
+  // fact-check ONLY the added sentences with the same strict PASS1 rules; the rest of the article was already reviewed
+  const p = await chat({ script, label: `${key} expand fact-check`, model, temperature: 0, maxTokens: 8000,
+    messages: [{ role: 'system', content: PASS1 }, { role: 'user', content: `TRANSCRIPTS\n### Video ${id}\nSpoken: ${an.transcript}\n\nTITLE: ${final.title}\n\nARTICLE UNITS (only these new sentences are checked)\n${added.map((u) => `${u.id} [section${u.section}.body] ${u.text}`).join('\n')}` }] });
+  const log = [];
+  for (const vd of p.verdicts || []) {
+    const u = added.find((x) => x.id === vd.id); if (!u) continue;
+    const verdict = String(vd.verdict).toUpperCase();
+    if (verdict === 'CUT' || verdict === 'DOUBT') u.cut = true;
+    else if (verdict === 'FIX' && vd.fixed) { if (vd.fixed.split(/\s+/).length < FIX_FLOOR * u.text.split(/\s+/).length) u.cut = true; else u.text = vd.fixed; }
+    log.push({ id: u.id, verdict: u.cut ? 'CUT' : verdict, text: u.text, reason: vd.reason });
+  }
+  const out = structuredClone(final);
+  const bySection = new Map();
+  for (const u of added.filter((x) => !x.cut)) bySection.set(u.section, [...(bySection.get(u.section) || []), u.text]);
+  for (const [i, t] of bySection) out.sections[i].body = `${out.sections[i].body}\n\n${t.join(' ')}`;
+  const after = words(out);
+  const kept = added.filter((x) => !x.cut).length;
+  console.log(`  expand: ${before} → ${after} words · added ${added.length} sentences, ${kept} kept after fact-check`);
+  return { final: { ...out, words: after }, expand: { before, after, added: added.length, kept, log } };
+}
+export const lengthOk = (n) => n >= LIMITS[0] && n <= LIMITS[1];

@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
-import { spawnSync } from 'node:child_process';
+import { spawnSync, spawn } from 'node:child_process';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 // One parent folder (2026-11-10): <parent>alsuhaiby-site, <parent>alsuhaiby-library, <parent>media{downloads,telegram-export}.
@@ -22,10 +22,44 @@ export const MODEL = process.env.OPENROUTER_MODEL || 'google/gemini-3.8-flash';
 export const LANGS = ['ar', 'en', 'fr', 'es', 'ur'];
 
 export const readJson = (p, fallback) => (fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')) : fallback);
-export const writeJson = (p, data) => {
+// Every file is written whole or not at all (owner, 2026-11-11): write a temp file next to it, then rename over it.
+export function writeFileAtomic(p, text) {
   fs.mkdirSync(path.dirname(p), { recursive: true });
-  fs.writeFileSync(p, JSON.stringify(data, null, 2) + '\n', 'utf8');
-};
+  const tmp = `${p}.${process.pid}.${Math.random().toString(36).slice(2, 8)}.tmp`;
+  fs.writeFileSync(tmp, text, 'utf8');
+  for (let i = 0; ; i++) {
+    try { fs.renameSync(tmp, p); return; } catch (e) { // Windows: a reader (git, antivirus) can hold the old file for a moment
+      if (i >= 20 || !['EPERM', 'EACCES', 'EBUSY'].includes(e.code)) { try { fs.rmSync(tmp, { force: true }); } catch {} throw e; }
+      sleepSync(50);
+    }
+  }
+}
+export const writeJson = (p, data) => writeFileAtomic(p, JSON.stringify(data, null, 2) + '\n');
+
+// ---- single-writer locks (owner, 2026-11-11) --------------------------------------------------------------------------
+// One lock per shared resource: ledger, spend, run-state, queue, git-<repo>. A lock is a folder created with mkdir (atomic on
+// every OS), so it also holds between separate processes (fetch / numbers / comments runs on the same PC). Inside one Node
+// process the writers are synchronous, so two workers can never interleave inside a write; the lock covers other processes.
+// A lock older than 10 minutes is treated as left over from a killed process and taken over.
+export const sleepSync = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+const LOCK_DIR = path.join(os.tmpdir(), 'alsuhaiby-locks');
+export const lockStats = {}; // name → { taken, waited, waitMs, maxWaitMs, stale }
+export function withLock(name, fn) {
+  fs.mkdirSync(LOCK_DIR, { recursive: true });
+  const dir = path.join(LOCK_DIR, name), st = (lockStats[name] ||= { taken: 0, waited: 0, waitMs: 0, maxWaitMs: 0, stale: 0 });
+  const t0 = Date.now();
+  for (;;) {
+    try { fs.mkdirSync(dir); break; } catch (e) {
+      if (e.code !== 'EEXIST') throw e;
+      try { if (Date.now() - fs.statSync(dir).mtimeMs > 10 * 60e3) { fs.rmSync(dir, { recursive: true, force: true }); st.stale++; continue; } } catch { continue; }
+      if (Date.now() - t0 > 5 * 60e3) throw new Error(`lock ${name}: still held after 5 min`);
+      sleepSync(25);
+    }
+  }
+  const w = Date.now() - t0;
+  st.taken++; if (w > 0) { st.waited++; st.waitMs += w; st.maxWaitMs = Math.max(st.maxWaitMs, w); }
+  try { return fn(); } finally { try { fs.rmdirSync(dir); } catch {} }
+}
 
 export function args() {
   const out = { _: [] };
@@ -89,13 +123,15 @@ export const cachePath = (video, kind) => path.join(LIB_DIR, 'videos', String(vi
 // ---- dedup ledger (private library): id → { status, page, reason, line, at } ---------------------
 // status: published | queued | merged | skipped | download-failed. Remaining = library − ledger (published/queued/merged/skipped).
 export const LEDGER = path.join(LIB_DIR, 'ledger.json');
-export const DONE = new Set(['published', 'queued', 'merged', 'skipped', 'excluded', 'merge-held']); // excluded = never published (owner's rule: incomplete data) · merge-held = duplicate of a live page, embed waits for the publishing side
+export const DONE = new Set(['published', 'queued', 'merged', 'skipped', 'excluded', 'merge-held', 'held-length']); // held-length = final article outside 1150–1400 after every pass, kept in the library for a human look, never queued // excluded = never published (owner's rule: incomplete data) · merge-held = duplicate of a live page, embed waits for the publishing side
 export const loadLedger = () => readJson(LEDGER, {});
 export function setLedger(id, entry) {
-  const l = loadLedger();
-  l[id] = { ...(l[id] || {}), ...entry, at: new Date().toISOString() };
-  writeJson(LEDGER, l);
-  return l[id];
+  return withLock('ledger', () => {
+    const l = loadLedger();
+    l[id] = { ...(l[id] || {}), ...entry, at: new Date().toISOString() };
+    writeJson(LEDGER, l);
+    return l[id];
+  });
 }
 
 /** Kuwait date (YYYY-MM-DD) — the site's day. */
@@ -104,19 +140,26 @@ export const kuwaitDay = (d = new Date()) => new Date(d.getTime() + 3 * 3600e3).
 // ---- spend tracking -------------------------------------------------------
 const SPEND = path.join(ROOT, 'data', 'spend.json');
 export function recordSpend(entry) {
-  const s = readJson(SPEND, { totalUsd: 0, calls: [] });
-  s.calls.push({ at: new Date().toISOString(), ...entry });
-  s.totalUsd = Math.round(s.calls.reduce((a, c) => a + (c.costUsd || 0), 0) * 1e6) / 1e6;
-  writeJson(SPEND, s);
-  return s.totalUsd;
+  return withLock('spend', () => {
+    const s = readJson(SPEND, { totalUsd: 0, calls: [] });
+    s.calls.push({ at: new Date().toISOString(), ...entry });
+    s.totalUsd = Math.round(s.calls.reduce((a, c) => a + (c.costUsd || 0), 0) * 1e6) / 1e6;
+    writeJson(SPEND, s);
+    return s.totalUsd;
+  });
 }
 
 // ---- OpenRouter -----------------------------------------------------------
 export class ClaudeLimitError extends Error {}
+// A run that is stopping (time limit / Claude limit) ends its open Claude calls; the videos they belonged to are discarded.
+export class StopError extends Error {}
+export const runFlags = { stopping: false };
 
 // Claude Code CLI on his PC (his subscription, no per-call cost). Lean call: own system prompt, no tools, no MCP,
 // no user settings (so the Telegram Stop hook does not fire per call), no saved session.
-function claudeCli({ messages, script, label }) {
+export const liveChildren = new Set(); // running claude processes (killed on a limit / time stop)
+export function killChildren() { for (const c of liveChildren) { try { spawnSync('taskkill', ['/pid', String(c.pid), '/t', '/f'], { stdio: 'ignore' }); } catch {} try { c.kill(); } catch {} } }
+async function claudeCli({ messages, script, label }) {
   const sys = messages.filter((m) => m.role === 'system').map((m) => m.content).join('\n\n');
   const conv = messages.filter((m) => m.role !== 'system')
     .map((m) => (m.role === 'assistant' ? `YOUR PREVIOUS ANSWER:\n${m.content}` : typeof m.content === 'string' ? m.content : JSON.stringify(m.content))).join('\n\n');
@@ -126,9 +169,20 @@ function claudeCli({ messages, script, label }) {
   const env = { ...process.env };
   delete env.ANTHROPIC_API_KEY; // always the subscription, never an API key
   const t0 = Date.now();
-  const r = spawnSync('claude', ['-p', '--output-format', 'json', '--setting-sources', 'project', '--no-session-persistence', '--model', process.env.CLAUDE_MODEL || 'opus',
-    '--tools', '""', '--strict-mcp-config', '--system-prompt-file', `"${sp}"`], { input: `${conv}\n\nReturn ONLY the JSON object.`, cwd: dir, env, encoding: 'utf8', shell: true, timeout: 20 * 60e3, maxBuffer: 64 << 20 });
+  const r = await new Promise((resolve) => {
+    const c = spawn('claude', ['-p', '--output-format', 'json', '--setting-sources', 'project', '--no-session-persistence', '--model', process.env.CLAUDE_MODEL || 'opus',
+      '--tools', '""', '--strict-mcp-config', '--system-prompt-file', `"${sp}"`], { cwd: dir, env, shell: true, windowsHide: true });
+    liveChildren.add(c);
+    let stdout = '', stderr = '';
+    c.stdout.setEncoding('utf8').on('data', (d) => { stdout += d; });
+    c.stderr.setEncoding('utf8').on('data', (d) => { stderr += d; });
+    const timer = setTimeout(() => { try { spawnSync('taskkill', ['/pid', String(c.pid), '/t', '/f'], { stdio: 'ignore' }); } catch {} }, 20 * 60e3);
+    c.on('error', (error) => { clearTimeout(timer); liveChildren.delete(c); resolve({ stdout, stderr, error }); });
+    c.on('close', (status) => { clearTimeout(timer); liveChildren.delete(c); resolve({ stdout, stderr, status }); });
+    c.stdin.end(`${conv}\n\nReturn ONLY the JSON object.`, 'utf8');
+  });
   fs.rmSync(dir, { recursive: true, force: true });
+  if (runFlags.stopping) throw new StopError(`stopped during ${label}`);
   let j;
   try { j = JSON.parse(r.stdout); } catch {
     const raw = String(r.stderr || r.stdout || r.error || '');
@@ -152,11 +206,12 @@ export async function chat({ messages, script, label, json = true, model = MODEL
   if (model === 'claude-cli') {
     let lastErr;
     for (let attempt = 1; attempt <= 2; attempt++) {
+      if (runFlags.stopping) throw new StopError(`stopped before ${label}`);
       try {
-        const text = claudeCli({ messages, script, label });
+        const text = await claudeCli({ messages, script, label });
         return json ? parseJson(text) : text;
       } catch (e) {
-        if (e instanceof ClaudeLimitError) throw e;
+        if (e instanceof ClaudeLimitError || e instanceof StopError) throw e;
         lastErr = e;
         console.warn(`  ! attempt ${attempt} failed: ${e.message}`);
       }
