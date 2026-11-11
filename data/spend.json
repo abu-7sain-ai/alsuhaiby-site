@@ -16944,6 +16944,16 @@
       "completionTokens": 87,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.25882000000000005
+    },
+    {
+      "at": "2026-11-11T21:13:50.795Z",
+      "script": "night",
+      "label": "tk-7493572490338290962 expand fact-check",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 688,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0290744
     }
   ]
 }
