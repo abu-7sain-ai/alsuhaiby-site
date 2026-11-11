@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7278372886862253320"
 tiktokId: "7278372886862253320"
 duration: 26
-otherVideos: []
+otherVideos:
+  - tiktokId: "7320297471471652104"
+    title: "خمس أسباب تسبب دخان أسود يطلع من سيارتك."
+    views: 290900
+    published: "2024-01-04"
+    cover: "/covers/7320297471471652104.webp"
 tags:
   - "محرك"
   - "دخان أسود"
