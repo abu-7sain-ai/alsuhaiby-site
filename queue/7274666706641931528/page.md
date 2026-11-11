@@ -20,6 +20,11 @@ otherVideos:
     views: 121200
     published: "2023-03-26"
     cover: "/covers/7214933700264480002.webp"
+  - tiktokId: "7378574998308392199"
+    title: "خمس علامات تدلك ان في عطل بصمام الـ EGR."
+    views: 83700
+    published: "2024-06-09"
+    cover: "/covers/7378574998308392199.webp"
 tags:
   - "محرك"
   - "صمام EGR"
