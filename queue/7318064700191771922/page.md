@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7318064700191771922"
 tiktokId: "7318064700191771922"
 duration: 38
-otherVideos: []
+otherVideos:
+  - tiktokId: "7251298359632350465"
+    title: "أربع حالات لا أنصح بتفعيل نظام الإيكو، نظام التوفير."
+    views: 119700
+    published: "2023-07-02"
+    cover: "/covers/7251298359632350465.webp"
 tags:
   - "نظام الإيكو"
   - "مكيف"
