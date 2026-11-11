@@ -1,5 +1,5 @@
 {
-  "totalUsd": 9.521276,
+  "totalUsd": 9.527894,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -7316,6 +7316,65 @@
       "completionTokens": 98,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.128064
+    },
+    {
+      "at": "2026-11-11T12:17:37.589Z",
+      "script": "night",
+      "label": "tk-7207123833483021570 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1743,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0957424
+    },
+    {
+      "at": "2026-11-11T12:17:46.047Z",
+      "script": "night",
+      "label": "7330321289556643090 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 2279,
+      "completionTokens": 1309,
+      "costUsd": 0.006618
+    },
+    {
+      "at": "2026-11-11T12:17:50.723Z",
+      "script": "night",
+      "label": "tk-7347774529541786888 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 6575,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.1871962
+    },
+    {
+      "at": "2026-11-11T12:17:52.800Z",
+      "script": "night",
+      "label": "tk-7207123833483021570 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1242,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.077302
+    },
+    {
+      "at": "2026-11-11T12:18:07.333Z",
+      "script": "night",
+      "label": "tk-7207123833483021570 expand",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 674,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.059544
+    },
+    {
+      "at": "2026-11-11T12:18:11.549Z",
+      "script": "night",
+      "label": "7330321289556643090 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 96,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.127256
     }
   ]
 }
