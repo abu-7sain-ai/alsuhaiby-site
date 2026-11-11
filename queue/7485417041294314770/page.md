@@ -25,6 +25,11 @@ otherVideos:
     views: 490400
     published: "2024-06-09"
     cover: "/covers/7378574458665078023.webp"
+  - tiktokId: "7243130140300004610"
+    title: "أربع أسباب تنقص ماي الرديتر."
+    views: 428800
+    published: "2023-06-10"
+    cover: "/covers/7243130140300004610.webp"
 tags:
   - "تبريد"
   - "رديتر"
