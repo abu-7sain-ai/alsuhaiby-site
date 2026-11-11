@@ -20,6 +20,11 @@ otherVideos:
     views: 122500
     published: "2025-03-13"
     cover: "/covers/7481338876938833159.webp"
+  - tiktokId: "7587101365852261688"
+    title: "أربعة من علامات تلف سير المكينة"
+    views: 99700
+    published: "2025-12-23"
+    cover: "/covers/7587101365852261688.webp"
 tags:
   - "سير المكينة"
   - "صرير"
