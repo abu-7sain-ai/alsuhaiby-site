@@ -1,5 +1,5 @@
 {
-  "totalUsd": 8.754897,
+  "totalUsd": 8.913795,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -2482,6 +2482,60 @@
       "promptTokens": 3180,
       "completionTokens": 243,
       "costUsd": 0.00329625
+    },
+    {
+      "at": "2026-11-11T02:45:10.541Z",
+      "script": "daily",
+      "label": "7706633373321661697 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 4474,
+      "completionTokens": 2226,
+      "costUsd": 0.011703
+    },
+    {
+      "at": "2026-11-11T02:45:13.810Z",
+      "script": "daily",
+      "label": "7706633373321661697 dedup",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3386,
+      "completionTokens": 147,
+      "costUsd": 0.00309075
+    },
+    {
+      "at": "2026-11-11T02:45:56.694Z",
+      "script": "daily",
+      "label": "tk-7706633373321661697 write",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1879,
+      "completionTokens": 4528,
+      "costUsd": 0.01838925
+    },
+    {
+      "at": "2026-11-11T02:46:40.181Z",
+      "script": "daily",
+      "label": "tk-7706633373321661697 write (resize)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 4568,
+      "completionTokens": 6796,
+      "costUsd": 0.028911
+    },
+    {
+      "at": "2026-11-11T02:47:10.451Z",
+      "script": "daily",
+      "label": "tk-7706633373321661697 review pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 7447,
+      "completionTokens": 5507,
+      "costUsd": 0.069964
+    },
+    {
+      "at": "2026-11-11T02:47:20.597Z",
+      "script": "daily",
+      "label": "tk-7706633373321661697 review pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 6750,
+      "completionTokens": 1334,
+      "costUsd": 0.02684
     }
   ]
 }

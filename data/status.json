@@ -5,29 +5,29 @@
     "at": "2026-11-10T17:55:59.229Z",
     "ok": true
   },
-  "updatedAt": "2026-11-10T17:55:59.907Z",
-  "nextScheduledRun": "2026-11-11 02:00 Kuwait (GitHub Actions, daily)",
+  "updatedAt": "2026-11-11T02:47:26.414Z",
+  "nextScheduledRun": "2026-11-12 02:00 Kuwait (GitHub Actions, daily)",
   "pagesPublished": {
-    "total": 25,
+    "total": 26,
     "byLang": {
-      "ar": 25
+      "ar": 26
     }
   },
   "videosProcessed": 50,
-  "videosOnR2": 721,
+  "videosOnR2": 722,
   "openRouterSpendUsd": {
-    "total": 8.755,
-    "last30Days": 8.755
+    "total": 8.914,
+    "last30Days": 8.914
   },
   "keyCreditLeftUsd": {
-    "usd": 41.25,
+    "usd": 41.21,
     "source": "key limit"
   },
   "siteHealth": {
-    "at": "2026-11-10T17:55:59.907Z",
+    "at": "2026-11-11T02:47:26.414Z",
     "url": "https://alsuhaiby.com/",
     "httpStatus": 200,
-    "ms": 184,
+    "ms": 136,
     "up": true
   },
   "alerts": {},
@@ -47,20 +47,23 @@
     }
   },
   "lastDaily": {
-    "day": "2026-11-10",
-    "at": "2026-11-10T04:36:37.020Z",
-    "published": [],
-    "merged": [
-      "7706237772511726869 → سيارتي-ترجف-وهي-واقفة"
+    "day": "2026-11-11",
+    "at": "2026-11-11T02:47:26.250Z",
+    "published": [
+      {
+        "title": "كهرباء السيارة تشكل بالحر والمطر: 4 أسباب",
+        "url": "https://alsuhaiby.com/%D9%83%D9%87%D8%B1%D8%A8%D8%A7%D8%A1-%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A9-%D8%AA%D8%B4%D9%83%D9%84-%D8%A8%D8%A7%D9%84%D8%AD%D8%B1-%D9%88%D8%A7%D9%84%D9%85%D8%B7%D8%B1/"
+      }
     ],
+    "merged": [],
     "queueLeft": 0,
-    "archiveLeft": 682,
-    "costTodayUsd": 0.013,
+    "archiveLeft": 678,
+    "costTodayUsd": 0.159,
     "costGuard": null,
     "errors": []
   },
   "queueWaiting": 0,
   "publishPerDay": 7,
-  "videosAnalyzed": 58,
+  "videosAnalyzed": 59,
   "archiveLeft": 682
 }
