@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7308425295999012104"
 tiktokId: "7308425295999012104"
 duration: 25
-otherVideos: []
+otherVideos:
+  - tiktokId: "7170766712990698753"
+    title: "خمس أسباب تتلف تكايات المكينة عندك"
+    views: 90200
+    published: "2022-11-27"
+    cover: "/covers/7170766712990698753.webp"
 tags:
   - "محرك"
   - "تكايات"
