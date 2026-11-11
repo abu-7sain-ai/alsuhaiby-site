@@ -14,6 +14,7 @@
 // Telegram: ONE message at the end of each burst (written in this burst, how many remain, why it ended) + one at the finish.
 // All night.js rules apply: never-wait, no retries, machine guard, whole-file writes, locks, nothing published.
 //   node scripts/prep-burst.js            (what the task runs)
+//   node scripts/prep-burst.js --now      start the coming burst early (stops at its normal stop time)
 //   node scripts/prep-burst.js --check    say whether now is inside a burst, and the next one; runs nothing
 import fs from 'node:fs';
 import os from 'node:os';
@@ -63,7 +64,8 @@ if (A.check) {
 fs.mkdirSync(path.dirname(PID), { recursive: true });
 { let other = 0; try { other = Number(fs.readFileSync(PID, 'utf8')); } catch {} if (other && other !== process.pid && alive(other)) process.exit(0); }
 if (Date.now() >= DEADLINE) { log('Thursday 22:00 deadline passed — nothing runs'); disableTask('deadline'); process.exit(0); }
-const burst = current();
+// --now (owner's call): start the coming burst early — it still stops at that burst's normal stop time
+const burst = current() || (A.now && next() ? { start: Date.now(), stop: next().stop } : null);
 if (!burst) { const n = next(); log(`started outside a burst window — nothing runs (next burst ${n ? kt(n.start) : '-'})`); process.exit(0); }
 fs.writeFileSync(PID, String(process.pid));
 process.on('exit', () => { try { if (Number(fs.readFileSync(PID, 'utf8')) === process.pid) fs.rmSync(PID); } catch {} });
