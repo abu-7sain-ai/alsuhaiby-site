@@ -1,5 +1,5 @@
 {
-  "totalUsd": 11.530364,
+  "totalUsd": 11.540881,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -17099,6 +17099,65 @@
       "completionTokens": 81,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.256708
+    },
+    {
+      "at": "2026-11-11T21:15:24.445Z",
+      "script": "night",
+      "label": "tk-7492792764032158983 write (resize 2)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 6987,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2415402
+    },
+    {
+      "at": "2026-11-11T21:15:39.130Z",
+      "script": "night",
+      "label": "tk-7695466545161489684 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 2051,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.11103840000000001
+    },
+    {
+      "at": "2026-11-11T21:15:41.617Z",
+      "script": "night",
+      "label": "tk-7492792764032158983 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1357,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.08826239999999999
+    },
+    {
+      "at": "2026-11-11T21:15:42.139Z",
+      "script": "night",
+      "label": "tk-7635352603215269140 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7167,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2028042
+    },
+    {
+      "at": "2026-11-11T21:15:46.509Z",
+      "script": "night",
+      "label": "7359986158723484946 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3928,
+      "completionTokens": 2019,
+      "costUsd": 0.01051725
+    },
+    {
+      "at": "2026-11-11T21:15:52.116Z",
+      "script": "night",
+      "label": "7359986158723484946 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 89,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.258396
     }
   ]
 }

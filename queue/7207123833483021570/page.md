@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7207123833483021570"
 tiktokId: "7207123833483021570"
 duration: 40
-otherVideos: []
+otherVideos:
+  - tiktokId: "7359986158723484946"
+    title: "أربع أسباب تخلي الزيت أسود بسيارتك."
+    views: 74700
+    published: "2024-04-20"
+    cover: "/covers/7359986158723484946.webp"
 tags:
   - "محرك"
   - "زيت المكينة"
