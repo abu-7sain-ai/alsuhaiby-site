@@ -35,6 +35,11 @@ otherVideos:
     views: 287500
     published: "2024-05-28"
     cover: "/covers/7374107075288304914.webp"
+  - tiktokId: "7460216992579194120"
+    title: "تدل على وجود خلل في مسامير التوازن بسيارتك"
+    views: 274500
+    published: "2025-01-15"
+    cover: "/covers/7460216992579194120.webp"
 tags:
   - "مسمار التوازن"
   - "طقطقة"
