@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7325863253597244679"
 tiktokId: "7325863253597244679"
 duration: 25
-otherVideos: []
+otherVideos:
+  - tiktokId: "7199342080198495490"
+    title: "أهم أربع أسباب تسبب في ارتفاع في صوت المكينة عند التشغيل"
+    views: 505000
+    published: "2023-02-12"
+    cover: "/covers/7199342080198495490.webp"
 tags:
   - "محرك"
   - "صوت المكينة"
