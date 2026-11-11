@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7210824119275769090"
 tiktokId: "7210824119275769090"
 duration: 54
-otherVideos: []
+otherVideos:
+  - tiktokId: "7634229572950576404"
+    title: "ست علامات تبين لك ان عندك مشكلة بالمعاونيات، او بلهجة ثانية المساعدات."
+    views: 64175
+    published: "2026-04-29"
+    cover: "/covers/7634229572950576404.webp"
 tags:
   - "معاونيات"
   - "تعليق"
