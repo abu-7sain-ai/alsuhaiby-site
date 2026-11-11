@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7374108608151293192"
 tiktokId: "7374108608151293192"
 duration: 28
-otherVideos: []
+otherVideos:
+  - tiktokId: "7246844007056297218"
+    title: "خمس أشياء لازم تفحص باستمرار في سيارتك."
+    views: 220500
+    published: "2023-06-20"
+    cover: "/covers/7246844007056297218.webp"
 tags:
   - "صيانة دورية"
   - "زيوت"
