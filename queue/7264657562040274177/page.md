@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7264657562040274177"
 tiktokId: "7264657562040274177"
 duration: 24
-otherVideos: []
+otherVideos:
+  - tiktokId: "7486162855260114183"
+    title: "ست مشاكل تجيك لو انسد فلتر الهوا عندك"
+    views: 139000
+    published: "2025-03-26"
+    cover: "/covers/7486162855260114183.webp"
 tags:
   - "محرك"
   - "فلتر هواء"
