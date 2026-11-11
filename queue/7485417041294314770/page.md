@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7485417041294314770"
 tiktokId: "7485417041294314770"
 duration: 18
-otherVideos: []
+otherVideos:
+  - tiktokId: "7186302921397538049"
+    title: "أربع أسباب تنقص ماي الرديتر."
+    views: 587600
+    published: "2023-01-08"
+    cover: "/covers/7186302921397538049.webp"
 tags:
   - "تبريد"
   - "رديتر"
