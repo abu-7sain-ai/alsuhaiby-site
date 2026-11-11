@@ -20,6 +20,11 @@ otherVideos:
     views: 77000
     published: "2024-02-11"
     cover: "/covers/7334398503847808263.webp"
+  - tiktokId: "7330320927378525447"
+    title: "أربع نصائح عشان تحافظ على قزاز سيارتك."
+    views: 69200
+    published: "2024-01-31"
+    cover: "/covers/7330320927378525447.webp"
 tags:
   - "قزاز"
   - "الشمس"
