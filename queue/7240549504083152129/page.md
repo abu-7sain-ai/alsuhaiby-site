@@ -20,6 +20,11 @@ otherVideos:
     views: 167700
     published: "2026-01-04"
     cover: "/covers/7591567912356285752.webp"
+  - tiktokId: "7407886969839078674"
+    title: "ثلاث علامات تدل على تلف شريحة القير"
+    views: 127900
+    published: "2024-08-27"
+    cover: "/covers/7407886969839078674.webp"
 tags:
   - "قير"
   - "شريحة القير"
