@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7295803001338481922"
 tiktokId: "7295803001338481922"
 duration: 53
-otherVideos: []
+otherVideos:
+  - tiktokId: "7411131952935324935"
+    title: "أربع أسباب تضوي لك لمبة ال ABS، خلك معاي وتعرفها."
+    views: 289500
+    published: "2024-09-05"
+    cover: "/covers/7411131952935324935.webp"
 tags:
   - "فرامل"
   - "ABS"
