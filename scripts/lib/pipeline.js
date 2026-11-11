@@ -91,6 +91,35 @@ export function mergeInto(page, v, an) {
   return addOtherVideo(page.file, { tiktokId: v.id, title: clean(an.hook || an.topic || ''), views: v.views, published: v.date, cover: img.cover });
 }
 
+// ---- 4a'. held merge (owner, 2026-11-11): a repeat of a LIVE page is prepared on the PC (MP4 → R2, images and the
+// merge entry in queue/.held-<id>/, a folder the queue and the dedup never read) and applied by the daily job when it publishes.
+export const HELD_PREFIX = '.held-';
+export function prepareHeldMerge(page, v, an) {
+  assertPublishable(v.id, publishData(), { needFile: false });
+  const dir = path.join(QUEUE, `${HELD_PREFIX}${v.id}`), tmp = path.join(QUEUE, `.tmp-held-${v.id}`);
+  fs.rmSync(tmp, { recursive: true, force: true });
+  fs.mkdirSync(tmp, { recursive: true });
+  const img = images(v, tmp);
+  uploadVideo(v);
+  writeJson(path.join(tmp, 'merge.json'), { id: v.id, page: page.slug, item: { tiktokId: v.id, title: clean(an.hook || an.topic || ''), views: v.views, published: v.date, cover: img.cover }, preparedAt: new Date().toISOString() });
+  withLock('queue', () => { fs.rmSync(dir, { recursive: true, force: true }); fs.renameSync(tmp, dir); });
+  return dir;
+}
+export const heldMerges = () => (fs.existsSync(QUEUE) ? fs.readdirSync(QUEUE).filter((d) => d.startsWith(HELD_PREFIX) && fs.existsSync(path.join(QUEUE, d, 'merge.json'))).map((d) => ({ dir: path.join(QUEUE, d), ...readJson(path.join(QUEUE, d, 'merge.json')) })) : []);
+/** Daily job: embed one held video on its live page (its images move to public/, the folder is removed). */
+export function applyHeldMerge(h) {
+  assertPublishable(h.id); // file on R2 AND numbers
+  const page = pageIndex().find((p) => p.slug === h.page && p.where === 'live');
+  if (!page) throw new Error(`live page ${h.page} not found`);
+  for (const f of fs.readdirSync(h.dir)) {
+    if (f.endsWith('.webp')) fs.renameSync(path.join(h.dir, f), path.join(ROOT, 'public', 'covers', f));
+    if (f.endsWith('.jpg')) fs.renameSync(path.join(h.dir, f), path.join(ROOT, 'public', 'og', f));
+  }
+  addOtherVideo(page.file, h.item);
+  fs.rmSync(h.dir, { recursive: true, force: true });
+  return page;
+}
+
 // ---- 4b. new page: reviewed article → queue/<id>/ (page.md + its images), MP4 on R2 -------------
 export function uniqueSlug(s) {
   const taken = new Set(pageIndex().map((p) => p.slug));

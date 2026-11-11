@@ -31,7 +31,7 @@ import os from 'node:os';
 import { ROOT, LIB_DIR, args, cachePath, readJson, writeJson, setLedger, loadLedger, DONE, ClaudeLimitError, StopError, runFlags, killChildren, withLock, lockStats } from './lib/common.js';
 import { writeArticle, reviewArticle, expandArticle, lengthOk, LIMITS } from './lib/article.js';
 import { checkPublishable, publishData } from './lib/publishable.js';
-import { download, analyze, decide, mergeInto, queuePage, remaining, queued, gitSync, RateLimitError } from './lib/pipeline.js';
+import { download, analyze, decide, mergeInto, prepareHeldMerge, queuePage, remaining, queued, gitSync, RateLimitError } from './lib/pipeline.js';
 import { QUEUE } from './lib/page.js';
 import { guard, alert } from './lib/status.js';
 import { machineGate, MachineStopError, setStage, startStage } from './lib/machine.js';
@@ -177,6 +177,7 @@ async function handle(v) {
     done.skipped.push(v.id); console.log(`  skip: ${d.reason}`); result = 'skipped';
   } else if (d.decision === 'duplicate' && d.page.where !== 'queue') {
     // owner (2026-11-11): the prep line publishes NOTHING; a repeat of a LIVE page is held and embedded by the daily job
+    prepareHeldMerge(d.page, v, an);
     setLedger(v.id, { status: 'merge-held', page: d.page.slug, reason: d.reason, line: 'night' });
     done.merged.push(`${v.id} → ${d.page.slug} (held: live page)`); console.log(`  duplicate of LIVE page ${d.page.slug} — held for the daily job: ${d.reason}`); result = 'merge-held';
   } else if (d.decision === 'duplicate') {

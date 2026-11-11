@@ -12,7 +12,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { ROOT, LIB_DIR, LIBRARY, args, readJson, writeJson, cachePath, setLedger, loadLedger, kuwaitDay, videoIndex, apiKey } from './lib/common.js';
 import { writeArticle, reviewArticle } from './lib/article.js';
-import { download, analyze, decide, mergeInto, queuePage, publishQueued, queued, remaining, gitSync } from './lib/pipeline.js';
+import { download, analyze, decide, mergeInto, queuePage, publishQueued, queued, remaining, gitSync, heldMerges, applyHeldMerge } from './lib/pipeline.js';
 import { checkPublishable, publishData, numbersComplete } from './lib/publishable.js';
 import { alert, recordRun, refreshStatus } from './lib/status.js';
 
@@ -163,6 +163,16 @@ try {
       ledgerSet(m.id, { status: 'published', page: meta.slug, line: 'night → cloud' });
       result.published.push(meta);
     } catch (e) { errors.push(`publish ${m.slug}: ${e.message.slice(0, 150)}`); }
+  }
+  // 2b. held duplicates (owner, 2026-11-11): videos that repeat a LIVE page were prepared on the PC (queue/.held-<id>/);
+  //     publishing embeds them on that page now. Incomplete data (no R2 file or no numbers) → stays held, not embedded.
+  for (const h of heldMerges()) {
+    if (DRY) { log(`  would embed held ${h.id} on ${h.page}`); continue; }
+    try {
+      applyHeldMerge(h);
+      ledgerSet(h.id, { status: 'merged', page: h.page, line: 'night → cloud (held merge)' });
+      result.merged.push({ id: h.id, slug: h.page });
+    } catch (e) { errors.push(`held merge ${h.id} → ${h.page}: ${e.message.slice(0, 150)}`); }
   }
   for (const r of result.newPublished) pub[r.id] = { slug: r.slug, at: new Date().toISOString(), line: 'cloud' };
   if (!DRY) writeJson(PUBLISHED, pub);
