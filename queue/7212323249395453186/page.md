@@ -35,6 +35,11 @@ otherVideos:
     views: 109900
     published: "2023-06-10"
     cover: "/covers/7243129742168198401.webp"
+  - tiktokId: "7388957859062566160"
+    title: "ثلاث أسباب تخلي سكان سيارتك ثقيل"
+    views: 109500
+    published: "2024-07-07"
+    cover: "/covers/7388957859062566160.webp"
 tags:
   - "سكان"
   - "زيت باور"
