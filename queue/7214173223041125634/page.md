@@ -25,6 +25,11 @@ otherVideos:
     views: 157200
     published: "2023-10-25"
     cover: "/covers/7293956187035307282.webp"
+  - tiktokId: "7384117314792279304"
+    title: "أربع أسباب تخلي علامة الزيت تولع عندك"
+    views: 69200
+    published: "2024-06-24"
+    cover: "/covers/7384117314792279304.webp"
 tags:
   - "محرك"
   - "لمبة الزيت"
