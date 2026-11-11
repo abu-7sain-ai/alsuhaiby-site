@@ -88,6 +88,10 @@ UptimeRobot: monitor on https://alsuhaiby.com every 5 min with EMAIL alerts.
 - Network errors (owner, 2026-11-11): a network error sets only that video aside («deferred», network: true) and does NOT count toward «3 failures in a row»; 10 network errors in a row stop the run with Telegram reason «network down». Releasing «معلّقة» videos is by hand (ledger status «released» → picked up by the next run).
 - Test 2026-11-11 13:20–14:29 at concurrency 3: 65 videos (38 written, 13 merged into queued pages, 14 held merges), 0 failed, 0 stalled; 1.05 min wall per video vs 3.5 sequential; lock waits 172 of 620, max 2 ms; 5-hour window 50% → 84%, weekly 8% → 12%.
 
+## Burst schedule (owner, 2026-11-11 23:20)
+- The prep line runs ONLY in the last hour before each 5-hour session reset: 23:40→00:38 · 04:40→05:38 · 09:40→10:38 · 14:40→15:38 · 19:40→20:38 Kuwait, concurrency 6, until the backlog is done or Thursday 2026-11-12 22:00. Between bursts nothing runs (no process, no Claude call).
+- Task «alsuhaiby-prep-supervisor» (5 daily triggers, expires and deletes itself Thu 22:00) → scripts/prep-supervisor.vbs (hidden) → scripts/prep-burst.js. The runner does nothing outside a burst window (late wake-up), ends the burst on the session limit (no early resume), disables the task on the weekly limit or when the backlog is finished. One Telegram per burst + one at the finish. `node scripts/prep-burst.js --check` shows the state. scripts/prep-supervisor.js (continuous mode) is no longer used by the task.
+
 ## Incidents
 - 2026-11-10: Cloudflare Workers Build e14f8189 for commit 642a6d2 (garage contact details) failed with a zero-second build (start = finish, 19:11:52 UTC). No code fault: a clean clone of 642a6d2 builds fine. The live site stayed on 5eacc96 and nothing alerted; found by checking the site by hand. Fixed by an empty commit (5df44bf), which rebuilt and deployed (build 3e521a60, version 9f12527b). Led to the deploy watch above.
 
