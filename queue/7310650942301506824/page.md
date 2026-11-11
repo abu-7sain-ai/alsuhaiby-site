@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7310650942301506824"
 tiktokId: "7310650942301506824"
 duration: 22
-otherVideos: []
+otherVideos:
+  - tiktokId: "7334398503847808263"
+    title: "أربع نصايح عشان تحافظ على قزاز سيارتك"
+    views: 77000
+    published: "2024-02-11"
+    cover: "/covers/7334398503847808263.webp"
 tags:
   - "قزاز"
   - "الشمس"
