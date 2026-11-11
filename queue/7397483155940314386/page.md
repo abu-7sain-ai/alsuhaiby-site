@@ -20,6 +20,11 @@ otherVideos:
     views: 70200
     published: "2025-04-04"
     cover: "/covers/7489501353040039175.webp"
+  - tiktokId: "7169301368581229826"
+    title: "خمسة أخطاء شائعة في صيانة السيارة ومع الأسف الأغلب يسويها."
+    views: 67100
+    published: "2022-11-23"
+    cover: "/covers/7169301368581229826.webp"
 tags:
   - "صيانة"
   - "زيت"
