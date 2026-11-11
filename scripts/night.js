@@ -270,12 +270,20 @@ if (!stopKind && Number.isFinite(hardStop) && Date.now() >= lastStart) { stopKin
 // final commit + push of both repos (the site may have up to 9 unpushed commits)
 try { gitSync(LIB_DIR, ['.'], 'night: end of run'); } catch (e) { console.warn(`  ! final push (library): ${e.message}`); }
 try { gitSync(ROOT, ['queue', 'content/videos', 'public/covers', 'public/og', 'data/r2.json', 'data/spend.json'], 'night: end of run', { push: true }); } catch (e) { console.warn(`  ! final push (site): ${e.message}`); }
+// owner (2026-11-11): the stop message names the reason plainly: session limit · weekly limit · time (or what else stopped it)
+function reasonLabel() {
+  if (stopKind === 'claude-limit') return /week/i.test(stopReason) ? 'weekly limit' : 'session limit';
+  if (stopKind === 'time') return 'time';
+  if (!stopKind) return 'backlog finished';
+  return { machine: 'machine guard', tiktok: 'TikTok block', errors: '3 failures in a row' }[stopKind] || stopKind;
+}
 const left = remaining().length;
 const lines = [
   `🌙 alsuhaiby.com — prep run ${stopReason ? 'stopped' : 'finished'} (${CONC} at a time)`,
   `written ${done.queued.length} · merged/held merges ${done.merged.length} · skipped ${done.skipped.length} · held (length) ${done.held.length} · معلّقة ${done.failed.length} · discarded mid-video ${done.discarded.length}`,
   `remaining in the archive: ${left} · waiting in queue: ${queued().length}`,
-  ...(stopReason ? [`stopped: ${stopReason}`] : []),
+  `stop reason: ${reasonLabel()}`,
+  ...(stopReason ? [`detail: ${stopReason.slice(0, 200)}`] : []),
   ...(done.failed.length ? ['معلّقة (الرقم · الخطوة · السبب):', ...done.failed.slice(0, 10).map((f) => `⚠️ ${f.id} · ${f.step} · ${f.reason.slice(0, 80)}`)] : []),
 ];
 console.log(`\n${lines.join('\n')}`);
