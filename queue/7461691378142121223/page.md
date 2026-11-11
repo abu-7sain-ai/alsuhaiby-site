@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7461691378142121223"
 tiktokId: "7461691378142121223"
 duration: 16
-otherVideos: []
+otherVideos:
+  - tiktokId: "7600094313489485068"
+    title: "أربعة من أسباب نتلة القير"
+    views: 103500
+    published: "2026-01-27"
+    cover: "/covers/7600094313489485068.webp"
 tags:
   - "قير"
   - "نتعة"
