@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7209352642999471361"
 tiktokId: "7209352642999471361"
 duration: 40
-otherVideos: []
+otherVideos:
+  - tiktokId: "7437202142022094088"
+    title: "خمس علامات تدلك على تبديل البخاخات"
+    views: 492500
+    published: "2024-11-14"
+    cover: "/covers/7437202142022094088.webp"
 tags:
   - "بخاخات"
   - "محرك"
