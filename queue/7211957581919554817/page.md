@@ -20,6 +20,11 @@ otherVideos:
     views: 229600
     published: "2024-08-20"
     cover: "/covers/7405283780983835911.webp"
+  - tiktokId: "7314340558783237384"
+    title: "ست علامات تدل على تلف سنسر الهواء، وتسمى بعد الماف، أو الـ MAF."
+    views: 124100
+    published: "2023-12-19"
+    cover: "/covers/7314340558783237384.webp"
 tags:
   - "محرك"
   - "سنسر الهواء"
