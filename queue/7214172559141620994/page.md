@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7214172559141620994"
 tiktokId: "7214172559141620994"
 duration: 29
-otherVideos: []
+otherVideos:
+  - tiktokId: "7371869353647557896"
+    title: "أربع أسباب تخلي كمبيوتر السيارة يتعطل عندك"
+    views: 185900
+    published: "2024-05-22"
+    cover: "/covers/7371869353647557896.webp"
 tags:
   - "كمبيوتر السيارة"
   - "كهرباء"
