@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7257238458261916930"
 tiktokId: "7257238458261916930"
 duration: 30
-otherVideos: []
+otherVideos:
+  - tiktokId: "7316579831590685959"
+    title: "أربع أسباب تخلي مفتاح سيارتك ما يطلع من مكانه."
+    views: 122500
+    published: "2023-12-25"
+    cover: "/covers/7316579831590685959.webp"
 tags:
   - "مفتاح السيارة"
   - "سويتش"
