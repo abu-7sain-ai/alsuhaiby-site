@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7347774529541786888"
 tiktokId: "7347774529541786888"
 duration: 35
-otherVideos: []
+otherVideos:
+  - tiktokId: "7272068783102020871"
+    title: "أربعة من أشكال الزيوت اللي تلقاها ناقعة تحت سيارتك الصبح."
+    views: 211700
+    published: "2023-08-27"
+    cover: "/covers/7272068783102020871.webp"
 tags:
   - "تهريب زيت"
   - "قير"
