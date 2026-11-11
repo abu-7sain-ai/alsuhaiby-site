@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7328452580852403463"
 tiktokId: "7328452580852403463"
 duration: 25
-otherVideos: []
+otherVideos:
+  - tiktokId: "7379675101395995911"
+    title: "خمس أسباب تتلف منها كراسي المكينة."
+    views: 310400
+    published: "2024-06-12"
+    cover: "/covers/7379675101395995911.webp"
 tags:
   - "محرك"
   - "رجفة"
