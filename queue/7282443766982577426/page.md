@@ -25,6 +25,11 @@ otherVideos:
     views: 257300
     published: "2023-12-19"
     cover: "/covers/7314341463163292946.webp"
+  - tiktokId: "7427084824801742088"
+    title: "بعنوان لا يقصون عليك، 20 عطل بـ 20 يوم"
+    views: 58800
+    published: "2024-10-18"
+    cover: "/covers/7427084824801742088.webp"
 tags:
   - "ريحة بنزين"
   - "وقود"
