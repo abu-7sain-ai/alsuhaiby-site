@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7458676119773007112"
 tiktokId: "7458676119773007112"
 duration: 16
-otherVideos: []
+otherVideos:
+  - tiktokId: "7562981753271454994"
+    title: "أربعة من أعراض عطل حساس ال TPS."
+    views: 320600
+    published: "2025-10-19"
+    cover: "/covers/7562981753271454994.webp"
 tags:
   - "محرك"
   - "حساسات"
