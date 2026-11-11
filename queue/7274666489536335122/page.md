@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7274666489536335122"
 tiktokId: "7274666489536335122"
 duration: 54
-otherVideos: []
+otherVideos:
+  - tiktokId: "7212322809459084545"
+    title: "خمسة أمور ما تخلي البريك يمسك عدل."
+    views: 98800
+    published: "2023-03-19"
+    cover: "/covers/7212322809459084545.webp"
 tags:
   - "فرامل"
   - "سفايف"
