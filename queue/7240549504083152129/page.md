@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7240549504083152129"
 tiktokId: "7240549504083152129"
 duration: 23
-otherVideos: []
+otherVideos:
+  - tiktokId: "7591567912356285752"
+    title: "ثلاث علامات تدل على تلف شريحة القير."
+    views: 167700
+    published: "2026-01-04"
+    cover: "/covers/7591567912356285752.webp"
 tags:
   - "قير"
   - "شريحة القير"
