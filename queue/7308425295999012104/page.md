@@ -20,6 +20,11 @@ otherVideos:
     views: 90200
     published: "2022-11-27"
     cover: "/covers/7170766712990698753.webp"
+  - tiktokId: "7277266210281000200"
+    title: "خمس أسباب تتلف تكايات المكينة عندك."
+    views: 59200
+    published: "2023-09-10"
+    cover: "/covers/7277266210281000200.webp"
 tags:
   - "محرك"
   - "تكايات"
