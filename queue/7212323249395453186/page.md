@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7212323249395453186"
 tiktokId: "7212323249395453186"
 duration: 32
-otherVideos: []
+otherVideos:
+  - tiktokId: "7447871971766865159"
+    title: "أربع أسباب تخليك تحس بثقل بالسكان."
+    views: 267200
+    published: "2024-12-13"
+    cover: "/covers/7447871971766865159.webp"
 tags:
   - "سكان"
   - "زيت باور"
