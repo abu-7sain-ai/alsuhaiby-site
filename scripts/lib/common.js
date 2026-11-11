@@ -89,7 +89,7 @@ export const cachePath = (video, kind) => path.join(LIB_DIR, 'videos', String(vi
 // ---- dedup ledger (private library): id → { status, page, reason, line, at } ---------------------
 // status: published | queued | merged | skipped | download-failed. Remaining = library − ledger (published/queued/merged/skipped).
 export const LEDGER = path.join(LIB_DIR, 'ledger.json');
-export const DONE = new Set(['published', 'queued', 'merged', 'skipped', 'excluded']); // excluded = never published (owner's rule: incomplete data)
+export const DONE = new Set(['published', 'queued', 'merged', 'skipped', 'excluded', 'merge-held']); // excluded = never published (owner's rule: incomplete data) · merge-held = duplicate of a live page, embed waits for the publishing side
 export const loadLedger = () => readJson(LEDGER, {});
 export function setLedger(id, entry) {
   const l = loadLedger();

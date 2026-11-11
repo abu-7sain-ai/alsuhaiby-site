@@ -101,6 +101,11 @@ for (const v of todo) {
     if (d.decision === 'skip') {
       setLedger(v.id, { status: 'skipped', reason: d.reason, line: 'night' });
       done.skipped.push(v.id); console.log(`  skip: ${d.reason}`);
+    } else if (d.decision === 'duplicate' && d.page.where !== 'queue') {
+      // owner (2026-11-11): the prep line publishes NOTHING. Embedding into a LIVE page would change the live site on the next
+      // push, so the merge is held (target page recorded) and applied later by the publishing side, not here.
+      setLedger(v.id, { status: 'merge-held', page: d.page.slug, reason: d.reason, line: 'night' });
+      done.merged.push(`${v.id} → ${d.page.slug} (held: live page)`); console.log(`  duplicate of LIVE page ${d.page.slug} — held, not embedded (prep publishes nothing): ${d.reason}`);
     } else if (d.decision === 'duplicate') {
       mergeInto(d.page, v, an);
       setLedger(v.id, { status: 'merged', page: d.page.slug, reason: d.reason, line: 'night' });
