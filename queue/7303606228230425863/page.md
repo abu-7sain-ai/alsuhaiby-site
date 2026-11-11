@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7303606228230425863"
 tiktokId: "7303606228230425863"
 duration: 31
-otherVideos: []
+otherVideos:
+  - tiktokId: "7256122588353596674"
+    title: "خمسة من الأسباب اللي تخلي القير يعلق."
+    views: 172500
+    published: "2023-07-15"
+    cover: "/covers/7256122588353596674.webp"
 tags:
   - "قير"
   - "زيت القير"
