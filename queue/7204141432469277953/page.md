@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7204141432469277953"
 tiktokId: "7204141432469277953"
 duration: 51
-otherVideos: []
+otherVideos:
+  - tiktokId: "7331068522413542663"
+    title: "ست إجراءات لازم تسويها إذا تعطل البريك عندك وأنت ماشي بالسيارة"
+    views: 198900
+    published: "2024-02-02"
+    cover: "/covers/7331068522413542663.webp"
 tags:
   - "فرامل"
   - "بريك"
