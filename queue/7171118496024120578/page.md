@@ -25,6 +25,11 @@ otherVideos:
     views: 656700
     published: "2024-12-23"
     cover: "/covers/7451641585281862919.webp"
+  - tiktokId: "7315836956561231122"
+    title: "أربع علامات تدل على تلف مسمار التوازن."
+    views: 303500
+    published: "2023-12-23"
+    cover: "/covers/7315836956561231122.webp"
 tags:
   - "مسمار التوازن"
   - "طقطقة"
