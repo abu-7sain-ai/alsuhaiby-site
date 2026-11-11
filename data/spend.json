@@ -1,5 +1,5 @@
 {
-  "totalUsd": 11.145813,
+  "totalUsd": 11.15535,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -15576,6 +15576,65 @@
       "completionTokens": 1132,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.075398
+    },
+    {
+      "at": "2026-11-11T21:00:27.807Z",
+      "script": "night",
+      "label": "tk-7425330416795618568 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7684,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2090882
+    },
+    {
+      "at": "2026-11-11T21:00:27.992Z",
+      "script": "night",
+      "label": "tk-7271323993934793991 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1303,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0892704
+    },
+    {
+      "at": "2026-11-11T21:00:29.815Z",
+      "script": "night",
+      "label": "tk-7458676115519900936 write (resize 2)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7732,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.26062420000000003
+    },
+    {
+      "at": "2026-11-11T21:00:41.526Z",
+      "script": "night",
+      "label": "7245731358276914434 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3561,
+      "completionTokens": 1831,
+      "costUsd": 0.009537
+    },
+    {
+      "at": "2026-11-11T21:00:44.328Z",
+      "script": "night",
+      "label": "tk-7474256452790619399 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 10827,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2686522
+    },
+    {
+      "at": "2026-11-11T21:00:44.930Z",
+      "script": "night",
+      "label": "tk-7271323993934793991 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1578,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.08651
     }
   ]
 }
