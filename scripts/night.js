@@ -45,6 +45,7 @@ const CFG = readJson(`${ROOT}/config/site.json`, {});
 const CONC = Math.max(1, Number(A.concurrency ?? CFG.nightConcurrency ?? 1) || 1);
 const MAX_MIN = Number(A.minutes ?? CFG.maxMinutes ?? 0) || 0;
 const TG_AT_STOP = !!A['telegram-at-stop'];
+const NO_TG = !!A['no-telegram']; // the supervisor (scripts/prep-supervisor.js) sends the messages itself
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const startedAt = new Date();
 // hard stop time (epoch ms): --until HH:MM Kuwait clock, or --minutes from the start
@@ -88,6 +89,17 @@ function cleanStart() {
   if (fs.existsSync(QUEUE)) for (const d of fs.readdirSync(QUEUE)) if (d.startsWith('.tmp-')) n += discard(d.slice(5), 'half-built page') ? 1 : 0;
   for (const dir of [path.join(ROOT, 'data'), LIB_DIR]) for (const f of fs.readdirSync(dir)) if (/\.\d+\.[a-z0-9]+\.tmp$/.test(f)) { fs.rmSync(path.join(dir, f), { force: true }); n++; }
   console.log(`clean start: ${n} unfinished item(s) discarded${n ? ` (kept aside in ${BIN})` : ''}; paid analyses kept`);
+}
+
+// ---- one night run at a time (a second start exits at once) --------------------------------------------------------------
+const RUN_PID = path.join(os.tmpdir(), 'alsuhaiby-locks', 'night-run.pid');
+if (!DRY) {
+  fs.mkdirSync(path.dirname(RUN_PID), { recursive: true });
+  let other = 0; try { other = Number(fs.readFileSync(RUN_PID, 'utf8')); } catch {}
+  let alive = false; if (other && other !== process.pid) { try { process.kill(other, 0); alive = true; } catch (k) { alive = k.code === 'EPERM'; } }
+  if (alive) { console.log(`night: another prep run is going (pid ${other}) — not starting a second one`); process.exit(0); }
+  fs.writeFileSync(RUN_PID, String(process.pid));
+  process.on('exit', () => { try { if (Number(fs.readFileSync(RUN_PID, 'utf8')) === process.pid) fs.rmSync(RUN_PID); } catch {} });
 }
 
 // pages the cloud published since the last night run: record them in the ledger
@@ -298,7 +310,8 @@ saveProgress({ running: false, stopped: stopKind || null, stopReason: stopReason
 st.lastNight = { ...readJson(PROGRESS, {}), at: new Date().toISOString() };
 writeJson(`${ROOT}/data/status.json`, st);
 setStage('idle', { current: null, left, stopped: stopKind || null });
-if (TG_AT_STOP) alert(lines.join('\n')); // owner (2026-11-11): silence while running, ONE message at the stop
+if (NO_TG) { /* the supervisor reports */ }
+else if (TG_AT_STOP) alert(lines.join('\n')); // owner (2026-11-11): silence while running, ONE message at the stop
 else if (done.failed.length || stopKind === 'tiktok' || stopKind === 'machine') {
   alert(['⚠️ alsuhaiby.com — تشغيل الليل', ...(stopKind === 'tiktok' ? ['⚠️ تيك توك حدّ الجهاز ووقف التحميل. شغّله بعدين.'] : []), ...(stopKind === 'machine' ? [`⛔ ${stopReason}`] : []), ...done.failed.slice(0, 5).map((f) => `⚠️ ${f.id} · ${f.step} · ${f.reason.slice(0, 80)}`)].join('\n'));
 }
