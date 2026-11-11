@@ -1,5 +1,12 @@
 # DECISIONS (newest first)
 
+## 2026-11-11 — Prep line rules (owner)
+1. Queued articles under 1150 words are held (5 taken out of the queue and rewritten). Writer target 1250–1350, up to 2 resizes, reviewer FIX floor 75% in code, one expand pass with fact-check of added sentences only, held if still outside 1150–1400.
+2. The 02:07 daily job embeds held duplicates into their live pages while publishing.
+3. Commit both repos every video, push the library every video, the site every 10 videos and at the stop. Gemini analysis stays. Restart after a Claude limit is by hand.
+4. Concurrency is a setting (3 after the 2026-11-11 test). Shared files have one writer at a time; everything is written whole or not at all; unfinished videos are discarded at each start except the paid analysis.
+5. NEVER WAIT, forever: 15-minute cap per video, input/login prompt = skip, no retries, first failure → «معلّقة» (id, step, reason) for handling by hand.
+
 ## 2026-11-10 — One project folder
 1. Everything lives under Desktop\alsuhaiby: alsuhaiby-site (PUBLIC repo) and alsuhaiby-library (PRIVATE repo) side by side, each with its own .git (never merged, the library never inside the site); media\downloads and media\telegram-export (the videos, were in Videos); archive\ (one-of-a-kind files not in git). KatibSuhaibi stays on the Desktop (separate app).
 2. The move is done by the Desktop click-file «نقل المشروع» (scripts/move-project.ps1): refuses while a project process runs; folder moves are single renames; any failure undoes everything; shortcuts (target, working folder, icon) and Claude Code memory updated; verified before anything is removed; removals go to the Recycle Bin only (duplicates re-checked byte for byte).

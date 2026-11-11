@@ -79,6 +79,14 @@ UptimeRobot: monitor on https://alsuhaiby.com every 5 min with EMAIL alerts.
 - The 05:37 missed-run check in daily.yml runs the same check once, so an overnight failure (including pushes by the daily job, which do not start workflows) is caught by morning.
 - Test the alert path: Actions → «deploy check» → Run workflow (test_alert) sends one «🧪 اختبار» alert.
 
+## Prep line, parallel (2026-11-11)
+- `npm run night` runs `nightConcurrency` videos at a time (config/site.json, now 3; `--concurrency N` overrides). Flags: `--until HH:MM` (Kuwait; no new video in the last 4 min, anything still running at that time is ended and set aside), `--telegram-at-stop` (one message at the stop), `--video-cap` (default 15 min).
+- Single-writer locks (lib/common.js withLock, folders in %TEMP%alsuhaiby-locks): ledger, spend, run-state, queue, git-<repo>. Every file is written whole (temp + rename); a queued page is built in queue/.tmp-<id>/ and renamed. Each start sets aside (to %TEMP%alsuhaiby-discarded) everything of unfinished videos except the paid analysis.
+- Length: writer aims 1250–1350 (up to 2 resizes); review FIX floor 75% in code; under 1150 after review → one expand pass + fact-check of the added sentences only; still outside 1150–1400 → ledger «held-length», never queued.
+- Repeats of a LIVE page: prepared on the PC in queue/.held-<id>/ (MP4 on R2, images, merge.json); daily.js embeds them while publishing (`node scripts/prep-held.js` prepares any that were only recorded).
+- NEVER WAIT (standing rule): 15-min cap per video, a login/input prompt ends the call, no retries anywhere, the first failure → ledger «deferred» (= «معلّقة», with step + reason), never retried automatically.
+- Test 2026-11-11 13:20–14:29 at concurrency 3: 65 videos (38 written, 13 merged into queued pages, 14 held merges), 0 failed, 0 stalled; 1.05 min wall per video vs 3.5 sequential; lock waits 172 of 620, max 2 ms; 5-hour window 50% → 84%, weekly 8% → 12%.
+
 ## Incidents
 - 2026-11-10: Cloudflare Workers Build e14f8189 for commit 642a6d2 (garage contact details) failed with a zero-second build (start = finish, 19:11:52 UTC). No code fault: a clean clone of 642a6d2 builds fine. The live site stayed on 5eacc96 and nothing alerted; found by checking the site by hand. Fixed by an empty commit (5df44bf), which rebuilt and deployed (build 3e521a60, version 9f12527b). Led to the deploy watch above.
 

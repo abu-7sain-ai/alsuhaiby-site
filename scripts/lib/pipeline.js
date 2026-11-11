@@ -191,9 +191,11 @@ function gitSyncNow(cwd, paths, message, { push = true } = {}) {
   for (const f of Object.keys(UNION)) if (fs.existsSync(path.join(cwd, f))) mine[f] = readJson(path.join(cwd, f));
   const real = paths.filter((x) => fs.existsSync(path.join(cwd, x)) || git(cwd, 'ls-files', '--', x)); // a path that never existed would stop git add
   if (real.length) git(cwd, 'add', '-A', '--', ...real);
-  if (!git(cwd, 'diff', '--cached', '--name-only')) return false;
-  git(cwd, 'commit', '-q', '-m', message);
-  if (!push) return true;
+  const staged = !!git(cwd, 'diff', '--cached', '--name-only');
+  if (staged) git(cwd, 'commit', '-q', '-m', message);
+  if (!push) return staged;
+  // nothing new, but earlier commits may still wait for a push (the site is pushed every 10 videos): push them now
+  if (!staged) { let ahead = 0; try { ahead = Number(git(cwd, 'rev-list', '--count', '@{u}..HEAD')); } catch {} if (!ahead) return false; }
   for (let i = 1; i <= 1; i++) { // NEVER WAIT: one try; a push that fails stays committed and goes out with the next push
     try {
       git(cwd, 'pull', '-q', '--rebase', '--autostash', '-X', 'theirs');
