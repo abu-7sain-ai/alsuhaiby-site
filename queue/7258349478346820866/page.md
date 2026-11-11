@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7258349478346820866"
 tiktokId: "7258349478346820866"
 duration: 26
-otherVideos: []
+otherVideos:
+  - tiktokId: "7375217116011629842"
+    title: "أربع مشاكل راح تجيك لو ما رصصت تواير سيارتك."
+    views: 279400
+    published: "2024-05-31"
+    cover: "/covers/7375217116011629842.webp"
 tags:
   - "تواير"
   - "ترصيص"
