@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7252045358744849665"
 tiktokId: "7252045358744849665"
 duration: 33
-otherVideos: []
+otherVideos:
+  - tiktokId: "7297661223527664904"
+    title: "شنو المشكلة لو زاد الزيت عن الحد الطبيعي بالماكينة؟"
+    views: 258800
+    published: "2023-11-04"
+    cover: "/covers/7297661223527664904.webp"
 tags:
   - "محرك"
   - "زيت المكينة"
