@@ -20,6 +20,11 @@ otherVideos:
     views: 374000
     published: "2023-05-03"
     cover: "/covers/7229034870129921281.webp"
+  - tiktokId: "7399706323509660935"
+    title: "خمسة علامات تدل على إن قازقيت الراس عندك فيه مشكلة."
+    views: 114200
+    published: "2024-08-05"
+    cover: "/covers/7399706323509660935.webp"
 tags:
   - "محرك"
   - "قازقيت"
