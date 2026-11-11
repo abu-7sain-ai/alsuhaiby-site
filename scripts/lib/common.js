@@ -123,7 +123,7 @@ export const cachePath = (video, kind) => path.join(LIB_DIR, 'videos', String(vi
 // ---- dedup ledger (private library): id → { status, page, reason, line, at } ---------------------
 // status: published | queued | merged | skipped | download-failed. Remaining = library − ledger (published/queued/merged/skipped).
 export const LEDGER = path.join(LIB_DIR, 'ledger.json');
-export const DONE = new Set(['published', 'queued', 'merged', 'skipped', 'excluded', 'merge-held', 'held-length']); // held-length = final article outside 1150–1400 after every pass, kept in the library for a human look, never queued // excluded = never published (owner's rule: incomplete data) · merge-held = duplicate of a live page, embed waits for the publishing side
+export const DONE = new Set(['published', 'queued', 'merged', 'skipped', 'excluded', 'merge-held', 'held-length', 'deferred']); // deferred = «معلّقة»: stalled or failed once, set aside for a human (step + reason in the ledger), never retried automatically // held-length = final article outside 1150–1400 after every pass, kept in the library for a human look, never queued // excluded = never published (owner's rule: incomplete data) · merge-held = duplicate of a live page, embed waits for the publishing side
 export const loadLedger = () => readJson(LEDGER, {});
 export function setLedger(id, entry) {
   return withLock('ledger', () => {
@@ -153,12 +153,17 @@ export function recordSpend(entry) {
 export class ClaudeLimitError extends Error {}
 // A run that is stopping (time limit / Claude limit) ends its open Claude calls; the videos they belonged to are discarded.
 export class StopError extends Error {}
-export const runFlags = { stopping: false };
+export const runFlags = { stopping: false, aborted: new Set() }; // aborted = video ids cut off by the 15-minute cap
+// NEVER WAIT (owner, 2026-11-11): a video that stalls, asks for input or fails is set aside at once — no retry.
+export class SkipError extends Error { constructor(msg, step) { super(msg); this.step = step; } }
+const abortedLabel = (label) => [...runFlags.aborted].some((id) => String(label).includes(id));
 
 // Claude Code CLI on his PC (his subscription, no per-call cost). Lean call: own system prompt, no tools, no MCP,
 // no user settings (so the Telegram Stop hook does not fire per call), no saved session.
-export const liveChildren = new Set(); // running claude processes (killed on a limit / time stop)
-export function killChildren() { for (const c of liveChildren) { try { spawnSync('taskkill', ['/pid', String(c.pid), '/t', '/f'], { stdio: 'ignore' }); } catch {} try { c.kill(); } catch {} } }
+export const liveChildren = new Map(); // running claude process → its label (killed on a limit / time stop, or for one video at its cap)
+const killTree = (c) => { try { spawnSync('taskkill', ['/pid', String(c.pid), '/t', '/f'], { stdio: 'ignore' }); } catch {} try { c.kill(); } catch {} };
+export function killFor(id) { for (const [c, label] of liveChildren) if (String(label).includes(id)) killTree(c); }
+export function killChildren() { for (const c of liveChildren.keys()) { try { spawnSync('taskkill', ['/pid', String(c.pid), '/t', '/f'], { stdio: 'ignore' }); } catch {} try { c.kill(); } catch {} } }
 async function claudeCli({ messages, script, label }) {
   const sys = messages.filter((m) => m.role === 'system').map((m) => m.content).join('\n\n');
   const conv = messages.filter((m) => m.role !== 'system')
@@ -172,17 +177,20 @@ async function claudeCli({ messages, script, label }) {
   const r = await new Promise((resolve) => {
     const c = spawn('claude', ['-p', '--output-format', 'json', '--setting-sources', 'project', '--no-session-persistence', '--model', process.env.CLAUDE_MODEL || 'opus',
       '--tools', '""', '--strict-mcp-config', '--system-prompt-file', `"${sp}"`], { cwd: dir, env, shell: true, windowsHide: true });
-    liveChildren.add(c);
-    let stdout = '', stderr = '';
+    liveChildren.set(c, label);
+    let stdout = '', stderr = '', waiting = '';
     c.stdout.setEncoding('utf8').on('data', (d) => { stdout += d; });
-    c.stderr.setEncoding('utf8').on('data', (d) => { stderr += d; });
-    const timer = setTimeout(() => { try { spawnSync('taskkill', ['/pid', String(c.pid), '/t', '/f'], { stdio: 'ignore' }); } catch {} }, 20 * 60e3);
-    c.on('error', (error) => { clearTimeout(timer); liveChildren.delete(c); resolve({ stdout, stderr, error }); });
-    c.on('close', (status) => { clearTimeout(timer); liveChildren.delete(c); resolve({ stdout, stderr, status }); });
+    // a call that asks for a login / input / confirmation is ended at once (it can never answer: nobody is at the keyboard)
+    c.stderr.setEncoding('utf8').on('data', (d) => { stderr += d; if (!waiting && /log ?in|authenticat|press (enter|any key)|\(y\/n\)|confirm|enter your/i.test(d)) { waiting = d.trim().slice(0, 120); killTree(c); } });
+    const timer = setTimeout(() => killTree(c), 10 * 60e3); // one Claude call normally takes < 2 min; 10 min = stuck
+    c.on('error', (error) => { clearTimeout(timer); liveChildren.delete(c); resolve({ stdout, stderr, error, waiting }); });
+    c.on('close', (status) => { clearTimeout(timer); liveChildren.delete(c); resolve({ stdout, stderr, status, waiting }); });
     c.stdin.end(`${conv}\n\nReturn ONLY the JSON object.`, 'utf8');
   });
   fs.rmSync(dir, { recursive: true, force: true });
   if (runFlags.stopping) throw new StopError(`stopped during ${label}`);
+  if (abortedLabel(label)) throw new SkipError(`15-minute cap reached during ${label}`, label);
+  if (r.waiting) throw new SkipError(`Claude asked for input/login (${r.waiting}) during ${label}`, label);
   let j;
   try { j = JSON.parse(r.stdout); } catch {
     const raw = String(r.stderr || r.stdout || r.error || '');
@@ -205,13 +213,14 @@ export async function chat({ messages, script, label, json = true, model = MODEL
   if (process.env.ALSUHAIBY_NO_AI === '1') throw new Error(`AI call blocked in a download-only run (${label})`);
   if (model === 'claude-cli') {
     let lastErr;
-    for (let attempt = 1; attempt <= 2; attempt++) {
+    for (let attempt = 1; attempt <= 1; attempt++) { // NEVER WAIT: no retry
       if (runFlags.stopping) throw new StopError(`stopped before ${label}`);
+      if (abortedLabel(label)) throw new SkipError(`15-minute cap reached before ${label}`, label);
       try {
         const text = await claudeCli({ messages, script, label });
         return json ? parseJson(text) : text;
       } catch (e) {
-        if (e instanceof ClaudeLimitError || e instanceof StopError) throw e;
+        if (e instanceof ClaudeLimitError || e instanceof StopError || e instanceof SkipError) throw e;
         lastErr = e;
         console.warn(`  ! attempt ${attempt} failed: ${e.message}`);
       }
@@ -221,9 +230,9 @@ export async function chat({ messages, script, label, json = true, model = MODEL
   const body = { model, messages, max_tokens: maxTokens, temperature, usage: { include: true } };
   if (json) body.response_format = { type: 'json_object' };
   let lastErr;
-  for (let attempt = 1; attempt <= 3; attempt++) {
+  for (let attempt = 1; attempt <= 1; attempt++) { // NEVER WAIT: no retry; 3-minute cap on the request
     try {
-      const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      const res = await fetch('https://openrouter.ai/api/v1/chat/completions', { signal: AbortSignal.timeout(3 * 60e3),
         method: 'POST',
         headers: { Authorization: `Bearer ${apiKey()}`, 'Content-Type': 'application/json', 'X-Title': 'alsuhaiby-site' },
         body: JSON.stringify(body),
@@ -238,7 +247,6 @@ export async function chat({ messages, script, label, json = true, model = MODEL
     } catch (e) {
       lastErr = e;
       console.warn(`  ! attempt ${attempt} failed: ${e.message}`);
-      await new Promise((r) => setTimeout(r, 2000 * attempt));
     }
   }
   throw lastErr;

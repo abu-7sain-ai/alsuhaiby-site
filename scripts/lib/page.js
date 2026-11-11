@@ -9,8 +9,8 @@ export const OG = path.join(ROOT, 'public', 'og');
 export const QUEUE = path.join(ROOT, 'queue');
 export const PAGES_AR = path.join(ROOT, 'content', 'videos', 'ar');
 
-const ff = (a) => execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...a]);
-export const duration = (p) => Math.round(Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p]).toString().trim()));
+const ff = (a) => execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-nostdin', ...a], { timeout: 60e3 });
+export const duration = (p) => Math.round(Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p], { timeout: 30e3 }).toString().trim()));
 
 /** Cover (576px webp), card thumbnail (320px webp) and share image (1200×630 jpg) from the frame at 1.5 s.
  *  dir: where to write (default public/ — a queued page keeps its images in queue/<id>/ until it is published). */

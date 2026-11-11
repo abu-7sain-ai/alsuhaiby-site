@@ -47,7 +47,7 @@ export async function analyze(v, { script = 'analyze' } = {}) {
   let file = v.path;
   if (fs.statSync(file).size > 15 * 1024 * 1024) { // keep the request small: Gemini only needs to see and hear it
     file = path.join(os.tmpdir(), `${v.id}-small.mp4`);
-    execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', v.path, '-vf', 'scale=-2:720', '-b:v', '900k', '-b:a', '96k', file]);
+    execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-nostdin', '-i', v.path, '-vf', 'scale=-2:720', '-b:v', '900k', '-b:a', '96k', file], { timeout: 180e3 });
   }
   const b64 = fs.readFileSync(file).toString('base64');
   const res = await chat({
@@ -170,7 +170,9 @@ export function remaining() {
 }
 
 // ---- 5. git: commit the given paths, rebase on the remote, re-merge the shared JSON logs, push ---
-export const git = (cwd, ...a) => execFileSync('git', a, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+// git never waits for a login or an editor (GIT_TERMINAL_PROMPT=0, GCM_INTERACTIVE=never) and never runs more than 2 minutes
+const GIT_ENV = { ...process.env, GIT_TERMINAL_PROMPT: '0', GCM_INTERACTIVE: 'never', GIT_EDITOR: 'true' };
+export const git = (cwd, ...a) => execFileSync('git', a, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], env: GIT_ENV, timeout: 120e3 }).trim();
 const UNION = {
   'data/r2.json': (a, b) => ({ ...a, ...b }),
   'data/spend.json': (a, b) => {
@@ -192,7 +194,7 @@ function gitSyncNow(cwd, paths, message, { push = true } = {}) {
   if (!git(cwd, 'diff', '--cached', '--name-only')) return false;
   git(cwd, 'commit', '-q', '-m', message);
   if (!push) return true;
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 1; i++) { // NEVER WAIT: one try; a push that fails stays committed and goes out with the next push
     try {
       git(cwd, 'pull', '-q', '--rebase', '--autostash', '-X', 'theirs');
       const fixed = [];
@@ -208,7 +210,7 @@ function gitSyncNow(cwd, paths, message, { push = true } = {}) {
       return true;
     } catch (e) {
       try { git(cwd, 'rebase', '--abort'); } catch {}
-      if (i === 3) throw new Error(`git push failed in ${path.basename(cwd)}: ${String(e.stderr || e.message).slice(0, 300)}`);
+      if (i === 1) throw new Error(`git push failed in ${path.basename(cwd)}: ${String(e.stderr || e.message).slice(0, 300)}`);
     }
   }
 }

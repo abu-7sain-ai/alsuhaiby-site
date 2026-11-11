@@ -28,7 +28,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-import { ROOT, LIB_DIR, args, cachePath, readJson, writeJson, setLedger, loadLedger, DONE, ClaudeLimitError, StopError, runFlags, killChildren, withLock, lockStats } from './lib/common.js';
+import { ROOT, LIB_DIR, args, cachePath, readJson, writeJson, setLedger, loadLedger, DONE, ClaudeLimitError, StopError, SkipError, runFlags, killChildren, killFor, withLock, lockStats } from './lib/common.js';
 import { writeArticle, reviewArticle, expandArticle, lengthOk, LIMITS } from './lib/article.js';
 import { checkPublishable, publishData } from './lib/publishable.js';
 import { download, analyze, decide, mergeInto, prepareHeldMerge, queuePage, remaining, queued, gitSync, RateLimitError } from './lib/pipeline.js';
@@ -97,7 +97,7 @@ if (!DRY) cleanStart();
 let todo = remaining().sort((a, b) => b.views - a.views);
 if (A.ids) { const want = String(A.ids).split(','); todo = todo.filter((v) => want.includes(v.id)); }
 const ledger0 = loadLedger();
-todo = todo.filter((v) => (ledger0[v.id]?.tries || 0) < 3); // a video that failed 3 times waits for a human look
+todo = todo.filter((v) => ledger0[v.id]?.status !== 'failed'); // NEVER WAIT (2026-11-11): a video that failed once is never retried automatically
 { const data = publishData(); const blocked = todo.filter((v) => !checkPublishable(v.id, data, { needFile: false }).ok);
   if (blocked.length) console.log(`night: ${blocked.length} video(s) left out — incomplete data, never published: ${blocked.map((v) => v.id).slice(0, 10).join(', ')}${blocked.length > 10 ? ' …' : ''}`);
   todo = todo.filter((v) => !blocked.includes(v)); }
@@ -110,7 +110,9 @@ if (DRY) {
 }
 
 // ---- run state -----------------------------------------------------------------------------------------------------------
-const done = { queued: [], merged: [], skipped: [], held: [], failed: [], discarded: [] };
+const done = { queued: [], merged: [], skipped: [], held: [], failed: [], discarded: [] }; // failed = «معلّقة» (deferred): { id, step, reason }
+const VIDEO_CAP_MS = Number(A['video-cap'] ?? 15) * 60e3; // owner (2026-11-11): 15 minutes per video, then it is set aside
+const stepOf = new Map(); // id → the step it is on (for the «معلّقة» list)
 const timings = []; // { id, startedAt, minutes, result }
 let stopReason = '', stopKind = '', backoff = 0, failStreak = 0, started = 0, sitePending = 0;
 const finished = () => done.queued.length + done.merged.length + done.skipped.length + done.held.length + done.failed.length;
@@ -148,7 +150,8 @@ function pushSite(msg, force = false) {
 }
 
 async function handle(v) {
-  const at = (stage) => setStage(stage, { current: [...inflight.keys(), v.id].join(','), left: todo.length });
+  const alive = () => { if (runFlags.aborted.has(v.id)) throw new SkipError('15-minute cap reached', stepOf.get(v.id)); if (runFlags.stopping) throw new StopError('stopping'); };
+  const at = (stage) => { alive(); stepOf.set(v.id, stage); setStage(stage, { current: [...inflight.keys(), v.id].join(','), left: todo.length }); };
   const t0 = Date.now();
   console.log(`\n[${new Date().toLocaleTimeString('en-GB')}] ${v.id} · ${v.views.toLocaleString('en')} views`);
   const hadFile = !!v.path;
@@ -172,6 +175,7 @@ async function handle(v) {
     if (n <= 3) { todo.push(v); return 'deferred'; }
     d.decision = 'new'; inflight.set(v.id, { id: v.id, topic: an.topic || '' });
   }
+  alive();
   if (d.decision === 'skip') {
     setLedger(v.id, { status: 'skipped', reason: d.reason, line: 'night' });
     done.skipped.push(v.id); console.log(`  skip: ${d.reason}`); result = 'skipped';
@@ -193,6 +197,7 @@ async function handle(v) {
     const { review, final: reviewed } = await reviewArticle({ key, id: v.id, an, draft, model: CLAUDE, script: 'night' });
     const { final, expand } = await expandArticle({ key, id: v.id, an, final: reviewed, model: CLAUDE, script: 'night' });
     if (expand) { review.expand = expand; review.wordsAfter = final.words; }
+    alive();
     writeJson(cachePath(v, 'review.ar'), review);
     writeJson(cachePath(v, 'final.ar'), final);
     if (!lengthOk(final.words)) {
@@ -230,22 +235,27 @@ async function worker(w) {
     if (!v) return;
     started++;
     try {
-      await handle(v);
+      // the 15-minute cap: the video's Claude calls are ended, its files set aside, and the worker takes the next video
+      let capTimer;
+      const job = handle(v);
+      job.catch(() => {}); // after the cap, the cut-off job only ends with an error; nothing waits for it
+      await Promise.race([job, new Promise((_, rej) => { capTimer = setTimeout(() => { runFlags.aborted.add(v.id); killFor(v.id); rej(new SkipError(`over ${VIDEO_CAP_MS / 60e3} minutes (something stalled)`, stepOf.get(v.id))); }, VIDEO_CAP_MS); })]).finally(() => clearTimeout(capTimer));
       failStreak = 0;
     } catch (e) {
       inflight.delete(v.id);
       if (e instanceof ClaudeLimitError) { stop('claude-limit', e.message); discard(v.id, 'stopped mid-video'); done.discarded.push(v.id); continue; }
       if (e instanceof StopError || runFlags.stopping) { discard(v.id, 'stopped mid-video'); done.discarded.push(v.id); continue; } // ledger untouched: redone next run
       if (e instanceof RateLimitError) { backoff++; if (backoff >= 3) stop('tiktok', `TikTok rate-limited this PC 3 times in a row (${e.message}). Stopped; run again later.`); }
-      const tries = (loadLedger()[v.id]?.tries || 0) + 1;
-      discard(v.id, 'failed');
-      setLedger(v.id, { status: 'failed', tries, reason: e.message.slice(0, 300), line: 'night' });
-      done.failed.push(`${v.id}: ${e.message.slice(0, 120)}`); console.warn(`  ! ${e.message}`);
+      // NEVER WAIT: the first failure or stall sets the video aside («معلّقة»), no retry; the step and reason are kept for a human
+      const step = e.step || stepOf.get(v.id) || 'unknown';
+      discard(v.id, 'set aside');
+      setLedger(v.id, { status: 'deferred', step, reason: e.message.slice(0, 300), line: 'night', deferredAt: new Date().toISOString() });
+      done.failed.push({ id: v.id, step, reason: e.message.slice(0, 160) }); console.warn(`  – معلّقة: ${v.id} at «${step}»: ${e.message}`);
       try { gitSync(LIB_DIR, ['.'], `night: ${v.id} failed`); } catch {}
       saveProgress();
-      if (++failStreak >= 3) stop('errors', `3 videos failed in a row; last error: ${e.message.slice(0, 150)}`);
+      if (!(e instanceof SkipError) && ++failStreak >= 3) stop('errors', `3 videos failed in a row; last error: ${e.message.slice(0, 150)}`);
     } finally {
-      inflight.delete(v.id);
+      inflight.delete(v.id); stepOf.delete(v.id);
     }
   }
 }
@@ -263,10 +273,10 @@ try { gitSync(ROOT, ['queue', 'content/videos', 'public/covers', 'public/og', 'd
 const left = remaining().length;
 const lines = [
   `🌙 alsuhaiby.com — prep run ${stopReason ? 'stopped' : 'finished'} (${CONC} at a time)`,
-  `written ${done.queued.length} · merged/held merges ${done.merged.length} · skipped ${done.skipped.length} · held (length) ${done.held.length} · failed ${done.failed.length} · discarded mid-video ${done.discarded.length}`,
+  `written ${done.queued.length} · merged/held merges ${done.merged.length} · skipped ${done.skipped.length} · held (length) ${done.held.length} · معلّقة ${done.failed.length} · discarded mid-video ${done.discarded.length}`,
   `remaining in the archive: ${left} · waiting in queue: ${queued().length}`,
   ...(stopReason ? [`stopped: ${stopReason}`] : []),
-  ...done.failed.slice(0, 5).map((f) => `⚠️ ${f}`),
+  ...(done.failed.length ? ['معلّقة (الرقم · الخطوة · السبب):', ...done.failed.slice(0, 10).map((f) => `⚠️ ${f.id} · ${f.step} · ${f.reason.slice(0, 80)}`)] : []),
 ];
 console.log(`\n${lines.join('\n')}`);
 const st = readJson(`${ROOT}/data/status.json`, {});
@@ -276,6 +286,6 @@ writeJson(`${ROOT}/data/status.json`, st);
 setStage('idle', { current: null, left, stopped: stopKind || null });
 if (TG_AT_STOP) alert(lines.join('\n')); // owner (2026-11-11): silence while running, ONE message at the stop
 else if (done.failed.length || stopKind === 'tiktok' || stopKind === 'machine') {
-  alert(['⚠️ alsuhaiby.com — تشغيل الليل', ...(stopKind === 'tiktok' ? ['⚠️ تيك توك حدّ الجهاز ووقف التحميل. شغّله بعدين.'] : []), ...(stopKind === 'machine' ? [`⛔ ${stopReason}`] : []), ...done.failed.slice(0, 5).map((f) => `⚠️ ${f}`)].join('\n'));
+  alert(['⚠️ alsuhaiby.com — تشغيل الليل', ...(stopKind === 'tiktok' ? ['⚠️ تيك توك حدّ الجهاز ووقف التحميل. شغّله بعدين.'] : []), ...(stopKind === 'machine' ? [`⛔ ${stopReason}`] : []), ...done.failed.slice(0, 5).map((f) => `⚠️ ${f.id} · ${f.step} · ${f.reason.slice(0, 80)}`)].join('\n'));
 }
 process.exit(0);
