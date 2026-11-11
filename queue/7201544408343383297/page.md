@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7201544408343383297"
 tiktokId: "7201544408343383297"
 duration: 47
-otherVideos: []
+otherVideos:
+  - tiktokId: "7633465668310125845"
+    title: "ستة من أهم المشاكل اللي راح تواجهها لو ما غيرت البلاكات."
+    views: 60154
+    published: "2026-04-27"
+    cover: "/covers/7633465668310125845.webp"
 tags:
   - "محرك"
   - "بلاكات"
