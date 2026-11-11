@@ -15000,6 +15000,16 @@
       "completionTokens": 1076,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.077342
+    },
+    {
+      "at": "2026-11-11T20:53:43.663Z",
+      "script": "night",
+      "label": "tk-7629392950283291925 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 978,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.072934
     }
   ]
 }
