@@ -25,6 +25,11 @@ otherVideos:
     views: 77300
     published: "2024-10-18"
     cover: "/covers/7427085029689412872.webp"
+  - tiktokId: "7667272989121203477"
+    title: "إذا ارتفعت حرارة السيارة وقت ما تشغل المكيف"
+    views: 72575
+    published: "2026-07-27"
+    cover: "/covers/7667272989121203477.webp"
 tags:
   - "تبريد"
   - "رديتر"
