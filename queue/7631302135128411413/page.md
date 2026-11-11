@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7631302135128411413"
 tiktokId: "7631302135128411413"
 duration: 39
-otherVideos: []
+otherVideos:
+  - tiktokId: "7681393731274034452"
+    title: "أول ما يضعف العزم عندك إذا شغلت المكيف لازم تفحص هالاربع شغلات."
+    views: 76936
+    published: "2026-09-03"
+    cover: "/covers/7681393731274034452.webp"
 tags:
   - "مكيف"
   - "ضعف العزم"
