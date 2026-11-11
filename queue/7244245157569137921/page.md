@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7244245157569137921"
 tiktokId: "7244245157569137921"
 duration: 37
-otherVideos: []
+otherVideos:
+  - tiktokId: "7168901320869530881"
+    title: "خمس إشارات تدل على أن السفايف تحتاج تبديل"
+    views: 119900
+    published: "2022-11-22"
+    cover: "/covers/7168901320869530881.webp"
 tags:
   - "فرامل"
   - "سفايف"
