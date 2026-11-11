@@ -1,5 +1,5 @@
 {
-  "totalUsd": 11.125226,
+  "totalUsd": 11.131063,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -15339,6 +15339,65 @@
       "completionTokens": 1942,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.093022
+    },
+    {
+      "at": "2026-11-11T20:57:11.672Z",
+      "script": "night",
+      "label": "tk-7322523228470070546 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7489,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.19928420000000002
+    },
+    {
+      "at": "2026-11-11T20:57:16.672Z",
+      "script": "night",
+      "label": "7425330416795618568 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 2277,
+      "completionTokens": 1101,
+      "costUsd": 0.0058365
+    },
+    {
+      "at": "2026-11-11T20:57:17.493Z",
+      "script": "night",
+      "label": "tk-7479127493232839943 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 2484,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.1151384
+    },
+    {
+      "at": "2026-11-11T20:57:24.689Z",
+      "script": "night",
+      "label": "7425330416795618568 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 187,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.237284
+    },
+    {
+      "at": "2026-11-11T20:57:28.165Z",
+      "script": "night",
+      "label": "tk-7292094473549466881 write",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 8692,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.1861922
+    },
+    {
+      "at": "2026-11-11T20:57:39.003Z",
+      "script": "night",
+      "label": "tk-7479127493232839943 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 2005,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.096402
     }
   ]
 }
