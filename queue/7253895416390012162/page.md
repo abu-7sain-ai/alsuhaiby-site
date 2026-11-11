@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7253895416390012162"
 tiktokId: "7253895416390012162"
 duration: 28
-otherVideos: []
+otherVideos:
+  - tiktokId: "7311391310806666503"
+    title: "ثلاث طرق عشان تتخلص من ريحة المكيف الخايسة وانتوا بكرامة."
+    views: 126100
+    published: "2023-12-11"
+    cover: "/covers/7311391310806666503.webp"
 tags:
   - "مكيف"
   - "ريحة المكيف"
