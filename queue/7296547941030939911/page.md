@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7296547941030939911"
 tiktokId: "7296547941030939911"
 duration: 58
-otherVideos: []
+otherVideos:
+  - tiktokId: "7273921098951986440"
+    title: "أربعة من الأسباب اللي تسبب كسر في عمود الكامات، من الأسباب مو كلها."
+    views: 94500
+    published: "2023-09-01"
+    cover: "/covers/7273921098951986440.webp"
 tags:
   - "محرك"
   - "عمود الكامات"
