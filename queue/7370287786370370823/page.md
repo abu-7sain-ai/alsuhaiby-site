@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7370287786370370823"
 tiktokId: "7370287786370370823"
 duration: 16
-otherVideos: []
+otherVideos:
+  - tiktokId: "7464633901126831368"
+    title: "أربع نصائح ودك تاخذها"
+    views: 196800
+    published: "2025-01-27"
+    cover: "/covers/7464633901126831368.webp"
 tags:
   - "طرمبة البنزين"
   - "وقود"
