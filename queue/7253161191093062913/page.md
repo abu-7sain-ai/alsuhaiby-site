@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7253161191093062913"
 tiktokId: "7253161191093062913"
 duration: 32
-otherVideos: []
+otherVideos:
+  - tiktokId: "7284692038031789330"
+    title: "خمس علامات تدل ان زيت سيارتك مغشوش أو تجاري بوطقة"
+    views: 230200
+    published: "2023-09-30"
+    cover: "/covers/7284692038031789330.webp"
 tags:
   - "زيت"
   - "محرك"
