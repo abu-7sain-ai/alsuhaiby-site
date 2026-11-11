@@ -114,7 +114,11 @@ const done = { queued: [], merged: [], skipped: [], held: [], failed: [], discar
 const VIDEO_CAP_MS = Number(A['video-cap'] ?? 15) * 60e3; // owner (2026-11-11): 15 minutes per video, then it is set aside
 const stepOf = new Map(); // id → the step it is on (for the «معلّقة» list)
 const timings = []; // { id, startedAt, minutes, result }
-let stopReason = '', stopKind = '', backoff = 0, failStreak = 0, started = 0, sitePending = 0;
+let stopReason = '', stopKind = '', backoff = 0, failStreak = 0, netStreak = 0, started = 0, sitePending = 0;
+// owner (2026-11-11): a network error sets only that video aside and does NOT count toward «3 failures in a row»;
+// 10 network errors in a row (no success in between) = the network is down → stop the run, Telegram «network down».
+const NET_MAX = 10;
+const isNetworkError = (e) => /fetch failed|network|ECONNRESET|ECONNREFUSED|ENOTFOUND|EAI_AGAIN|ETIMEDOUT|ENETUNREACH|EHOSTUNREACH|socket hang up|getaddrinfo|Could not resolve host|unable to access/i.test(`${e?.message || ''} ${e?.cause?.code || ''} ${e?.cause?.message || ''}`);
 const finished = () => done.queued.length + done.merged.length + done.skipped.length + done.held.length + done.failed.length;
 function saveProgress(extra = {}) {
   withLock('run-state', () => {
@@ -240,7 +244,7 @@ async function worker(w) {
       const job = handle(v);
       job.catch(() => {}); // after the cap, the cut-off job only ends with an error; nothing waits for it
       await Promise.race([job, new Promise((_, rej) => { capTimer = setTimeout(() => { runFlags.aborted.add(v.id); killFor(v.id); rej(new SkipError(`over ${VIDEO_CAP_MS / 60e3} minutes (something stalled)`, stepOf.get(v.id))); }, VIDEO_CAP_MS); })]).finally(() => clearTimeout(capTimer));
-      failStreak = 0;
+      failStreak = 0; netStreak = 0;
     } catch (e) {
       inflight.delete(v.id);
       if (e instanceof ClaudeLimitError) { stop('claude-limit', e.message); discard(v.id, 'stopped mid-video'); done.discarded.push(v.id); continue; }
@@ -248,12 +252,14 @@ async function worker(w) {
       if (e instanceof RateLimitError) { backoff++; if (backoff >= 3) stop('tiktok', `TikTok rate-limited this PC 3 times in a row (${e.message}). Stopped; run again later.`); }
       // NEVER WAIT: the first failure or stall sets the video aside («معلّقة»), no retry; the step and reason are kept for a human
       const step = e.step || stepOf.get(v.id) || 'unknown';
+      const net = !(e instanceof SkipError) && isNetworkError(e);
       discard(v.id, 'set aside');
-      setLedger(v.id, { status: 'deferred', step, reason: e.message.slice(0, 300), line: 'night', deferredAt: new Date().toISOString() });
+      setLedger(v.id, { status: 'deferred', step, reason: e.message.slice(0, 300), line: 'night', deferredAt: new Date().toISOString(), ...(net ? { network: true } : {}) });
       done.failed.push({ id: v.id, step, reason: e.message.slice(0, 160) }); console.warn(`  – معلّقة: ${v.id} at «${step}»: ${e.message}`);
       try { gitSync(LIB_DIR, ['.'], `night: ${v.id} failed`); } catch {}
       saveProgress();
-      if (!(e instanceof SkipError) && ++failStreak >= 3) stop('errors', `3 videos failed in a row; last error: ${e.message.slice(0, 150)}`);
+      if (net) { if (++netStreak >= NET_MAX) stop('network', `${NET_MAX} network errors in a row; last: ${e.message.slice(0, 150)}`); }
+      else if (!(e instanceof SkipError) && (netStreak = 0, ++failStreak >= 3)) stop('errors', `3 videos failed in a row; last error: ${e.message.slice(0, 150)}`);
     } finally {
       inflight.delete(v.id); stepOf.delete(v.id);
     }
@@ -275,7 +281,7 @@ function reasonLabel() {
   if (stopKind === 'claude-limit') return /week/i.test(stopReason) ? 'weekly limit' : 'session limit';
   if (stopKind === 'time') return 'time';
   if (!stopKind) return 'backlog finished';
-  return { machine: 'machine guard', tiktok: 'TikTok block', errors: '3 failures in a row' }[stopKind] || stopKind;
+  return { machine: 'machine guard', tiktok: 'TikTok block', errors: '3 failures in a row', network: 'network down' }[stopKind] || stopKind;
 }
 const left = remaining().length;
 const lines = [

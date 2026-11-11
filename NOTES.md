@@ -85,6 +85,7 @@ UptimeRobot: monitor on https://alsuhaiby.com every 5 min with EMAIL alerts.
 - Length: writer aims 1250–1350 (up to 2 resizes); review FIX floor 75% in code; under 1150 after review → one expand pass + fact-check of the added sentences only; still outside 1150–1400 → ledger «held-length», never queued.
 - Repeats of a LIVE page: prepared on the PC in queue/.held-<id>/ (MP4 on R2, images, merge.json); daily.js embeds them while publishing (`node scripts/prep-held.js` prepares any that were only recorded).
 - NEVER WAIT (standing rule): 15-min cap per video, a login/input prompt ends the call, no retries anywhere, the first failure → ledger «deferred» (= «معلّقة», with step + reason), never retried automatically.
+- Network errors (owner, 2026-11-11): a network error sets only that video aside («deferred», network: true) and does NOT count toward «3 failures in a row»; 10 network errors in a row stop the run with Telegram reason «network down». Releasing «معلّقة» videos is by hand (ledger status «released» → picked up by the next run).
 - Test 2026-11-11 13:20–14:29 at concurrency 3: 65 videos (38 written, 13 merged into queued pages, 14 held merges), 0 failed, 0 stalled; 1.05 min wall per video vs 3.5 sequential; lock waits 172 of 620, max 2 ms; 5-hour window 50% → 84%, weekly 8% → 12%.
 
 ## Incidents
