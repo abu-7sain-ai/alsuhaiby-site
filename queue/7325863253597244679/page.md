@@ -30,6 +30,11 @@ otherVideos:
     views: 342200
     published: "2023-11-12"
     cover: "/covers/7300639335856999681.webp"
+  - tiktokId: "7280236504331472136"
+    title: "ثلاثة من أسباب ارتفاع صوت المكينة"
+    views: 275400
+    published: "2023-09-18"
+    cover: "/covers/7280236504331472136.webp"
 tags:
   - "محرك"
   - "صوت المكينة"
