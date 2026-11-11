@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7393374054457167122"
 tiktokId: "7393374054457167122"
 duration: 34
-otherVideos: []
+otherVideos:
+  - tiktokId: "7602700356933471544"
+    title: "بعض الأسرار اللي ما حد يبيك تعرفها عشان تفرق ما بين ليتات ال إي دي والزينون."
+    views: 64000
+    published: "2026-02-03"
+    cover: "/covers/7602700356933471544.webp"
 tags:
   - "زينون"
   - "ليتات"
