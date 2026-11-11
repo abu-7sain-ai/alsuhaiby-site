@@ -49,8 +49,10 @@ export function withLock(name, fn) {
   const dir = path.join(LOCK_DIR, name), st = (lockStats[name] ||= { taken: 0, waited: 0, waitMs: 0, maxWaitMs: 0, stale: 0 });
   const t0 = Date.now();
   for (;;) {
-    try { fs.mkdirSync(dir); break; } catch (e) {
+    try { fs.mkdirSync(dir); try { fs.writeFileSync(path.join(dir, 'pid'), String(process.pid)); } catch {} break; } catch (e) {
       if (e.code !== 'EEXIST') throw e;
+      // the owner is gone (killed process): take the lock over at once instead of waiting
+      try { const owner = Number(fs.readFileSync(path.join(dir, 'pid'), 'utf8')); if (owner && owner !== process.pid) { let alive = true; try { process.kill(owner, 0); } catch (k) { alive = k.code === 'EPERM'; } if (!alive) { fs.rmSync(dir, { recursive: true, force: true }); st.stale++; continue; } } } catch {}
       try { if (Date.now() - fs.statSync(dir).mtimeMs > 10 * 60e3) { fs.rmSync(dir, { recursive: true, force: true }); st.stale++; continue; } } catch { continue; }
       if (Date.now() - t0 > 5 * 60e3) throw new Error(`lock ${name}: still held after 5 min`);
       sleepSync(25);
@@ -58,7 +60,7 @@ export function withLock(name, fn) {
   }
   const w = Date.now() - t0;
   st.taken++; if (w > 0) { st.waited++; st.waitMs += w; st.maxWaitMs = Math.max(st.maxWaitMs, w); }
-  try { return fn(); } finally { try { fs.rmdirSync(dir); } catch {} }
+  try { return fn(); } finally { try { fs.rmSync(dir, { recursive: true, force: true }); } catch {} }
 }
 
 export function args() {
