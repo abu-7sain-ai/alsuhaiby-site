@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7230154166746860801"
 tiktokId: "7230154166746860801"
 duration: 69
-otherVideos: []
+otherVideos:
+  - tiktokId: "7191918757734911234"
+    title: "ست نقاط مهمة عن الماي الأحمر والماي الأخضر للرديتر."
+    views: 340900
+    published: "2023-01-23"
+    cover: "/covers/7191918757734911234.webp"
 tags:
   - "تبريد"
   - "ماي الرديتر"
