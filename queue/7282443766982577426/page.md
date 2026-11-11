@@ -20,6 +20,11 @@ otherVideos:
     views: 311600
     published: "2023-03-11"
     cover: "/covers/7209352119617473793.webp"
+  - tiktokId: "7314341463163292946"
+    title: "ستة من أسباب وجود ريحة البنزين داخل سيارتك."
+    views: 257300
+    published: "2023-12-19"
+    cover: "/covers/7314341463163292946.webp"
 tags:
   - "ريحة بنزين"
   - "وقود"
