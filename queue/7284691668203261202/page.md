@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7284691668203261202"
 tiktokId: "7284691668203261202"
 duration: 31
-otherVideos: []
+otherVideos:
+  - tiktokId: "7443521548759207176"
+    title: "أربع شغلات تطول من عمر الكويلات عندك."
+    views: 91000
+    published: "2024-12-01"
+    cover: "/covers/7443521548759207176.webp"
 tags:
   - "كويلات"
   - "بلكات"
