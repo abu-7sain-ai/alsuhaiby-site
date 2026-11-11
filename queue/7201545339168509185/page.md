@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7201545339168509185"
 tiktokId: "7201545339168509185"
 duration: 30
-otherVideos: []
+otherVideos:
+  - tiktokId: "7481338876938833159"
+    title: "خمس علامات وإنت تسوق السيارة تدل على إنه سير المكينة انقطع عندك."
+    views: 122500
+    published: "2025-03-13"
+    cover: "/covers/7481338876938833159.webp"
 tags:
   - "سير المكينة"
   - "صرير"
