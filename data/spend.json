@@ -1,5 +1,5 @@
 {
-  "totalUsd": 9.229227,
+  "totalUsd": 9.237871,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -5283,6 +5283,65 @@
       "completionTokens": 110,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.09408
+    },
+    {
+      "at": "2026-11-11T11:10:09.288Z",
+      "script": "night",
+      "label": "tk-7382635624299318535 write (resize 2)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7433,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.25081220000000004
+    },
+    {
+      "at": "2026-11-11T11:10:26.670Z",
+      "script": "night",
+      "label": "7213082034133011714 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 4920,
+      "completionTokens": 1321,
+      "costUsd": 0.00864375
+    },
+    {
+      "at": "2026-11-11T11:10:29.507Z",
+      "script": "night",
+      "label": "tk-7382635624299318535 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1724,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0976264
+    },
+    {
+      "at": "2026-11-11T11:10:30.836Z",
+      "script": "night",
+      "label": "tk-7259092809259519233 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7142,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2035362
+    },
+    {
+      "at": "2026-11-11T11:10:32.424Z",
+      "script": "night",
+      "label": "7213082034133011714 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 59,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0949
+    },
+    {
+      "at": "2026-11-11T11:10:49.930Z",
+      "script": "night",
+      "label": "tk-7382635624299318535 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 2011,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.09456200000000001
     }
   ]
 }
