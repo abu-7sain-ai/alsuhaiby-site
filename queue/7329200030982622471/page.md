@@ -20,6 +20,11 @@ otherVideos:
     views: 185700
     published: "2025-05-16"
     cover: "/covers/7505116890688130312.webp"
+  - tiktokId: "7208982209884163330"
+    title: "خمسة من الأسباب اللي إذا صارت يتعطل التيربو"
+    views: 151100
+    published: "2023-03-10"
+    cover: "/covers/7208982209884163330.webp"
 tags:
   - "تيربو"
   - "محرك"
