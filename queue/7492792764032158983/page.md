@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7492792764032158983"
 tiktokId: "7492792764032158983"
 duration: 26
-otherVideos: []
+otherVideos:
+  - tiktokId: "7556651724497227015"
+    title: "أربع أمور تشيك عليها إذا سيارتك جمس وشفت الآر بي إم يلعب."
+    views: 60600
+    published: "2025-10-02"
+    cover: "/covers/7556651724497227015.webp"
 tags:
   - "محرك"
   - "RPM"
