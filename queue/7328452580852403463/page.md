@@ -20,6 +20,11 @@ otherVideos:
     views: 310400
     published: "2024-06-12"
     cover: "/covers/7379675101395995911.webp"
+  - tiktokId: "7530305184166137106"
+    title: "خمس اسباب تتلف منها كراسي المكينة"
+    views: 260600
+    published: "2025-07-23"
+    cover: "/covers/7530305184166137106.webp"
 tags:
   - "محرك"
   - "رجفة"
