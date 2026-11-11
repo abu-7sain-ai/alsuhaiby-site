@@ -1,5 +1,5 @@
 {
-  "totalUsd": 10.385518,
+  "totalUsd": 10.395798,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -11996,6 +11996,75 @@
       "completionTokens": 254,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.20197600000000002
+    },
+    {
+      "at": "2026-11-11T13:58:34.712Z",
+      "script": "night",
+      "label": "tk-7252045700727328001 write (resize 2)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 8505,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2772202
+    },
+    {
+      "at": "2026-11-11T13:58:35.242Z",
+      "script": "night",
+      "label": "7391904894069902600 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3007,
+      "completionTokens": 2140,
+      "costUsd": 0.01028025
+    },
+    {
+      "at": "2026-11-11T13:58:54.067Z",
+      "script": "night",
+      "label": "tk-7262815611149978881 write (resize 2)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7159,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.25036420000000004
+    },
+    {
+      "at": "2026-11-11T13:59:19.394Z",
+      "script": "night",
+      "label": "7391904894069902600 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 99,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.19936399999999999
+    },
+    {
+      "at": "2026-11-11T13:59:23.746Z",
+      "script": "night",
+      "label": "tk-7252045700727328001 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1641,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0971264
+    },
+    {
+      "at": "2026-11-11T13:59:28.409Z",
+      "script": "night",
+      "label": "tk-7262815611149978881 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1734,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0998024
+    },
+    {
+      "at": "2026-11-11T13:59:42.917Z",
+      "script": "night",
+      "label": "tk-7252045700727328001 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1155,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.078138
     }
   ]
 }
