@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7263530197570342146"
 tiktokId: "7263530197570342146"
 duration: 38
-otherVideos: []
+otherVideos:
+  - tiktokId: "7429727184471821576"
+    title: "لا يقصون عليك، بعطيك فيها عشرين عطل بعشرين يوم"
+    views: 93000
+    published: "2024-10-25"
+    cover: "/covers/7429727184471821576.webp"
 tags:
   - "غسيل المكينة"
   - "بلاكات"
