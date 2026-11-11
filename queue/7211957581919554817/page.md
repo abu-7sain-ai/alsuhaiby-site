@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7211957581919554817"
 tiktokId: "7211957581919554817"
 duration: 56
-otherVideos: []
+otherVideos:
+  - tiktokId: "7405283780983835911"
+    title: "ست علامات تدل على تلف سنسر الهواء وتسمى بلغة ثانية الماف أو الـ MAF."
+    views: 229600
+    published: "2024-08-20"
+    cover: "/covers/7405283780983835911.webp"
 tags:
   - "محرك"
   - "سنسر الهواء"
