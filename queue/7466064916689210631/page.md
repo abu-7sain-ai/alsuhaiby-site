@@ -35,6 +35,11 @@ otherVideos:
     views: 139300
     published: "2025-10-22"
     cover: "/covers/7564104916164250888.webp"
+  - tiktokId: "7192291740064222466"
+    title: "خمس مشاكل يسببها الماي العادي بالرديتر."
+    views: 234300
+    published: "2023-01-24"
+    cover: "/covers/7192291740064222466.webp"
 tags:
   - "تبريد"
   - "راديتر"
