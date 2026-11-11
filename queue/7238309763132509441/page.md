@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7238309763132509441"
 tiktokId: "7238309763132509441"
 duration: 34
-otherVideos: []
+otherVideos:
+  - tiktokId: "7409325336992697608"
+    title: "أربع من العلامات اللي تدل على عطل مبرد القير."
+    views: 105300
+    published: "2024-08-31"
+    cover: "/covers/7409325336992697608.webp"
 tags:
   - "قير"
   - "مبرد القير"
