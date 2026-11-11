@@ -1,5 +1,5 @@
 {
-  "totalUsd": 8.913795,
+  "totalUsd": 8.92118,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -2586,6 +2586,65 @@
       "completionTokens": 1483,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.082884
+    },
+    {
+      "at": "2026-11-11T09:13:06.130Z",
+      "script": "night",
+      "label": "7240549504083152129 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 2381,
+      "completionTokens": 1493,
+      "costUsd": 0.0073845
+    },
+    {
+      "at": "2026-11-11T09:13:12.603Z",
+      "script": "night",
+      "label": "7240549504083152129 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 158,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.052464
+    },
+    {
+      "at": "2026-11-11T09:14:36.347Z",
+      "script": "night",
+      "label": "tk-7240549504083152129 write",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7887,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.1693824
+    },
+    {
+      "at": "2026-11-11T09:15:34.491Z",
+      "script": "night",
+      "label": "tk-7240549504083152129 write (resize)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 6928,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.18535440000000003
+    },
+    {
+      "at": "2026-11-11T09:15:52.690Z",
+      "script": "night",
+      "label": "tk-7240549504083152129 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1436,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.08203740000000001
+    },
+    {
+      "at": "2026-11-11T09:16:10.099Z",
+      "script": "night",
+      "label": "tk-7240549504083152129 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1709,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.080546
     }
   ]
 }
