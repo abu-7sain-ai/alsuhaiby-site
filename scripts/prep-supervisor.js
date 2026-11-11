@@ -3,6 +3,8 @@
 //
 //   node scripts/prep-supervisor.js [--deadline 2026-11-12T19:00:00Z] [--concurrency 3]
 //   node scripts/prep-supervisor.js --ensure     (Task Scheduler, every 10 min) starts a supervisor only if none is alive
+//   node scripts/prep-supervisor.js --hold-until 2026-11-11T20:00:00Z   arm a start time: kept in the state file, so every
+//                                       supervisor (also one started by the task) waits until then before starting any run
 //
 // Loop: start night.js (below-normal priority, --no-telegram, time limit = the deadline) → when it ends, read why:
 //   · session limit  → write the stopping point (data/prep-supervisor.json), ONE Telegram «paused» (how many are left, when it
@@ -27,7 +29,7 @@ import { alert } from './lib/status.js';
 
 const A = args();
 const DEADLINE = Date.parse(A.deadline || '2026-11-12T19:00:00Z'); // Thursday 22:00 Kuwait = weekly reset
-const CONC = Number(A.concurrency || 3);
+const CONC = Number(A.concurrency || readJson(path.join(ROOT, 'config', 'site.json'), {}).nightConcurrency || 3);
 const STATE = path.join(ROOT, 'data', 'prep-supervisor.json');
 const LOG = path.join(ROOT, 'data', 'run-supervisor.log'); // data/run-*.log is not committed
 const PID = path.join(os.tmpdir(), 'alsuhaiby-locks', 'prep-supervisor.pid');
@@ -48,7 +50,8 @@ if (['done', 'stopped'].includes(state().phase) && state().deadline === new Date
 fs.writeFileSync(PID, String(process.pid));
 process.on('exit', () => { try { if (Number(fs.readFileSync(PID, 'utf8')) === process.pid) fs.rmSync(PID); } catch {} });
 try { os.setPriority(os.constants.priority.PRIORITY_BELOW_NORMAL); } catch {} // the runs it starts inherit below-normal
-save({ phase: state().phase === 'paused' ? 'paused' : 'starting', deadline: new Date(DEADLINE).toISOString(), concurrency: CONC, startedAt: new Date().toISOString() });
+if (A['hold-until']) { writeJson(STATE, { phase: 'holding', holdUntil: new Date(A['hold-until']).toISOString(), announceStart: true, armedAt: new Date().toISOString() }); }
+save({ phase: ['paused', 'holding'].includes(state().phase) ? state().phase : 'starting', deadline: new Date(DEADLINE).toISOString(), concurrency: CONC, startedAt: new Date().toISOString() });
 log(`supervisor up (pid ${process.pid}) · deadline ${kt(DEADLINE)} · concurrency ${CONC} · ${left()} left`);
 
 function finish(phase, why, message) {
@@ -104,6 +107,18 @@ const runNight = (minutes) => new Promise((resolve) => {
   save({ phase: 'running', runPid: c.pid, runStartedAt: new Date().toISOString() });
   c.on('exit', (code) => resolve(code));
 });
+
+// ---- armed start time: nothing runs before it -----------------------------------------------------------------------------
+{ const h = Date.parse(state().holdUntil || '');
+  if (h && Date.now() < h) {
+    log(`holding — nothing starts before ${kt(h)} Kuwait`);
+    while (Date.now() < h) await sleep(Math.min(60e3, h - Date.now()));
+  }
+  if (h && state().announceStart) {
+    save({ phase: 'starting', holdUntil: null, announceStart: false, startedRunsAt: new Date().toISOString() });
+    alert(`▶ alsuhaiby prep: started at ${kt(Date.now())} Kuwait — ${left()} left, concurrency ${CONC}. Runs until the backlog is done or Thu 22:00; pauses on each session limit and resumes by itself.`);
+  } else if (h) save({ phase: 'starting', holdUntil: null });
+}
 
 // ---- main loop ------------------------------------------------------------------------------------------------------------
 let quick = 0;
