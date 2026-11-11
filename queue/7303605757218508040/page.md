@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7303605757218508040"
 tiktokId: "7303605757218508040"
 duration: 27
-otherVideos: []
+otherVideos:
+  - tiktokId: "7414114691901017351"
+    title: "ثلاث علامات تدل على تلف الدينمو عندك"
+    views: 109600
+    published: "2024-09-13"
+    cover: "/covers/7414114691901017351.webp"
 tags:
   - "دينمو"
   - "بطارية"
