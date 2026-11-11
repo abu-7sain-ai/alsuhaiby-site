@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7186736970306096386"
 tiktokId: "7186736970306096386"
 duration: 52
-otherVideos: []
+otherVideos:
+  - tiktokId: "7457255423779949832"
+    title: "أربع أسباب تخلي سيارتك تخلط زيت وماي."
+    views: 109900
+    published: "2025-01-07"
+    cover: "/covers/7457255423779949832.webp"
 tags:
   - "محرك"
   - "خلط ماي وزيت"
