@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7256122115521400065"
 tiktokId: "7256122115521400065"
 duration: 28
-otherVideos: []
+otherVideos:
+  - tiktokId: "7351465835451419922"
+    title: "خمس اسباب تخلي السيارة ما تشتغل والبطارية جديدة"
+    views: 135400
+    published: "2024-03-28"
+    cover: "/covers/7351465835451419922.webp"
 tags:
   - "كهرباء"
   - "تشغيل"
