@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7387100399330708743"
 tiktokId: "7387100399330708743"
 duration: 23
-otherVideos: []
+otherVideos:
+  - tiktokId: "7232736625531309313"
+    title: "أول شي أحبها، مستمتع أنا، وأي واحد يحب شغلته يعني مو بس أنا، يعني مو إلا الميكانيكا، أي واحد يحب شغلته يستمتع فيها."
+    views: 113000
+    published: "2023-05-13"
+    cover: "/covers/7232736625531309313.webp"
 tags:
   - "تبريد"
   - "حرارة"
