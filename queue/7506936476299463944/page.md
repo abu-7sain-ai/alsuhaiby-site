@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7506936476299463944"
 tiktokId: "7506936476299463944"
 duration: 51
-otherVideos: []
+otherVideos:
+  - tiktokId: "7222370847477042434"
+    title: "علامات مهمة إذا شفتها معناتها عندك رواسب كربونية داخل المكينة."
+    views: 77200
+    published: "2023-04-15"
+    cover: "/covers/7222370847477042434.webp"
 tags:
   - "محرك"
   - "رواسب كربونية"
