@@ -20,6 +20,11 @@ otherVideos:
     views: 81300
     published: "2023-02-24"
     cover: "/covers/7203757731780644098.webp"
+  - tiktokId: "7477626107135560968"
+    title: "خمس أسباب تخلي سنسر الرجوع ما يشتغل عندك"
+    views: 71500
+    published: "2025-03-03"
+    cover: "/covers/7477626107135560968.webp"
 tags:
   - "سنسر الرجوع"
   - "حساسات"
