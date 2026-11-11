@@ -20,6 +20,11 @@ otherVideos:
     views: 320600
     published: "2025-10-19"
     cover: "/covers/7562981753271454994.webp"
+  - tiktokId: "7624478470218845460"
+    title: "أربع علامات لعطل حساس الـ TPS"
+    views: 81917
+    published: "2026-04-03"
+    cover: "/covers/7624478470218845460.webp"
 tags:
   - "محرك"
   - "حساسات"
