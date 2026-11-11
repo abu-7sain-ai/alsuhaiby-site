@@ -20,6 +20,11 @@ otherVideos:
     views: 113000
     published: "2023-05-13"
     cover: "/covers/7232736625531309313.webp"
+  - tiktokId: "7553920548074474770"
+    title: "خمسة من الأسباب اللي ترفع حرارة السيارة عندك."
+    views: 75200
+    published: "2025-09-25"
+    cover: "/covers/7553920548074474770.webp"
 tags:
   - "تبريد"
   - "حرارة"
