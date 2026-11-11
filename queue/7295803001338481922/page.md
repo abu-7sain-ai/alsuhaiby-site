@@ -20,6 +20,11 @@ otherVideos:
     views: 289500
     published: "2024-09-05"
     cover: "/covers/7411131952935324935.webp"
+  - tiktokId: "7597128850681744652"
+    title: "أربعة من الأسباب اللي تطلعلك لمبة الـ ABS، خلك معاي وتعرفها."
+    views: 67300
+    published: "2026-01-19"
+    cover: "/covers/7597128850681744652.webp"
 tags:
   - "فرامل"
   - "ABS"
