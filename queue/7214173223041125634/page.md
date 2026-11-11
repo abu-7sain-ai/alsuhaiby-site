@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7214173223041125634"
 tiktokId: "7214173223041125634"
 duration: 33
-otherVideos: []
+otherVideos:
+  - tiktokId: "7308423803464437010"
+    title: "أربع من الأسباب اللي تطلعلك علامة الزيت."
+    views: 360700
+    published: "2023-12-03"
+    cover: "/covers/7308423803464437010.webp"
 tags:
   - "محرك"
   - "لمبة الزيت"
