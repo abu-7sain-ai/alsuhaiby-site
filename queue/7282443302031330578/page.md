@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7282443302031330578"
 tiktokId: "7282443302031330578"
 duration: 31
-otherVideos: []
+otherVideos:
+  - tiktokId: "7475041603866889479"
+    title: "ست نقاط مهمة لازم إنك تعرفها إذا كنت تحب تغسل سيارتك بنفسك."
+    views: 79000
+    published: "2025-02-24"
+    cover: "/covers/7475041603866889479.webp"
 tags:
   - "غسيل السيارة"
   - "صبغة"
