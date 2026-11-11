@@ -20,6 +20,11 @@ otherVideos:
     views: 587600
     published: "2023-01-08"
     cover: "/covers/7186302921397538049.webp"
+  - tiktokId: "7378574458665078023"
+    title: "خمس أسباب تخلي ماي الراديتر ينقص عندك"
+    views: 490400
+    published: "2024-06-09"
+    cover: "/covers/7378574458665078023.webp"
 tags:
   - "تبريد"
   - "رديتر"
