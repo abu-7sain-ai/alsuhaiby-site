@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7254637727910530306"
 tiktokId: "7254637727910530306"
 duration: 34
-otherVideos: []
+otherVideos:
+  - tiktokId: "7379675624471842055"
+    title: "ثلاث أسباب لارتفاع حرارة البطارية."
+    views: 79000
+    published: "2024-06-12"
+    cover: "/covers/7379675624471842055.webp"
 tags:
   - "بطارية"
   - "دينمو"
