@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7367425575423708424"
 tiktokId: "7367425575423708424"
 duration: 34
-otherVideos: []
+otherVideos:
+  - tiktokId: "7316579274742353170"
+    title: "خمس علامات تدل على تلف فلتر البنزين."
+    views: 260100
+    published: "2023-12-25"
+    cover: "/covers/7316579274742353170.webp"
 tags:
   - "فلتر البنزين"
   - "تقطيع"
