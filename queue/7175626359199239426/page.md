@@ -20,6 +20,11 @@ otherVideos:
     views: 231400
     published: "2024-07-24"
     cover: "/covers/7395241140317998354.webp"
+  - tiktokId: "7264657912339942657"
+    title: "أربع أعراض تدل على إن دبة التلوث عندك تلفت."
+    views: 207000
+    published: "2023-08-07"
+    cover: "/covers/7264657912339942657.webp"
 tags:
   - "دبة التلوث"
   - "قزوز"
