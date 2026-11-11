@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7305823716561177864"
 tiktokId: "7305823716561177864"
 duration: 35
-otherVideos: []
+otherVideos:
+  - tiktokId: "7223835471326039297"
+    title: "أربع أشياء تسويها إذا انفجر تايرك وانت تسوق بسرعة"
+    views: 493400
+    published: "2023-04-19"
+    cover: "/covers/7223835471326039297.webp"
 tags:
   - "تواير"
   - "انفجار التاير"
