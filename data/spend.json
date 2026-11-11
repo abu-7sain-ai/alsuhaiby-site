@@ -3041,6 +3041,136 @@
       "completionTokens": 1971,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.09373800000000002
+    },
+    {
+      "at": "2026-11-11T10:20:54.312Z",
+      "script": "night",
+      "label": "7305823716561177864 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 51,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0543
+    },
+    {
+      "at": "2026-11-11T10:21:09.697Z",
+      "script": "night",
+      "label": "7240549504083152129 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 166,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.056695999999999996
+    },
+    {
+      "at": "2026-11-11T10:21:24.859Z",
+      "script": "night",
+      "label": "7458676119773007112 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 68,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.054192000000000004
+    },
+    {
+      "at": "2026-11-11T10:22:12.213Z",
+      "script": "night",
+      "label": "tk-7305823716561177864 write",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 6622,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.155136
+    },
+    {
+      "at": "2026-11-11T10:22:43.010Z",
+      "script": "night",
+      "label": "tk-7458676119773007112 write",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 6390,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.1363842
+    },
+    {
+      "at": "2026-11-11T10:22:47.412Z",
+      "script": "night",
+      "label": "tk-7240549504083152129 write",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 9364,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.1989122
+    },
+    {
+      "at": "2026-11-11T10:23:08.878Z",
+      "script": "night",
+      "label": "tk-7305823716561177864 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 6537,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.1802362
+    },
+    {
+      "at": "2026-11-11T10:23:48.681Z",
+      "script": "night",
+      "label": "tk-7240549504083152129 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7340,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.19516820000000001
+    },
+    {
+      "at": "2026-11-11T10:24:02.879Z",
+      "script": "night",
+      "label": "tk-7305823716561177864 write (resize 2)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 6991,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2362682
+    },
+    {
+      "at": "2026-11-11T10:24:15.591Z",
+      "script": "night",
+      "label": "tk-7458676119773007112 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 10750,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2668082
+    },
+    {
+      "at": "2026-11-11T10:24:22.311Z",
+      "script": "night",
+      "label": "tk-7305823716561177864 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1534,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.100056
+    },
+    {
+      "at": "2026-11-11T10:24:51.813Z",
+      "script": "night",
+      "label": "tk-7240549504083152129 write (resize 2)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 7837,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2494602
+    },
+    {
+      "at": "2026-11-11T10:24:57.644Z",
+      "script": "night",
+      "label": "tk-7305823716561177864 review pass2",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 4096,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.13595
     }
   ]
 }
