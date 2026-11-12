@@ -45,6 +45,11 @@ otherVideos:
     views: 20600
     published: "2026-02-07"
     cover: "/covers/7604123852758666552.webp"
+  - tiktokId: "7654666518852144405"
+    title: "أربع علامات تدل على انسداد دبة البيئة."
+    views: 14218
+    published: "2026-06-23"
+    cover: "/covers/7654666518852144405.webp"
 tags:
   - "دبة التلوث"
   - "قزوز"
