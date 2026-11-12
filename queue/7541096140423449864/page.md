@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7541096140423449864"
 tiktokId: "7541096140423449864"
 duration: 45
-otherVideos: []
+otherVideos:
+  - tiktokId: "7666901293168020757"
+    title: "الماكينة.. هذي اعتبرها مثل قلب السيارة."
+    views: 31927
+    published: "2026-07-26"
+    cover: "/covers/7666901293168020757.webp"
 tags:
   - "محرك"
   - "صيانة"
