@@ -25,6 +25,11 @@ otherVideos:
     views: 45700
     published: "2024-02-24"
     cover: "/covers/7339230867610406152.webp"
+  - tiktokId: "7637951517781232917"
+    title: "خمس أسباب تخلي السيارة ما تشتغل حتى والبطارية جديدة."
+    views: 6267
+    published: "2026-05-09"
+    cover: "/covers/7637951517781232917.webp"
 tags:
   - "كهرباء"
   - "تشغيل"
