@@ -45,6 +45,11 @@ otherVideos:
     views: 27200
     published: "2024-04-16"
     cover: "/covers/7358543636448988424.webp"
+  - tiktokId: "7555769076602309906"
+    title: "ثلاثة من الأسباب اللي تعطل التيربو عندك."
+    views: 14200
+    published: "2025-09-30"
+    cover: "/covers/7555769076602309906.webp"
 tags:
   - "تيربو"
   - "محرك"
