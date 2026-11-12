@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7608234199065103637"
 tiktokId: "7608234199065103637"
 duration: 54
-otherVideos: []
+otherVideos:
+  - tiktokId: "7496218508548754695"
+    title: "أربع أسباب تخلي الـ Lexus بشكل خاص والسيارات بشكل عام ما تشتغل نهائيًا."
+    views: 29100
+    published: "2025-04-22"
+    cover: "/covers/7496218508548754695.webp"
 tags:
   - "سلف"
   - "بطارية"
