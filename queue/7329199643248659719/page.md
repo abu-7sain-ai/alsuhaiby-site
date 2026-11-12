@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7329199643248659719"
 tiktokId: "7329199643248659719"
 duration: 21
-otherVideos: []
+otherVideos:
+  - tiktokId: "7658738750784113940"
+    title: "أربع أسباب ترفع ضغط الزيت عن معدله الطبيعي."
+    views: 16047
+    published: "2026-07-04"
+    cover: "/covers/7658738750784113940.webp"
 tags:
   - "محرك"
   - "ضغط الزيت"
