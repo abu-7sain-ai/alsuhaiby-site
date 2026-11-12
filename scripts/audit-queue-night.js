@@ -18,7 +18,7 @@ const kt = (ms) => new Date(ms).toLocaleString('en-GB', { timeZone: 'Asia/Kuwait
 const log = (m) => { const l = `[${kt(Date.now())}] ${m}`; console.log(l); try { fs.appendFileSync(LOG, l + '\n'); } catch {} };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const esc = () => readJson(path.join(LIB_DIR, 'audit-escalations.json'), []).length;
-const tot = { audited: 0, changed: 0 }, esc0 = esc(), start0 = auditLeft('queue').length;
+const tot = { audited: 0, changed: 0 }, esc0 = esc(), start0 = auditLeft('all').length;
 let why = '';
 
 // "resets 12:20pm (Asia/Riyadh)" → epoch ms of the next such time (Riyadh = Kuwait = UTC+3)
@@ -29,18 +29,18 @@ function resetFrom(text) {
   if (t <= Date.now()) t += 864e5; return t;
 }
 
-log(`start · ${start0} queued articles to audit · until ${kt(UNTIL)} · concurrency ${CONC}`);
+log(`start · ${start0} articles to audit (unaudited + re-audit under the corrected «explain» rule) · until ${kt(UNTIL)} · concurrency ${CONC}`);
 for (let run = 1; run <= 12; run++) {
-  if (!auditLeft('queue').length) { why = 'queue finished'; break; }
+  if (!auditLeft('all').length) { why = 'queue finished'; break; }
   const mins = Math.floor((UNTIL - Date.now()) / 60e3);
   if (mins < 12) { why = '21:58 reached'; break; }
-  log(`run ${run} · ${auditLeft('queue').length} left · ${mins} min to the deadline`);
+  log(`run ${run} · ${auditLeft('all').length} left · ${mins} min to the deadline`);
   const out = fs.openSync(path.join(ROOT, 'data', 'run-audit.log'), 'a');
-  await new Promise((res) => { const c = spawn(process.execPath, ['scripts/audit.js', '--scope', 'queue', '--concurrency', String(CONC), `--minutes=${mins}`, '--margin', '9'], { cwd: ROOT, stdio: ['ignore', out, out], windowsHide: true }); c.on('exit', res); c.on('error', res); });
+  await new Promise((res) => { const c = spawn(process.execPath, ['scripts/audit.js', '--scope', 'all', '--concurrency', String(CONC), `--minutes=${mins}`, '--margin', '9'], { cwd: ROOT, stdio: ['ignore', out, out], windowsHide: true }); c.on('exit', res); c.on('error', res); });
   const r = readJson(path.join(ROOT, 'data', 'run-audit.json'), {});
   tot.audited += r.audited || 0; tot.changed += r.changed || 0;
-  log(`run ${run} ended: ${r.stopped} · audited ${r.audited}, changed ${r.changed}, set aside ${r.failed} · ${auditLeft('queue').length} left`);
-  if (r.stopped === 'none') { why = auditLeft('queue').length ? '21:58 reached' : 'queue finished'; break; }
+  log(`run ${run} ended: ${r.stopped} · audited ${r.audited}, changed ${r.changed}, set aside ${r.failed} · ${auditLeft('all').length} left`);
+  if (r.stopped === 'none') { why = auditLeft('all').length ? '21:58 reached' : 'queue finished'; break; }
   if (r.stopped === 'time') { why = '21:58 reached'; break; }
   if (r.stopped === 'claude-limit') {
     if (/week/i.test(r.stopReason || '')) { why = 'weekly limit reached'; break; }
@@ -51,7 +51,7 @@ for (let run = 1; run <= 12; run++) {
   }
   why = `${r.stopped}: ${String(r.stopReason || '').slice(0, 120)}`; break;
 }
-const left = auditLeft('queue').length;
+const left = auditLeft('all').length;
 log(`END: ${why} · audited ${tot.audited}, changed ${tot.changed}, ${left} remain, escalations +${esc() - esc0} (${esc()} total)`);
 alert(`🔍 alsuhaiby queue audit stopped (${why}): ${tot.audited} audited, ${tot.changed} changed, ${left} remain. Escalations: +${esc() - esc0} tonight, ${esc()} in total. The daily 7-a-day task stays armed.`);
 process.exit(0);

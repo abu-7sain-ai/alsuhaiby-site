@@ -30,5 +30,5 @@
   "zernioPerMinute": 45,
   "zernioCommentsPerHour": 1700,
   "nightConcurrency": 6,
-  "auditMode": "balanced"
+  "auditMode": "explain"
 }

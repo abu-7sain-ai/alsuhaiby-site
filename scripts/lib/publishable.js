@@ -36,7 +36,7 @@ export function checkPublishable(id, { meta, r2 }, { needFile = true } = {}) {
 // Audited = library audit.json has status changed|clean for the id. skipped (hand-edited / no transcript) and deferred do NOT count.
 export const AUDITED = new Set(['changed', 'clean']);
 export const auditData = ({ libDir = LIB_DIR } = {}) => readJson(path.join(libDir, 'audit.json'), null); // null = library not reachable
-export const isAudited = (id, audit) => !!audit && AUDITED.has(audit[id]?.status);
+export const isAudited = (id, audit) => !!audit && AUDITED.has(audit[id]?.status) && !audit[id]?.redo; // redo = audited under the old cutting rule: waits for the corrected audit
 
 /** Throws PublishBlockedError with the reasons when the video may not be published. */
 export function assertPublishable(id, data = publishData(), opts) {
