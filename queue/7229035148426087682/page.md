@@ -25,6 +25,11 @@ otherVideos:
     views: 13421
     published: "2026-05-17"
     cover: "/covers/7640935184199585045.webp"
+  - tiktokId: "7671732287683366164"
+    title: "أهم أسباب تخلي السيارة توقف إذا اشتغل المكيف"
+    views: 6098
+    published: "2026-08-08"
+    cover: "/covers/7671732287683366164.webp"
 tags:
   - "مكيف"
   - "طفي السيارة"
