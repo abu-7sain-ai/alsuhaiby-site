@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7384116764658896136"
 tiktokId: "7384116764658896136"
 duration: 15
-otherVideos: []
+otherVideos:
+  - tiktokId: "7538496253663972626"
+    title: "أربع اشياء لازم تفحصها اذا ما اشتغلت المروحة عندك."
+    views: 32700
+    published: "2025-08-14"
+    cover: "/covers/7538496253663972626.webp"
 tags:
   - "مروحة الرديتر"
   - "حرارة المكينة"
