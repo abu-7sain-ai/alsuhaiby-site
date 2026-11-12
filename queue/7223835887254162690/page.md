@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7223835887254162690"
 tiktokId: "7223835887254162690"
 duration: 51
-otherVideos: []
+otherVideos:
+  - tiktokId: "7657254120608288021"
+    title: "السؤال: هل لازم أغير لزوجة الزيت حسب فصول السنة؟"
+    views: 38373
+    published: "2026-06-30"
+    cover: "/covers/7657254120608288021.webp"
 tags:
   - "زيت المكينة"
   - "لزوجة الزيت"
