@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7213082034133011714"
 tiktokId: "7213082034133011714"
 duration: 51
-otherVideos: []
+otherVideos:
+  - tiktokId: "7636091291893370133"
+    title: "خمس أسباب تخلي الدخان يطلع من فتحة قياس الزيت"
+    views: 21892
+    published: "2026-05-04"
+    cover: "/covers/7636091291893370133.webp"
 tags:
   - "محرك"
   - "دخان"
