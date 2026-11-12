@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7194162230156348674"
 tiktokId: "7194162230156348674"
 duration: 48
-otherVideos: []
+otherVideos:
+  - tiktokId: "7630531884887461141"
+    title: "أكثر شيء أنسأل عنه بالتلفون أو بالشارع، الدخان الأزرق."
+    views: 17977
+    published: "2026-04-19"
+    cover: "/covers/7630531884887461141.webp"
 tags:
   - "محرك"
   - "دخان أزرق"
