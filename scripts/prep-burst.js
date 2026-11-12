@@ -1,21 +1,27 @@
 // prep-burst.js — the prep line runs ONLY in short bursts: the last hour before each 5-hour Claude session window resets
 // (owner, 2026-11-11). Between bursts nothing runs at all: no process, no Claude call, zero quota.
 //
-// Started by the scheduled task «alsuhaiby-prep-supervisor» (hidden launcher scripts/prep-supervisor.vbs) at each burst start.
-// Bursts, Kuwait time:  23:40→00:38 · 04:40→05:38 · 09:40→10:38 · 14:40→15:38 · 19:40→20:38   (stop 2 min before each reset)
-//   · outside a burst window (e.g. the PC woke up late) → does nothing and exits
-//   · inside one → runs night.js (concurrency from config/site.json → nightConcurrency, below-normal priority, --no-telegram)
-//     until the burst's stop time; no new video in the last 9 minutes, so a video is not cut at the stop
-//   · session limit inside a burst → the burst ends at once; the next scheduled burst continues (never resumes early)
-//   · weekly limit → the whole schedule stops (task disabled)
-//   · backlog finished → «finished» message, the whole schedule stops (task disabled)
-//   · Thursday 2026-11-12 22:00 Kuwait → nothing runs after it (the task also expires and deletes itself then)
-//   · a run that ends early for another reason (errors, network, a crash) is started again while ≥ 10 min of the burst remain
-// Telegram: ONE message at the end of each burst (written in this burst, how many remain, why it ended) + one at the finish.
+// SELF-CORRECTING (owner, 2026-11-12): the 5-hour window is anchored to its first use, not to a fixed clock, so a burst is
+// never timed from a hard-coded hour. When the scheduled task fires, the runner first reads the REAL reset time from Claude
+// itself: one tiny Haiku call in stream-json mode, whose «rate_limit_event» carries the five-hour window's resetsAt (and the
+// weekly one). The burst is then  [real reset − 60 min, real reset − 2 min]:
+//   · fired early (reset still > 60 min away) → waits quietly in-process (no Claude call) until reset − 60 min, then starts
+//   · fired inside that hour → starts at once and stops at reset − 2 min
+//   · fewer than 10 minutes left → nothing runs
+//   · the window is already used up (status rejected) → nothing runs; the next trigger continues
+//   · Claude's reset time can't be read (network, odd output) → falls back to the armed trigger's own window (FALLBACK)
+// Armed triggers of the task «alsuhaiby-prep-supervisor» (Kuwait): 11:22, 16:22, 21:00 — they are only "wake-up and check"
+// times; the window itself always comes from the real reset.
+// Stops: session limit inside a burst → the burst ends at once (next trigger continues) · weekly limit → whole schedule
+// stops (task disabled) · backlog finished → «finished» message, whole schedule stops (task disabled) · nothing after 21:58
+// Thursday 2026-11-12 (the weekly quota resets at 22:00; the task also expires and deletes itself then).
+// A run that ends early for another reason (errors, network, a crash) is started again while ≥ 10 min of the burst remain.
+// Telegram: ONE message at the end of each burst (written, remaining, why it ended, the real reset it used) + one at the finish.
 // All night.js rules apply: never-wait, no retries, machine guard, whole-file writes, locks, nothing published.
 //   node scripts/prep-burst.js            (what the task runs)
-//   node scripts/prep-burst.js --now      start the coming burst early (stops at its normal stop time)
-//   node scripts/prep-burst.js --check    say whether now is inside a burst, and the next one; runs nothing
+//   node scripts/prep-burst.js --now      start at once (no waiting for reset − 60 min), still stops at reset − 2 min
+//   node scripts/prep-burst.js --check    show the last known reset, the armed fallback windows and what is left; no Claude call
+//   node scripts/prep-burst.js --probe    read the real reset from Claude (one tiny Haiku call) and print it; runs nothing
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -23,10 +29,9 @@ import { spawn, spawnSync } from 'node:child_process';
 import { ROOT, args, readJson, writeJson, loadLedger } from './lib/common.js';
 import { remaining, queued } from './lib/pipeline.js';
 import { alert } from './lib/status.js';
+import { HARD_STOP, MIN_BURST, fbCurrent, fbNext, decide, hm } from './lib/burst-window.js';
 
 const A = args();
-const BURSTS = [['23:40', '00:38'], ['04:40', '05:38'], ['09:40', '10:38'], ['14:40', '15:38'], ['19:40', '20:38']];
-const DEADLINE = Date.parse('2026-11-12T19:00:00Z'); // Thursday 22:00 Kuwait
 const TASK = 'alsuhaiby-prep-supervisor';
 const MARGIN = 9; // minutes before the stop when no new video starts
 const CONC = Number(readJson(path.join(ROOT, 'config', 'site.json'), {}).nightConcurrency || 3);
@@ -34,47 +39,79 @@ const STATE = path.join(ROOT, 'data', 'prep-burst.json');
 const LOG = path.join(ROOT, 'data', 'run-burst.log'); // data/run-*.log is not committed
 const PID = path.join(os.tmpdir(), 'alsuhaiby-locks', 'prep-burst.pid');
 const kt = (ms) => new Date(ms).toLocaleString('en-GB', { timeZone: 'Asia/Kuwait', weekday: 'short', hour: '2-digit', minute: '2-digit' });
-const hm = (ms) => new Date(ms).toLocaleTimeString('en-GB', { timeZone: 'Asia/Kuwait', hour: '2-digit', minute: '2-digit' });
 const log = (m) => { const l = `[${kt(Date.now())}] ${m}`; console.log(l); try { fs.appendFileSync(LOG, l + '\n'); } catch {} };
 const alive = (pid) => { if (!pid) return false; try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
 const left = () => { const l = loadLedger(); return remaining().filter((v) => l[v.id]?.status !== 'failed').length; };
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const state = () => readJson(STATE, {});
 
-// Kuwait wall clock (UTC+3, no daylight saving) → epoch ms, for the Kuwait date `dayOffset` days from today
-function at(hhmm, dayOffset = 0) {
-  const [h, m] = hhmm.split(':').map(Number);
-  const k = new Date(Date.now() + 3 * 3600e3);
-  return Date.UTC(k.getUTCFullYear(), k.getUTCMonth(), k.getUTCDate() + dayOffset, h - 3, m);
-}
-function windows() { // every burst from yesterday to tomorrow, as {start, stop}
-  const out = [];
-  for (const d of [-1, 0, 1]) for (const [s, e] of BURSTS) { const start = at(s, d); let stop = at(e, d); if (stop <= start) stop += 24 * 3600e3; out.push({ start, stop }); }
-  return out.sort((a, b) => a.start - b.start);
-}
-const current = (now = Date.now()) => windows().find((w) => now >= w.start && now < w.stop) || null;
-const next = (now = Date.now()) => windows().find((w) => w.start > now) || null;
 const disableTask = (why) => { const r = spawnSync('schtasks', ['/Change', '/TN', TASK, '/DISABLE'], { encoding: 'utf8', timeout: 30e3 }); log(`schedule stopped (${why}) — task ${r.status === 0 ? 'disabled' : `not disabled: ${String(r.stderr || '').trim()}`}`); };
 
+// The real reset: a tiny Haiku call in stream-json mode; Claude reports the five-hour (and weekly) window in a rate_limit_event.
+// Never waits: 90 s cap, no retry. Returns { ok, fiveReset, fiveUtil, fiveStatus, weekReset, weekUtil, weekStatus } or { ok:false, why }.
+function probe() {
+  const env = { ...process.env }; delete env.ANTHROPIC_API_KEY;
+  const r = spawnSync('claude', ['-p', '--output-format', 'stream-json', '--verbose', '--model', 'haiku', '--no-session-persistence',
+    '--setting-sources', 'project', '--tools', '""', '--strict-mcp-config'],
+  { input: 'Reply with the word OK.', cwd: os.tmpdir(), env, encoding: 'utf8', shell: true, timeout: 90e3, windowsHide: true });
+  let info = null;
+  for (const line of String(r.stdout || '').split('\n')) {
+    let j; try { j = JSON.parse(line); } catch { continue; }
+    if (j.type === 'rate_limit_event' && j.rate_limit_info) info = j.rate_limit_info; // keep the last one
+  }
+  if (!info) return { ok: false, why: r.error ? String(r.error.code || r.error.message) : `no rate_limit_event (exit ${r.status})` };
+  const w = info.unifiedWindows || {};
+  const five = w.five_hour || (info.rateLimitType === 'five_hour' ? info : {});
+  const week = w.seven_day || {};
+  const ms = (s) => (s ? Number(s) * 1e3 : 0);
+  return { ok: !!ms(five.resetsAt), why: ms(five.resetsAt) ? '' : 'no five-hour reset in the event',
+    fiveReset: ms(five.resetsAt), fiveUtil: five.utilization, fiveStatus: five.status || info.status,
+    weekReset: ms(week.resetsAt), weekUtil: week.utilization, weekStatus: week.status };
+}
+const probeTxt = (p) => p.ok ? `5-hour window resets ${kt(p.fiveReset)} (${Math.round((p.fiveUtil ?? 0) * 100)}% used, ${p.fiveStatus}) · weekly resets ${p.weekReset ? kt(p.weekReset) : '?'} (${Math.round((p.weekUtil ?? 0) * 100)}% used, ${p.weekStatus || '?'})` : `reset not readable: ${p.why}`;
+
 if (A.check) {
-  const c = current(), n = next();
-  console.log(`now ${kt(Date.now())} · ${c ? `INSIDE a burst until ${hm(c.stop)}` : 'outside any burst (nothing runs)'} · next burst ${n ? `${kt(n.start)} → ${hm(n.stop)}` : '-'} · deadline ${kt(DEADLINE)} · concurrency ${CONC} · ${left()} left`);
+  const s = state(), n = fbNext(), c = fbCurrent();
+  console.log(`now ${kt(Date.now())} · last real reset read: ${s.realReset ? `${kt(Date.parse(s.realReset))} (read ${kt(Date.parse(s.realResetReadAt))})` : 'none yet'} · fallback window ${c ? `NOW until ${hm(c.stop)}` : n ? `next ${kt(n.start)} → ${hm(n.stop)}` : '-'} · hard stop ${kt(HARD_STOP)} · concurrency ${CONC} · ${left()} left`);
   process.exit(0);
 }
+if (A.probe) { console.log(probeTxt(probe())); process.exit(0); }
 
-// ---- guards: one burst runner at a time, deadline, burst window ------------------------------------------------------------
+// ---- guards: one burst runner at a time, deadline -------------------------------------------------------------------------
 fs.mkdirSync(path.dirname(PID), { recursive: true });
 { let other = 0; try { other = Number(fs.readFileSync(PID, 'utf8')); } catch {} if (other && other !== process.pid && alive(other)) process.exit(0); }
-if (Date.now() >= DEADLINE) { log('Thursday 22:00 deadline passed — nothing runs'); disableTask('deadline'); process.exit(0); }
-// --now (owner's call): start the coming burst early — it still stops at that burst's normal stop time
-const burst = current() || (A.now && next() ? { start: Date.now(), stop: next().stop } : null);
-if (!burst) { const n = next(); log(`started outside a burst window — nothing runs (next burst ${n ? kt(n.start) : '-'})`); process.exit(0); }
+if (Date.now() >= HARD_STOP) { log('Thursday 21:58 hard stop passed — nothing runs'); disableTask('deadline'); process.exit(0); }
 fs.writeFileSync(PID, String(process.pid));
 process.on('exit', () => { try { if (Number(fs.readFileSync(PID, 'utf8')) === process.pid) fs.rmSync(PID); } catch {} });
 try { os.setPriority(os.constants.priority.PRIORITY_BELOW_NORMAL); } catch {} // the run it starts inherits below-normal
-const stop = Math.min(burst.stop, DEADLINE);
+if (!left()) { alert('✅ alsuhaiby prep: the whole backlog is finished.'); disableTask('backlog finished'); process.exit(0); }
+
+// ---- the burst window, from the REAL reset -------------------------------------------------------------------------------
+let p = probe();
+log(`fired · ${probeTxt(p)}`);
+if (p.ok) writeJson(STATE, { ...state(), realReset: new Date(p.fiveReset).toISOString(), realResetReadAt: new Date().toISOString(), fiveUtil: p.fiveUtil, weekUtil: p.weekUtil });
+const d = decide(p, Date.now(), !!A.now);
+log(`decision: ${d.act}${d.burst ? ` · burst ${hm(d.burst.start)}→${hm(d.burst.stop)}` : ''} (${d.source})`);
+if (A.dry) process.exit(0);
+if (d.act === 'weekly') { alert(`⛔ alsuhaiby prep: weekly limit reached — schedule stopped. ${left()} remain.`); disableTask('weekly limit'); process.exit(0); }
+if (d.act === 'used-up') {
+  const n = fbNext();
+  alert(`🌙 alsuhaiby prep burst skipped: the 5-hour window is already used up (resets ${hm(p.fiveReset)}). ${left()} remain. ${n && n.start < HARD_STOP ? `Next check ${kt(n.start)}.` : 'No more bursts before Thursday 22:00.'}`);
+  process.exit(0);
+}
+if (d.act === 'none') process.exit(0);
+const burst = d.burst, source = d.source;
+if (Date.now() < burst.start) { // fired early: wait quietly (no Claude call) until reset − 60 min
+  writeJson(STATE, { ...state(), phase: 'waiting', burstStart: new Date(burst.start).toISOString(), stop: new Date(burst.stop).toISOString(), source, pid: process.pid });
+  log(`waiting until ${hm(burst.start)} (${source}) — nothing runs before it`);
+  while (Date.now() < burst.start) await sleep(Math.min(60e3, burst.start - Date.now()));
+}
+const stop = burst.stop;
 const startLeft = left();
 if (!startLeft) { alert('✅ alsuhaiby prep: the whole backlog is finished.'); disableTask('backlog finished'); process.exit(0); }
-writeJson(STATE, { phase: 'running', burstStart: new Date(burst.start).toISOString(), stop: new Date(stop).toISOString(), concurrency: CONC, leftAtStart: startLeft, pid: process.pid });
-log(`burst ${hm(burst.start)}→${hm(stop)} · concurrency ${CONC} · ${startLeft} left`);
+writeJson(STATE, { ...state(), phase: 'running', burstStart: new Date(Date.now()).toISOString(), stop: new Date(stop).toISOString(), source, concurrency: CONC, leftAtStart: startLeft, pid: process.pid });
+log(`burst ${hm(Date.now())}→${hm(stop)} (${source}) · concurrency ${CONC} · ${startLeft} left`);
+const startedAt = Date.now();
 
 // ---- run night.js until the burst's stop -----------------------------------------------------------------------------------
 const runNight = () => new Promise((resolve) => {
@@ -92,18 +129,18 @@ for (;;) {
   kind = r.running ? 'crash' : r.stopped || 'none'; why = r.stopReason || '';
   log(`run ${runs} ended: ${kind} ${why.slice(0, 120)} · written ${r.written || 0}`);
   if (['time', 'claude-limit', 'machine', 'none'].includes(kind)) break;
-  if (stop - Date.now() < 10 * 60e3 || runs >= 3) break; // errors / network / crash: start again only while the burst has time left
+  if (stop - Date.now() < MIN_BURST * 60e3 || runs >= 3) break; // errors / network / crash: start again only while the burst has time left
 }
 
 // ---- end of burst: one message ---------------------------------------------------------------------------------------------
 const nowLeft = left();
 const weekly = kind === 'claude-limit' && /week/i.test(why);
 const reason = kind === 'time' ? 'time' : kind === 'claude-limit' ? (weekly ? 'weekly limit' : 'session limit') : kind === 'none' ? 'backlog finished' : { machine: 'machine guard', network: 'network down', errors: '3 failures in a row', tiktok: 'TikTok block', crash: 'crash' }[kind] || kind;
-writeJson(STATE, { phase: 'idle', lastBurst: { start: new Date(burst.start).toISOString(), endedAt: new Date().toISOString(), reason, written, leftAtStart: startLeft, left: nowLeft } });
-if (!nowLeft) { alert(`✅ alsuhaiby prep: the whole backlog is finished (last burst wrote ${written}). Queue: ${queued().length}.`); disableTask('backlog finished'); process.exit(0); }
-const n = next();
-const nextTxt = weekly ? 'Schedule stopped (weekly limit).' : n && n.start < DEADLINE ? `Next burst ${kt(n.start)}.` : 'No more bursts before Thursday 22:00.';
-alert(`🌙 alsuhaiby prep burst ${hm(burst.start)}–${hm(Date.now())}: written ${written}, ${nowLeft} remain. Ended: ${reason}. ${nextTxt}`);
+writeJson(STATE, { ...state(), phase: 'idle', lastBurst: { start: new Date(startedAt).toISOString(), endedAt: new Date().toISOString(), source, reason, written, leftAtStart: startLeft, left: nowLeft } });
+if (!nowLeft) { alert(`✅ alsuhaiby prep: the whole backlog is finished (last burst wrote ${written}). Queue: ${queued().length}. Schedule stopped.`); disableTask('backlog finished'); process.exit(0); }
+const n = fbNext();
+const nextTxt = weekly ? 'Schedule stopped (weekly limit).' : n && n.start < HARD_STOP ? `Next check ${kt(n.start)} (burst timed from the real reset).` : 'No more bursts before Thursday 22:00.';
+alert(`🌙 alsuhaiby prep burst ${hm(startedAt)}–${hm(Date.now())} (${source}): written ${written}, ${nowLeft} remain. Ended: ${reason}. ${nextTxt}`);
 if (weekly) disableTask('weekly limit');
 log(`burst done: ${reason} · written ${written} · ${nowLeft} left`);
 process.exit(0);
