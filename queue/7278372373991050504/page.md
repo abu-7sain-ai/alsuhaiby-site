@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7278372373991050504"
 tiktokId: "7278372373991050504"
 duration: 45
-otherVideos: []
+otherVideos:
+  - tiktokId: "7320297682726178056"
+    title: "خمس أشياء تساعدك انك تحافظ على تواير سيارتك، أو الإطارات."
+    views: 47500
+    published: "2024-01-04"
+    cover: "/covers/7320297682726178056.webp"
 tags:
   - "تواير"
   - "ضغط الهوا"
