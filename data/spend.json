@@ -1,5 +1,5 @@
 {
-  "totalUsd": 13.971485,
+  "totalUsd": 13.981915,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -26186,6 +26186,35 @@
       "completionTokens": 89,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.332396
+    },
+    {
+      "at": "2026-11-12T08:32:59.344Z",
+      "script": "night",
+      "label": "tk-7702129106707598612 review pass1",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 1612,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.0903304
+    },
+    {
+      "at": "2026-11-12T08:33:02.510Z",
+      "script": "night",
+      "label": "7686947262693379348 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 3552,
+      "completionTokens": 2071,
+      "costUsd": 0.01043025
+    },
+    {
+      "at": "2026-11-12T08:33:02.962Z",
+      "script": "night",
+      "label": "7661705580289035540 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 87,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.33281200000000005
     }
   ]
 }
