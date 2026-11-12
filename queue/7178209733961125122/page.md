@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7178209733961125122"
 tiktokId: "7178209733961125122"
 duration: 47
-otherVideos: []
+otherVideos:
+  - tiktokId: "7638694854813404436"
+    title: "خمس علامات تدل على تلف سنسر الحرارة."
+    views: 38415
+    published: "2026-05-11"
+    cover: "/covers/7638694854813404436.webp"
 tags:
   - "سنسر الحرارة"
   - "تبريد"
