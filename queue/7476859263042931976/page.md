@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7476859263042931976"
 tiktokId: "7476859263042931976"
 duration: 21
-otherVideos: []
+otherVideos:
+  - tiktokId: "7490595170027687175"
+    title: "خمس مشاكل تجيك إذا تعطلت الكويلات عندك."
+    views: 25000
+    published: "2025-04-07"
+    cover: "/covers/7490595170027687175.webp"
 tags:
   - "محرك"
   - "كويلات"
