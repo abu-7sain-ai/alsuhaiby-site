@@ -30,6 +30,11 @@ otherVideos:
     views: 8139
     published: "2026-06-14"
     cover: "/covers/7651317302230617364.webp"
+  - tiktokId: "7687312732307180820"
+    title: "حساس الرجوع، سنسر الرجوع."
+    views: 3176
+    published: "2026-09-19"
+    cover: "/covers/7687312732307180820.webp"
 tags:
   - "سنسر الرجوع"
   - "حساسات"
