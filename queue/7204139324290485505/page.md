@@ -20,6 +20,11 @@ otherVideos:
     views: 25340
     published: "2026-04-26"
     cover: "/covers/7633107608823500053.webp"
+  - tiktokId: "7682471000667098389"
+    title: "أربعة من الأعراض إذا شفتها دليل على تلف كتاوت الدينمو."
+    views: 6472
+    published: "2026-09-06"
+    cover: "/covers/7682471000667098389.webp"
 tags:
   - "كهرباء"
   - "دينمو"
