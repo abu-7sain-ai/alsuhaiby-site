@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7627949491655576853"
 tiktokId: "7627949491655576853"
 duration: 24
-otherVideos: []
+otherVideos:
+  - tiktokId: "7684716758078393621"
+    title: "الفيديو هذا سويته خصوصي للي ترجف سيارته من بعد ما جفدها أو صلحها."
+    views: 4076
+    published: "2026-09-12"
+    cover: "/covers/7684716758078393621.webp"
 tags:
   - "محرك"
   - "صرفية البنزين"
