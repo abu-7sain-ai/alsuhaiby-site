@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7702532280161651989"
 tiktokId: "7702532280161651989"
 duration: 74
-otherVideos: []
+otherVideos:
+  - tiktokId: "7702899787590405396"
+    title: "تكلمنا بالمقطع اللي طاف عن مميزات اللاندكروزر التوين تيربو وعيوبه"
+    views: 16898
+    published: "2026-10-31"
+    cover: "/covers/7702899787590405396.webp"
 tags:
   - "لاندكروزر"
   - "تيربو"
