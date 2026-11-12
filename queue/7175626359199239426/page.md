@@ -50,6 +50,11 @@ otherVideos:
     views: 14218
     published: "2026-06-23"
     cover: "/covers/7654666518852144405.webp"
+  - tiktokId: "7689155896567516422"
+    title: "علامات انسداد دبة البيئة"
+    views: 3695
+    published: "2026-09-24"
+    cover: "/covers/7689155896567516422.webp"
 tags:
   - "دبة التلوث"
   - "قزوز"
