@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7253895945056750849"
 tiktokId: "7253895945056750849"
 duration: 27
-otherVideos: []
+otherVideos:
+  - tiktokId: "7641661059052440853"
+    title: "أربع من أعراض تلف كلتش القير العادي"
+    views: 26926
+    published: "2026-05-19"
+    cover: "/covers/7641661059052440853.webp"
 tags:
   - "قير عادي"
   - "كلتش"
