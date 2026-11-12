@@ -40,6 +40,11 @@ otherVideos:
     views: 56800
     published: "2024-03-05"
     cover: "/covers/7342938765536546066.webp"
+  - tiktokId: "7598242200559947019"
+    title: "أربع من المشاكل اللي يسببهن الترصيص"
+    views: 41100
+    published: "2026-01-22"
+    cover: "/covers/7598242200559947019.webp"
 tags:
   - "تواير"
   - "ترصيص"
