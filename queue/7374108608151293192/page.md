@@ -45,6 +45,11 @@ otherVideos:
     views: 7802
     published: "2026-10-02"
     cover: "/covers/7692127423667719445.webp"
+  - tiktokId: "7635724313080958228"
+    title: "خمس أشياء لازم تفحص باستمرار بسيارتك"
+    views: 6685
+    published: "2026-05-03"
+    cover: "/covers/7635724313080958228.webp"
 tags:
   - "صيانة دورية"
   - "زيوت"
