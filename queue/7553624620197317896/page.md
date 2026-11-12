@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7553624620197317896"
 tiktokId: "7553624620197317896"
 duration: 34
-otherVideos: []
+otherVideos:
+  - tiktokId: "7661333295124516116"
+    title: "ما في شي يعكر المزاج كثر لمبة المكينة إذا نورت فجأة"
+    views: 11541
+    published: "2026-07-11"
+    cover: "/covers/7661333295124516116.webp"
 tags:
   - "محرك"
   - "لمبة المكينة"
