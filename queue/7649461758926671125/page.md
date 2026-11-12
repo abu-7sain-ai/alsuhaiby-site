@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7649461758926671125"
 tiktokId: "7649461758926671125"
 duration: 47
-otherVideos: []
+otherVideos:
+  - tiktokId: "7693252812427283732"
+    title: "أهم أسباب لظهور زيت على البلاكات، البواجي، شمعات الاحتراق."
+    views: 15349
+    published: "2026-10-05"
+    cover: "/covers/7693252812427283732.webp"
 tags:
   - "محرك"
   - "بلاكات"
