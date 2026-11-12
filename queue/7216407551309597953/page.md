@@ -20,6 +20,11 @@ otherVideos:
     views: 286500
     published: "2024-09-13"
     cover: "/covers/7414115016791608583.webp"
+  - tiktokId: "7665046933349649685"
+    title: "هذا اللي راح يصير وياك إذا خربت جلود المقاصات."
+    views: 14226
+    published: "2026-07-21"
+    cover: "/covers/7665046933349649685.webp"
 tags:
   - "جلود المقصات"
   - "تعليق"
