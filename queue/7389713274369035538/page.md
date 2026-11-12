@@ -20,6 +20,11 @@ otherVideos:
     views: 13994
     published: "2026-06-19"
     cover: "/covers/7653166642842635540.webp"
+  - tiktokId: "7685445286780505364"
+    title: "خمس مشاكل تعرف منها تلف أصابع البطارية"
+    views: 5149
+    published: "2026-09-14"
+    cover: "/covers/7685445286780505364.webp"
 tags:
   - "كهرباء"
   - "بطارية"
