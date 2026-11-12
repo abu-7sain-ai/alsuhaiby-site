@@ -40,6 +40,11 @@ otherVideos:
     views: 234300
     published: "2023-01-24"
     cover: "/covers/7192291740064222466.webp"
+  - tiktokId: "7295071017305705729"
+    title: "السؤال، للراديتر، أفضل الماي العادي؟"
+    views: 46500
+    published: "2023-10-28"
+    cover: "/covers/7295071017305705729.webp"
 tags:
   - "تبريد"
   - "راديتر"
