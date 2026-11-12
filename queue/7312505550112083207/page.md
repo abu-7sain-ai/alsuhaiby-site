@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7312505550112083207"
 tiktokId: "7312505550112083207"
 duration: 33
-otherVideos: []
+otherVideos:
+  - tiktokId: "7660222752200215828"
+    title: "ثلاث أمور ودي إنك تعرفها عن جنزير الصدر."
+    views: 16988
+    published: "2026-07-08"
+    cover: "/covers/7660222752200215828.webp"
 tags:
   - "محرك"
   - "جنزير الصدر"
