@@ -35,6 +35,11 @@ otherVideos:
     views: 8045
     published: "2026-07-22"
     cover: "/covers/7665416285257272597.webp"
+  - tiktokId: "7682148823132589333"
+    title: "شنو الـ ABS؟"
+    views: 2060
+    published: "2026-09-05"
+    cover: "/covers/7682148823132589333.webp"
 tags:
   - "فرامل"
   - "ABS"
