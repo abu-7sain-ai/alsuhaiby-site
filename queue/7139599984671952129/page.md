@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7139599984671952129"
 tiktokId: "7139599984671952129"
 duration: 52
-otherVideos: []
+otherVideos:
+  - tiktokId: "7552107798570618119"
+    title: "انت تدري ان موترك المفروض يبرد حتى وهو واقف عالإشارة؟"
+    views: 51900
+    published: "2025-09-20"
+    cover: "/covers/7552107798570618119.webp"
 tags:
   - "مكيف"
   - "مراوح"
