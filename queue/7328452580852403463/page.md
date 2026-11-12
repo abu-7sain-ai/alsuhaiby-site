@@ -40,6 +40,11 @@ otherVideos:
     views: 67700
     published: "2024-01-12"
     cover: "/covers/7323262598529502471.webp"
+  - tiktokId: "7279492216039492871"
+    title: "شنو أسباب تلف كراسي السيارة؟"
+    views: 56500
+    published: "2023-09-16"
+    cover: "/covers/7279492216039492871.webp"
 tags:
   - "محرك"
   - "رجفة"
