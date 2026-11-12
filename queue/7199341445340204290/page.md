@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7199341445340204290"
 tiktokId: "7199341445340204290"
 duration: 61
-otherVideos: []
+otherVideos:
+  - tiktokId: "7618651276347182357"
+    title: "خمسة من العلامات اللي تدل على إن دورة التبريد بسيارتك فيها هوا، أو دورة الماي."
+    views: 49800
+    published: "2026-03-18"
+    cover: "/covers/7618651276347182357.webp"
 tags:
   - "تبريد"
   - "رديتر"
