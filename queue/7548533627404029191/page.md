@@ -20,6 +20,11 @@ otherVideos:
     views: 41901
     published: "2026-08-05"
     cover: "/covers/7670613927876742420.webp"
+  - tiktokId: "7586729405410577720"
+    title: "سيارتك يالله تشتغل؟"
+    views: 41200
+    published: "2025-12-22"
+    cover: "/covers/7586729405410577720.webp"
 tags:
   - "تشغيل"
   - "بطارية"
