@@ -20,6 +20,11 @@ otherVideos:
     views: 17977
     published: "2026-04-19"
     cover: "/covers/7630531884887461141.webp"
+  - tiktokId: "7681010493666069780"
+    title: "اكثر شي انسأل عنه بالتلفون او بالشارع الدخان الازرق."
+    views: 6462
+    published: "2026-09-02"
+    cover: "/covers/7681010493666069780.webp"
 tags:
   - "محرك"
   - "دخان أزرق"
