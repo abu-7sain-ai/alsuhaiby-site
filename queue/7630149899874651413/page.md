@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7630149899874651413"
 tiktokId: "7630149899874651413"
 duration: 49
-otherVideos: []
+otherVideos:
+  - tiktokId: "7678775746164231444"
+    title: "اختلفت مع واحد من المتابعين باللايف على ريحة الحرارة اللي تطلع من السيارة بعد ما تطفيها."
+    views: 31486
+    published: "2026-08-27"
+    cover: "/covers/7678775746164231444.webp"
 tags:
   - "تبريد"
   - "تيربو"
