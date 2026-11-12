@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7258348928750357762"
 tiktokId: "7258348928750357762"
 duration: 34
-otherVideos: []
+otherVideos:
+  - tiktokId: "7645006696020020501"
+    title: "ثلاث نقاط مهمة تمنعك تعبي غاز مكيف سيارتك بنفسك."
+    views: 46038
+    published: "2026-05-28"
+    cover: "/covers/7645006696020020501.webp"
 tags:
   - "مكيف"
   - "غاز المكيف"
