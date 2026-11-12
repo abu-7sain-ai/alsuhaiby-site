@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7389713274369035538"
 tiktokId: "7389713274369035538"
 duration: 23
-otherVideos: []
+otherVideos:
+  - tiktokId: "7653166642842635540"
+    title: "خمس علامات تعرف منها تلف أصابع البطارية"
+    views: 13994
+    published: "2026-06-19"
+    cover: "/covers/7653166642842635540.webp"
 tags:
   - "كهرباء"
   - "بطارية"
