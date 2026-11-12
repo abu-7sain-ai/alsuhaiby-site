@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7368917534839508242"
 tiktokId: "7368917534839508242"
 duration: 31
-otherVideos: []
+otherVideos:
+  - tiktokId: "7648338420707740948"
+    title: "ثلاث مشاكل في طرمبة البنزين راح تجي بسيارتك."
+    views: 44851
+    published: "2026-06-06"
+    cover: "/covers/7648338420707740948.webp"
 tags:
   - "طرمبة بنزين"
   - "فيوز"
