@@ -6,11 +6,16 @@
 3. Length 1150–1400 after the edit by expanding only verified points; never inventing. If that is impossible the accurate shorter article stays (listed «short»).
 4. Commit + push after every article; never half-edited.
 5. Escalate to the owner only: risk to a reader's safety or to Mohammad's professional reputation — one list, the run never stops for it.
+6. Mode = BALANCED (owner, 2026-11-12, standing rule — do not ask again). Why: his videos are 20–60 seconds, so strict mode cuts pages to 200–350 words, which defeats the site’s purpose (ranking in Google, being cited by AI engines). The essential protection is the same in both modes: nothing false is ever said in his name.
+   Balanced = remove every figure, step, warning, cause or claim he did not give, and anything in his voice he never said; keep correct, undisputed explanation of how the parts work, clearly framed as general information, not as his claim.
+7. Repetition stays banned in the expand step (no recaps, no restating his points); a shorter article beats padding.
+8. Escalation bar: real injury risk, or a false or softened claim in his name. Nothing looser.
+9. The 3 test articles (fuel filling, myths, overheating) were redone from their pre-audit versions in balanced mode to remove the strict-mode padding.
 
 ## 2026-11-12 — Bursts follow the real session reset (owner)
 1. The old triggers (23:40, 04:40, 09:40, 14:40, 19:40) were deleted, not added to. The task now has exactly three: 11:22 (→12:18), 16:22 (→17:18), 21:00 (→21:58, cut short for the 22:00 weekly reset).
 2. Self-correcting: each burst starts one hour before the REAL reset Claude reports (rate_limit_event in a tiny Haiku stream-json call), and stops 2 minutes before it; the armed times are only a fallback.
-3. Backlog finished → the whole schedule stops at once (task disabled) with a Telegram. Everything else unchanged: concurrency 6, never-wait, no retries, machine guard, whole-file writes, locks, no publishing, one Telegram per burst end.
+3. Backlog finished → (superseded the same day: the remaining bursts then run the content audit; the schedule stops when the backlog AND the audit are done). Everything else unchanged: concurrency 6, never-wait, no retries, machine guard, whole-file writes, locks, no publishing, one Telegram per burst end.
 
 ## 2026-11-11 — Prep line rules (owner)
 1. Queued articles under 1150 words are held (5 taken out of the queue and rewritten). Writer target 1250–1350, up to 2 resizes, reviewer FIX floor 75% in code, one expand pass with fact-check of added sentences only, held if still outside 1150–1400.

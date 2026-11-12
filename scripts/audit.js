@@ -46,7 +46,8 @@ const RULES = () => `The owner's three rules, applied strictly:
 3. Anything that cannot be verified against the video is removed.
    VERIFIED means: (a) he says it or it is shown/written on screen; or (b) it is the plain, obvious why/how behind a point HE made and adds no new fact of its own.
    NOT VERIFIED: any new number or figure (temperature, speed, minutes, km, percentage, price, quantity); any cause, sign, step, tool, product, part, procedure, advice or warning he did not give; any statistic, personal story, brand/model-specific claim; anything a careful mechanic could dispute.${MODE === 'balanced' ? `
-   KEPT AS GENERAL INFORMATION (rule 2): a correct, well-established explanation of HOW or WHY the parts he talks about work or fail, that a careful mechanic would never dispute and that contains none of the NOT VERIFIED items above (no figure, no advice, no step, no warning, no new cause or sign). It stays only if it reads as general information, not as his claim; REWORD it if it is attributed to him.` : ''}
+   BALANCED MODE — KEEP AS GENERAL INFORMATION: correct, undisputed explanation of how the parts and systems in his points work (e.g. what the fuel tank breathes out and why fuel vapour catches fire easily; that a diesel engine ignites by compression and a petrol engine by spark plugs; what the thermostat or the radiator cap does), and the mechanism that explains WHY his own point is true. Such a sentence stays when it reads as general information and not as his claim (REWORD it if it is put in his voice).
+   It is still REMOVED when it adds: a figure; a step, procedure or test for the reader; advice or a warning he did not give; a NEW cause or sign = a new problem or reason the reader should act on that he did not list, or a reason that REPLACES or weakens his own reason; a claim about what happens to the car (warning lights, codes, damage, costs) that he did not make; anything disputable.` : ''}
 If several videos are given, they are all his own videos on this page: what he says in any of them counts as verified.`;
 
 export const AUDIT_PROMPT = () => `You audit an Arabic web article on the personal site of محمد الصهيبي, a Kuwaiti mechanic («كراج الصهيبي»). An AI wrote it from his short video(s) and expanded it with general knowledge.
@@ -56,7 +57,7 @@ The article is split into numbered units (title, description, summary, intro sen
 - REWORD (rule 2): the content itself is verified, but it is attributed to him wrongly → "text" = the same content as plain general information, clearly not his personal claim (no new facts).
 - REMOVE (rule 3, or rule 2 when the content is not verified).
 Each listed unit also gets "rule" (1|2|3), "reason" (short English; quote what the video says when relevant) and "risk" about the ORIGINAL unit:
-- "harm": ONLY if a reader who follows the original could realistically be injured (burns, fire, loss of control, brake failure) — e.g. it contradicts or weakens HIS safety warning, or gives a dangerous procedure;
+- "harm": a reader who follows the original could realistically be injured (burns, scalding, fire, explosion, loss of control, brake failure). ALWAYS "harm" when the original tells the reader to touch, squeeze, open or work on a hot or pressurised part (radiator cap, hoses, coolant) — especially when he warns to stay away from it — when it weakens or replaces HIS safety reason or warning, when it says it is fine to keep driving with a fault, or when it gives a do-it-yourself check on brakes, fuel or a hot engine;
 - "reputation": ONLY if the original puts a clearly false or self-contradicting statement in his name, or reverses/softens one of his firm claims, so that a mechanic reading it would think less of him;
 - "none" for everything else — an extra detail, an unverified but harmless explanation, a style issue, a figure that is merely not his. Most units are "none"; be sparing.
 The title cannot be removed: CORRECT it if it is wrong (its number must match the number of points he gives). A heading is removed only if its whole section is unverified.
@@ -66,9 +67,10 @@ Return ONLY JSON:
 {"verdicts":[{"id":"S12","action":"CORRECT|REWORD|REMOVE","text":"only for CORRECT/REWORD","rule":1,"risk":"none|harm|reputation","reason":"..."}],"note":"one English sentence on the article overall"}`;
 
 const EXPAND_PROMPT = () => `You are the writer of this Arabic article for محمد الصهيبي's site (spoken Kuwaiti dialect, short sentences, «كراج» never «ورشة», talking to the driver as «انت»).
-After a strict accuracy audit the article is too short. ADD sentences that expand ONLY what he actually says in the video(s): restate his points more fully, spell out the plain why/how behind HIS points, describe in more words what the driver notices as HE describes it.
+After a strict accuracy audit the article is too short. ADD sentences that explain his points more fully: the plain why/how behind HIS points, what the driver notices as HE describes it, and (balanced mode) how the parts involved work.
 ${RULES()}
-So you may NOT add any new number, cause, sign, step, tool, product, advice, warning, story or claim, and nothing is attributed to him that he did not say.
+So you may NOT add any new number, cause, sign, step, tool, product, advice, warning, story or claim, and nothing is attributed to him that he did not say.${MODE === 'balanced' ? `
+You MAY add correct, undisputed general explanation of how the parts and systems in his points work, and of the mechanism behind HIS points, written as general information (not as his words). This is the main way to make the article complete.` : ''}
 NEVER repeat or restate an idea that is already in the article (no recaps, no «خلها ببالك», no listing his points again, no "as we said"). If nothing new and verified can be added to a section, add nothing there — a shorter article is better than padding.
 Return ONLY JSON: {"additions":[{"section":0,"text":"one or more new Arabic sentences for the END of that section"}]}`;
 
