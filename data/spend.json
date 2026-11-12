@@ -1,5 +1,5 @@
 {
-  "totalUsd": 13.933466,
+  "totalUsd": 13.950029,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -26081,6 +26081,44 @@
       "completionTokens": 5234,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.156238
+    },
+    {
+      "at": "2026-11-12T08:32:17.442Z",
+      "script": "night",
+      "label": "7638323952820964629 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 4644,
+      "completionTokens": 1714,
+      "costUsd": 0.0099105
+    },
+    {
+      "at": "2026-11-12T08:32:17.465Z",
+      "script": "night",
+      "label": "7650574669975883028 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 2645,
+      "completionTokens": 1245,
+      "costUsd": 0.0066525
+    },
+    {
+      "at": "2026-11-12T08:32:21.792Z",
+      "script": "night",
+      "label": "7703669631180918037 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 123,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.33950800000000003
+    },
+    {
+      "at": "2026-11-12T08:32:25.434Z",
+      "script": "night",
+      "label": "7638323952820964629 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 105,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.334252
     }
   ]
 }
