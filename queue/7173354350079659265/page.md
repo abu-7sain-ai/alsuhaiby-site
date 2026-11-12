@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7173354350079659265"
 tiktokId: "7173354350079659265"
 duration: 56
-otherVideos: []
+otherVideos:
+  - tiktokId: "7653910660375383316"
+    title: "خمس مزايا للزيوت التخليقية."
+    views: 22708
+    published: "2026-06-21"
+    cover: "/covers/7653910660375383316.webp"
 tags:
   - "زيت المكينة"
   - "زيت تخليقي"
