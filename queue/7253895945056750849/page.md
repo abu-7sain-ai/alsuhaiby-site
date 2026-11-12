@@ -20,6 +20,11 @@ otherVideos:
     views: 26926
     published: "2026-05-19"
     cover: "/covers/7641661059052440853.webp"
+  - tiktokId: "7598613195602889996"
+    title: "أربعة من أعراض تلف كلتش القير العادي."
+    views: 25700
+    published: "2026-01-23"
+    cover: "/covers/7598613195602889996.webp"
 tags:
   - "قير عادي"
   - "كلتش"
