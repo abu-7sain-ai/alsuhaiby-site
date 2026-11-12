@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7295071391588584706"
 tiktokId: "7295071391588584706"
 duration: 55
-otherVideos: []
+otherVideos:
+  - tiktokId: "7657997135094222101"
+    title: "السؤال، شلون ترفع كفاءة تبريد المكيف عندك؟"
+    views: 12360
+    published: "2026-07-02"
+    cover: "/covers/7657997135094222101.webp"
 tags:
   - "مكيف"
   - "فلتر المكيف"
