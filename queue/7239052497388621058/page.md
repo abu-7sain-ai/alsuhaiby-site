@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7239052497388621058"
 tiktokId: "7239052497388621058"
 duration: 36
-otherVideos: []
+otherVideos:
+  - tiktokId: "7662074086801116437"
+    title: "أربع فوائد الفلاش إنجن."
+    views: 29167
+    published: "2026-07-13"
+    cover: "/covers/7662074086801116437.webp"
 tags:
   - "محرك"
   - "فلاش إنجن"
