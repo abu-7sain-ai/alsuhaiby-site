@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7626449795850325269"
 tiktokId: "7626449795850325269"
 duration: 35
-otherVideos: []
+otherVideos:
+  - tiktokId: "7685824371214093588"
+    title: "هذا أكثر سؤال جاني بالتيك توك القير يبوش بين التبديلات"
+    views: 32994
+    published: "2026-09-15"
+    cover: "/covers/7685824371214093588.webp"
 tags:
   - "قير"
   - "بوش القير"
