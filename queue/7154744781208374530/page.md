@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7154744781208374530"
 tiktokId: "7154744781208374530"
 duration: 62
-otherVideos: []
+otherVideos:
+  - tiktokId: "7654281460244925717"
+    title: "السؤال شنو الثروتل أو بوابة الهواء وشنو هي أضرار خرابها على السيارة؟"
+    views: 22817
+    published: "2026-06-22"
+    cover: "/covers/7654281460244925717.webp"
 tags:
   - "محرك"
   - "بوابة الهواء"
