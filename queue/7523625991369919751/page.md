@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7523625991369919751"
 tiktokId: "7523625991369919751"
 duration: 19
-otherVideos: []
+otherVideos:
+  - tiktokId: "7649835172828843284"
+    title: "أربعة من الأسباب اللي تخلي عداد البنزين ما يعطيك قراءة صحيحة."
+    views: 21510
+    published: "2026-06-10"
+    cover: "/covers/7649835172828843284.webp"
 tags:
   - "عداد البنزين"
   - "مضخة البنزين"
