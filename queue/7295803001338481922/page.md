@@ -30,6 +30,11 @@ otherVideos:
     views: 43913
     published: "2026-03-29"
     cover: "/covers/7622732442041928980.webp"
+  - tiktokId: "7665416285257272597"
+    title: "شنو الـ ABS؟ وليش تولع لمبة الـ ABS؟"
+    views: 8045
+    published: "2026-07-22"
+    cover: "/covers/7665416285257272597.webp"
 tags:
   - "فرامل"
   - "ABS"
