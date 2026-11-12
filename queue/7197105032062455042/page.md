@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7197105032062455042"
 tiktokId: "7197105032062455042"
 duration: 37
-otherVideos: []
+otherVideos:
+  - tiktokId: "7660962268590443796"
+    title: "خمس أسباب تمنع وصول الكهرباء لطرمبة البنزين"
+    views: 16585
+    published: "2026-07-10"
+    cover: "/covers/7660962268590443796.webp"
 tags:
   - "طرمبة البنزين"
   - "كهرباء"
