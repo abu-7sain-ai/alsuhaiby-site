@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7271323993934793991"
 tiktokId: "7271323993934793991"
 duration: 33
-otherVideos: []
+otherVideos:
+  - tiktokId: "7666160608563236117"
+    title: "لا، هالكلام هذا مو دقيق حيل."
+    views: 10577
+    published: "2026-07-24"
+    cover: "/covers/7666160608563236117.webp"
 tags:
   - "محرك"
   - "صرف بنزين"
