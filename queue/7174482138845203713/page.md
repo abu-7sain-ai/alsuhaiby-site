@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7174482138845203713"
 tiktokId: "7174482138845203713"
 duration: 55
-otherVideos: []
+otherVideos:
+  - tiktokId: "7218657603973369090"
+    title: "ثلاثة من الأسباب الرئيسية لصعرورة التواير، أو التحبيل بلهجة ثانية."
+    views: 40200
+    published: "2023-04-05"
+    cover: "/covers/7218657603973369090.webp"
 tags:
   - "تواير"
   - "صعرورة"
