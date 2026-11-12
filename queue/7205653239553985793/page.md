@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7205653239553985793"
 tiktokId: "7205653239553985793"
 duration: 57
-otherVideos: []
+otherVideos:
+  - tiktokId: "7535112413918596370"
+    title: "غير تواير سيارتك بالثلاث حالات هذي."
+    views: 38800
+    published: "2025-08-05"
+    cover: "/covers/7535112413918596370.webp"
 tags:
   - "تواير"
   - "تحبيل"
