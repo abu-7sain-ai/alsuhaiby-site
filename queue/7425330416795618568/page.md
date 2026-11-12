@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7425330416795618568"
 tiktokId: "7425330416795618568"
 duration: 22
-otherVideos: []
+otherVideos:
+  - tiktokId: "7675070534421384468"
+    title: "إذا لقيت صدا على البلاكات لا يضحكون عليك ويقولون لك قزقيت الراس"
+    views: 6958
+    published: "2026-08-17"
+    cover: "/covers/7675070534421384468.webp"
 tags:
   - "بلاكات"
   - "رطوبة البنزين"
