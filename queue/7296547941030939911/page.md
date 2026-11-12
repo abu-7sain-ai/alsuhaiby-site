@@ -25,6 +25,11 @@ otherVideos:
     views: 15818
     published: "2026-09-27"
     cover: "/covers/7690274861305974037.webp"
+  - tiktokId: "7645751071960485141"
+    title: "أربع من الأسباب اللي تسبب كسر في عمود الكامات"
+    views: 9026
+    published: "2026-05-30"
+    cover: "/covers/7645751071960485141.webp"
 tags:
   - "محرك"
   - "عمود الكامات"
