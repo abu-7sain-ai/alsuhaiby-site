@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7402294222637878546"
 tiktokId: "7402294222637878546"
 duration: 26
-otherVideos: []
+otherVideos:
+  - tiktokId: "7645382978532543765"
+    title: "أربع أمور إن شفتها، الشنابر تلفت عندك."
+    views: 46192
+    published: "2026-05-29"
+    cover: "/covers/7645382978532543765.webp"
 tags:
   - "محرك"
   - "شنابر"
