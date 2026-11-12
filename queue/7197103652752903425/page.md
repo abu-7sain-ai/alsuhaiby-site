@@ -25,6 +25,11 @@ otherVideos:
     views: 114200
     published: "2024-08-05"
     cover: "/covers/7399706323509660935.webp"
+  - tiktokId: "7655044811182951701"
+    title: "خمسة علامات تدل على إن قزقيت الرأس عندك فيه مشكلة."
+    views: 40044
+    published: "2026-06-24"
+    cover: "/covers/7655044811182951701.webp"
 tags:
   - "محرك"
   - "قازقيت"
