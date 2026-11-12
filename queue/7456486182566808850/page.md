@@ -30,6 +30,11 @@ otherVideos:
     views: 72575
     published: "2026-07-27"
     cover: "/covers/7667272989121203477.webp"
+  - tiktokId: "7647974968696818964"
+    title: "أربع أسباب تخلي حرارة سيارتك تصعد إذا شغلت المكيف."
+    views: 55699
+    published: "2026-06-05"
+    cover: "/covers/7647974968696818964.webp"
 tags:
   - "تبريد"
   - "رديتر"
