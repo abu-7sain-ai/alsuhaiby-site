@@ -16,7 +16,10 @@
 // collected in the library (audit-escalations.json) — the run never stops for them; the fix is applied and the item listed.
 // All run rules apply: 15-minute cap per article, no retries, first failure → «deferred» (step + reason), machine guard, locks,
 // Claude limit → stop, 10 network errors in a row → stop, 3 other failures in a row → stop, nothing published.
-//   node scripts/audit.js [--concurrency 6] [--minutes 56] [--margin 9] [--only id,id] [--limit N] [--dry]
+//   node scripts/audit.js [--scope live|queue|daily|all] [--concurrency 6] [--minutes 56] [--margin 9] [--only id,id] [--limit N] [--dry]
+// SCOPE (owner, 2026-11-12): live = the live pages (the 16:22/21:00 bursts); queue = queued pages that could be published (file on R2 + numbers),
+// highest views first; daily = live pages not yet audited FIRST, then the queue (what scripts/audit-daily.js runs: 7 a day); all = both (default).
+// An article only counts as audited when audit.json says changed|clean; the 02:07 cloud job publishes nothing else.
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, LIB_DIR, args, cachePath, readJson, writeJson, writeFileAtomic, withLock, wordCount, chat, ClaudeLimitError, StopError, SkipError, runFlags, killChildren, killFor } from './lib/common.js';
@@ -24,6 +27,7 @@ import { gitSync, queued } from './lib/pipeline.js';
 import { PAGES_AR, QUEUE, fmValue, yamlStr, clean } from './lib/page.js';
 import { toUnits, fromUnits, words, applyEdits } from './lib/article.js';
 import { machineGate, MachineStopError } from './lib/machine.js';
+import { checkPublishable, publishData } from './lib/publishable.js';
 
 const A = args();
 const CONC = Number(A.concurrency || readJson(path.join(ROOT, 'config', 'site.json'), {}).nightConcurrency || 3);
@@ -35,6 +39,7 @@ const AUDIT = path.join(LIB_DIR, 'audit.json'); // id → { status: changed|clea
 const ESC = path.join(LIB_DIR, 'audit-escalations.json');
 const PROGRESS = path.join(ROOT, 'data', 'run-audit.json');
 const MODEL = 'claude-cli';
+const SCOPE = A.scope || 'all';
 export const MODE = A.mode || readJson(path.join(ROOT, 'config', 'site.json'), {}).auditMode || 'balanced'; // owner decides; see NOTES «Content audit»
 const kt = (ms) => new Date(ms).toLocaleTimeString('en-GB', { timeZone: 'Asia/Kuwait', hour: '2-digit', minute: '2-digit' });
 const today = () => new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10);
@@ -172,17 +177,24 @@ async function auditOne(item, step) {
 // ---- the run ---------------------------------------------------------------------------------------------------------------
 const auditLedger = () => readJson(AUDIT, {});
 const setAudit = (id, entry) => withLock('audit', () => { const l = auditLedger(); l[id] = { ...entry, at: new Date().toISOString() }; writeJson(AUDIT, l); });
-export const auditLeft = () => { const l = auditLedger(); return articleList().filter((a) => !l[a.id]); };
+export function scopeList(scope = 'all') {
+  const all = articleList(); // highest views first
+  const live = all.filter((a) => a.where === 'live');
+  let queue = all.filter((a) => a.where === 'queue');
+  if (scope !== 'live' && scope !== 'all') { const d = publishData(); queue = queue.filter((a) => checkPublishable(a.id, d).ok); } // an incomplete video is never published, so it is not worth an audit
+  return scope === 'live' ? live : scope === 'queue' ? queue : scope === 'daily' ? [...live, ...queue] : all;
+}
+export const auditLeft = (scope = 'all') => { const l = auditLedger(); return scopeList(scope).filter((a) => !l[a.id]); };
 
 if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(ROOT, 'scripts', 'audit.js')) {
-  let todo = auditLeft();
+  let todo = auditLeft(SCOPE);
   if (A.only) { const want = new Set(String(A.only).split(',')); todo = articleList().filter((a) => want.has(a.id)); }
   if (A.limit) todo = todo.slice(0, Number(A.limit));
   if (A.dry) { console.log(`${todo.length} to audit (highest views first):`); todo.slice(0, 15).forEach((a) => console.log(`  ${a.views}\t${a.where}\t${a.id}\t${a.title}`)); process.exit(0); }
   const done = { changed: [], clean: [], skipped: [], failed: [] };
   let stopKind = '', stopReason = '', failStreak = 0, netStreak = 0, escalationsAdded = 0;
   const isNet = (e) => /fetch failed|network|ECONNRESET|ECONNREFUSED|ENOTFOUND|EAI_AGAIN|ETIMEDOUT|ENETUNREACH|socket hang up|getaddrinfo|Could not resolve host|unable to access/i.test(`${e?.message || ''}`);
-  const save = (extra = {}) => withLock('run-state', () => writeJson(PROGRESS, { startedAt: new Date(startedAt).toISOString(), updatedAt: new Date().toISOString(), concurrency: CONC, audited: done.changed.length + done.clean.length, changed: done.changed.length, clean: done.clean.length, skipped: done.skipped.length, failed: done.failed.length, escalationsAdded, left: auditLeft().length, running: true, stopped: null, ...extra, details: done }));
+  const save = (extra = {}) => withLock('run-state', () => writeJson(PROGRESS, { startedAt: new Date(startedAt).toISOString(), updatedAt: new Date().toISOString(), concurrency: CONC, audited: done.changed.length + done.clean.length, changed: done.changed.length, clean: done.clean.length, skipped: done.skipped.length, failed: done.failed.length, escalationsAdded, left: auditLeft(SCOPE).length, scope: SCOPE, running: true, stopped: null, ...extra, details: done }));
   const stop = (kind, reason) => { if (stopKind) return; stopKind = kind; stopReason = reason; runFlags.stopping = true; console.warn(`  ⛔ stopping: ${reason}`); killChildren(); };
   const timer = Number.isFinite(hardStop) ? setTimeout(() => stop('time', `time limit reached (${kt(hardStop)} Kuwait)`), Math.max(0, hardStop - Date.now())) : null;
   const addEscalations = (item, log) => {
@@ -234,6 +246,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(ROOT, 'scr
   try { gitSync(LIB_DIR, ['.'], 'audit: end of run'); } catch (e) { console.warn(`  ! final push (library): ${e.message}`); }
   try { gitSync(ROOT, ['content/videos', 'queue'], 'audit: end of run', { push: true }); } catch (e) { console.warn(`  ! final push (site): ${e.message}`); }
   save({ running: false, stopped: stopKind || 'none', stopReason, stoppedAt: new Date().toISOString() });
-  console.log(`audit: changed ${done.changed.length} · clean ${done.clean.length} · skipped ${done.skipped.length} · set aside ${done.failed.length} · ${auditLeft().length} left${stopKind ? ` · stopped: ${stopReason}` : ''}`);
+  console.log(`audit: changed ${done.changed.length} · clean ${done.clean.length} · skipped ${done.skipped.length} · set aside ${done.failed.length} · ${auditLeft(SCOPE).length} left${stopKind ? ` · stopped: ${stopReason}` : ''}`);
   process.exit(0);
 }

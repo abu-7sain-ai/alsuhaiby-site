@@ -13,7 +13,7 @@ import { execFileSync } from 'node:child_process';
 import { ROOT, LIB_DIR, LIBRARY, args, readJson, writeJson, cachePath, setLedger, loadLedger, kuwaitDay, videoIndex, apiKey } from './lib/common.js';
 import { writeArticle, reviewArticle } from './lib/article.js';
 import { download, analyze, decide, mergeInto, queuePage, publishQueued, queued, remaining, gitSync, heldMerges, applyHeldMerge } from './lib/pipeline.js';
-import { checkPublishable, publishData, numbersComplete } from './lib/publishable.js';
+import { checkPublishable, publishData, numbersComplete, auditData, isAudited } from './lib/publishable.js';
 import { alert, recordRun, refreshStatus } from './lib/status.js';
 
 const A = args();
@@ -117,15 +117,16 @@ async function handleNew(p, maxNew) {
   writeJson(cachePath(v, 'review.ar'), review);
   writeJson(cachePath(v, 'final.ar'), final);
   const slug = queuePage(v, final);
-  const meta = publishQueued(v.id); // new videos go live today; they do not take a queue slot
-  setLedger(v.id, { status: 'published', page: slug, reason: d.reason, line: 'cloud', words: final.words, score: review.total });
-  return { kind: 'published', id: v.id, slug: meta.slug, title: meta.title };
+  // owner's rule (2026-11-12): nothing goes live unaudited. The cloud cannot audit (the audit runs on the PC), so the new page waits in the queue.
+  setLedger(v.id, { status: 'queued', page: slug, reason: d.reason, line: 'cloud', words: final.words, score: review.total });
+  return { kind: 'queued', id: v.id, slug };
 }
 
 // ---- main -------------------------------------------------------------------------------------------
 const N = Number(A.publish ?? readJson(path.join(ROOT, 'config', 'site.json'), {}).publishPerDay ?? 7);
 const MAX_NEW = Number(A['max-new'] ?? 5);
-const result = { published: [], newPublished: [], merged: [], skipped: [] };
+const result = { published: [], newPublished: [], merged: [], skipped: [], newQueued: [] };
+let notAudited = 0, auditReady = 0;
 try {
   // 1. new videos
   let fresh = [];
@@ -138,6 +139,7 @@ try {
     try {
       const r = await handleNew(p);
       if (r?.kind === 'published') result.newPublished.push(r);
+      if (r?.kind === 'queued') result.newQueued.push(r);
       if (r?.kind === 'merged') result.merged.push(r);
       if (r?.kind === 'skipped') result.skipped.push(r);
     } catch (e) { errors.push(`new video ${p.id}: ${e.message.slice(0, 150)}`); }
@@ -150,11 +152,17 @@ try {
   for (const m of q.filter((m) => pub[m.id])) { log(`  ${m.id} was already published — removed from the queue`); if (!DRY) fs.rmSync(path.join(ROOT, 'queue', m.id), { recursive: true, force: true }); }
   // owner's rule: only videos with BOTH their file on R2 and their numbers; an incomplete one stays out (and does not take a slot)
   const data = publishData();
-  const take = q.filter((m) => !pub[m.id]).filter((m) => {
+  // owner's rule (2026-11-12): only AUDITED articles (library audit.json: changed|clean) are published; the rest stay frozen in the queue
+  const audit = auditData();
+  const complete = q.filter((m) => !pub[m.id]).filter((m) => {
     const c = checkPublishable(m.id, data);
     if (!c.ok) log(`  ${m.id} not published (incomplete data): ${c.reasons.join('; ')}`);
     return c.ok;
-  }).slice(0, N);
+  });
+  const ready = complete.filter((m) => isAudited(m.id, audit));
+  notAudited = complete.length - ready.length; auditReady = ready.length;
+  log(`  audit gate: ${ready.length} audited and ready · ${notAudited} skipped (not audited yet)${audit ? '' : ' · audit list not reachable: nothing is published'}`);
+  const take = ready.slice(0, N);
   for (const m of take) {
     if (DRY) { log(`  would publish ${m.slug} (${m.views} views)`); continue; }
     try {
@@ -166,7 +174,11 @@ try {
   }
   // 2b. held duplicates (owner, 2026-11-11): videos that repeat a LIVE page were prepared on the PC (queue/.held-<id>/);
   //     publishing embeds them on that page now. Incomplete data (no R2 file or no numbers) → stays held, not embedded.
+  const hostAudited = (slug) => { try { const t = fs.readFileSync(path.join(ROOT, 'content', 'videos', 'ar', slug + '.md'), 'utf8'); const id = (t.match(/^tiktokId:\s*"?(\d+)/m) || [])[1]; return isAudited(id, audit); } catch { return false; } };
+  let heldWaiting = 0;
   for (const h of heldMerges()) {
+    // owner's rule (2026-11-12): a live page changes only after it has been audited (the embed adds a video the audit has not covered)
+    if (!hostAudited(h.page)) { heldWaiting++; continue; }
     if (DRY) { log(`  would embed held ${h.id} on ${h.page}`); continue; }
     try {
       applyHeldMerge(h);
@@ -174,13 +186,14 @@ try {
       result.merged.push({ id: h.id, slug: h.page });
     } catch (e) { errors.push(`held merge ${h.id} → ${h.page}: ${e.message.slice(0, 150)}`); }
   }
+  if (heldWaiting) log(`  ${heldWaiting} held merge(s) wait: their live page is not audited yet`);
   for (const r of result.newPublished) pub[r.id] = { slug: r.slug, at: new Date().toISOString(), line: 'cloud' };
   if (!DRY) writeJson(PUBLISHED, pub);
 
   // 3. build check, push, IndexNow, live check
   const all = [...result.newPublished, ...result.published];
   const urls = all.map((m) => `${SITE}/${encodeURI(m.slug)}/`);
-  if (!DRY && (all.length || result.merged.length)) {
+  if (!DRY && (all.length || result.merged.length || result.newQueued.length)) {
     execFileSync('npm', ['run', 'build', '--silent'], { cwd: ROOT, stdio: 'inherit', shell: true }); // throws (and nothing is pushed) if a page breaks the site
     HAVE_LIB && gitSync(LIB_DIR, ['.'], `daily ${today}: ${all.length} published, ${result.merged.length} merged`);
     s_status(); await refreshStatus();
@@ -205,7 +218,7 @@ try {
   const warn = [
     ...(guardTripped ? [`حارس التكلفة وقف الشغل المدفوع: ${guardTripped}`] : []),
     ...(st.siteHealth && !st.siteHealth.up ? ['الموقع ما يرد!'] : []),
-    ...(!take.length && !result.newPublished.length ? ['الطابور فاضي — ما انتشر شي اليوم. شغّل npm run night على الجهاز.'] : []),
+    ...(!take.length && !result.newPublished.length ? [notAudited ? `ما انتشر شي اليوم: ${notAudited} مقال بالطابور ينتظر التدقيق (ولا واحد مدقَّق جاهز).` : 'الطابور فاضي — ما انتشر شي اليوم. شغّل npm run night على الجهاز.'] : []),
     ...errors,
   ];
   log(`\npublished ${all.length}: ${all.map((m) => m.slug).join(', ') || '-'} · merged ${result.merged.length} · queue ${queued().length} · archive left ${HAVE_LIB ? remaining().length : '?'} · today $${spentToday().toFixed(2)} · credit ${st.keyCreditLeftUsd?.usd ?? '?'}`);
@@ -231,7 +244,7 @@ function s_status() {
   s.lastDaily = {
     day: today, at: new Date().toISOString(),
     published: all.map((m) => ({ title: m.title, url: `${SITE}/${encodeURI(m.slug)}/` })), merged: result.merged.map((m) => `${m.id} → ${m.slug}`),
-    queueLeft: queued().length, archiveLeft: HAVE_LIB ? remaining().length : null, costTodayUsd: Math.round(spentToday() * 1000) / 1000,
+    queueLeft: queued().length, queueNotAudited: notAudited, newQueued: result.newQueued.length, archiveLeft: HAVE_LIB ? remaining().length : null, costTodayUsd: Math.round(spentToday() * 1000) / 1000,
     costGuard: guardTripped || null, errors,
   };
   writeJson(STATUS, s);

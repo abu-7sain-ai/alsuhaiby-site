@@ -14,6 +14,13 @@
 10. LENGTH (owner, 2026-11-12, standing rule): for AUDITED articles accuracy beats length — a truthful 643-word page is better than a padded 1150-word one. The 1150–1400 range and the hold rule («held-length») apply to NEWLY WRITTEN articles only (night.js). An audited article is never held, and no sentence is ever added just to reach a word count. In code: audit.js has no expand step and never reads the range; it only records words before/after. Nothing else gates a live or queued page on length (daily.js does not), so an audited short page publishes normally.
 11. Escalations (real injury risk, or a false or softened claim in his name) are never loosened to reduce the count. At 17 in the first 3 articles the remaining 224 will produce many more: every one is collected in the library’s audit-escalations.json, and each burst’s Telegram reports how many were found in that burst and the total.
 
+## 2026-11-12 — Audit stays on this PC; nothing is published unaudited (owner)
+1. The audit runs on this machine (Claude subscription), not in the cloud.
+2. Phase A: tonight's bursts audit only the 33 live pages (highest views first), corrections pushed live. Nothing else in those bursts until they are done.
+3. Phase B: the 02:07 cloud job publishes only articles marked audited (audit.json changed|clean); it logs how many it skipped and publishes nothing when none is ready. The 201 queued articles stay frozen until audited. New TikTok videos now wait in the queue too.
+4. Phase C: a Windows task audits 7 queued articles a day, highest views first. Missed days are caught up at 7 per day, capped at 21 per run; it never wakes the PC; a marker (last completed date) prevents double runs; no end date. Start 14:47 (not on the hour/half hour, not 06–09).
+5. Standing rules unchanged: no minimum word count, no expand step, full freedom to cut, escalate only real injury risk or a false claim in his name.
+
 ## 2026-11-12 — Bursts follow the real session reset (owner)
 1. The old triggers (23:40, 04:40, 09:40, 14:40, 19:40) were deleted, not added to. The task now has exactly three: 11:22 (→12:18), 16:22 (→17:18), 21:00 (→21:58, cut short for the 22:00 weekly reset).
 2. Self-correcting: each burst starts one hour before the REAL reset Claude reports (rate_limit_event in a tiny Haiku stream-json call), and stops 2 minutes before it; the armed times are only a fallback.

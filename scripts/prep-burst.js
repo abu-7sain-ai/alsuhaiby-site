@@ -47,9 +47,9 @@ const alive = (pid) => { if (!pid) return false; try { process.kill(pid, 0); ret
 const left = () => { const l = loadLedger(); return remaining().filter((v) => l[v.id]?.status !== 'failed').length; };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const state = () => readJson(STATE, {});
-const auditTodo = () => auditLeft().length; // articles not audited yet (scripts/audit.js)
+const auditTodo = () => auditLeft('live').length; // LIVE pages not audited yet (scripts/audit.js --scope live). The queue is audited by the daily task (scripts/audit-daily.js), 7 a day.
 const escalations = () => readJson(path.join(LIB_DIR, 'audit-escalations.json'), []).length;
-const allDone = (extra = '') => { alert(`✅ alsuhaiby prep: the whole backlog is finished and every article is audited${extra}. Escalations for the owner: ${escalations()}. Schedule stopped.`); disableTask('backlog finished + audit finished'); process.exit(0); };
+const allDone = (extra = '') => { alert(`✅ alsuhaiby prep: the whole backlog is finished and every live page is audited${extra} (the queue is audited by the daily task). Escalations for the owner: ${escalations()}. Schedule stopped.`); disableTask('backlog finished + live audit finished'); process.exit(0); };
 
 const disableTask = (why) => { const r = spawnSync('schtasks', ['/Change', '/TN', TASK, '/DISABLE'], { encoding: 'utf8', timeout: 30e3 }); log(`schedule stopped (${why}) — task ${r.status === 0 ? 'disabled' : `not disabled: ${String(r.stderr || '').trim()}`}`); };
 
@@ -142,7 +142,7 @@ if (startLeft) for (;;) {
 const runAudit = () => new Promise((resolve) => {
   const minutes = Math.max(1, Math.floor((stop - Date.now()) / 60e3));
   const out = fs.openSync(path.join(ROOT, 'data', 'run-audit.log'), 'a');
-  const c = spawn(process.execPath, ['scripts/audit.js', '--concurrency', String(CONC), `--minutes=${minutes}`, '--margin', String(MARGIN)], { cwd: ROOT, stdio: ['ignore', out, out], windowsHide: true });
+  const c = spawn(process.execPath, ['scripts/audit.js', '--scope', 'live', '--concurrency', String(CONC), `--minutes=${minutes}`, '--margin', String(MARGIN)], { cwd: ROOT, stdio: ['ignore', out, out], windowsHide: true });
   c.on('exit', (code) => resolve(code));
 });
 const audit = { ran: false, audited: 0, changed: 0, escalations: 0 };

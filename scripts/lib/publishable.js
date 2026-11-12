@@ -32,6 +32,12 @@ export function checkPublishable(id, { meta, r2 }, { needFile = true } = {}) {
   return { ok: reasons.length === 0, reasons };
 }
 
+// Owner's rule (2026-11-12): an article that has not passed the content audit (scripts/audit.js) is never published.
+// Audited = library audit.json has status changed|clean for the id. skipped (hand-edited / no transcript) and deferred do NOT count.
+export const AUDITED = new Set(['changed', 'clean']);
+export const auditData = ({ libDir = LIB_DIR } = {}) => readJson(path.join(libDir, 'audit.json'), null); // null = library not reachable
+export const isAudited = (id, audit) => !!audit && AUDITED.has(audit[id]?.status);
+
 /** Throws PublishBlockedError with the reasons when the video may not be published. */
 export function assertPublishable(id, data = publishData(), opts) {
   const r = checkPublishable(id, data, opts);

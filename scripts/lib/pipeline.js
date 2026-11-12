@@ -5,7 +5,7 @@ import os from 'node:os';
 import { spawnSync, execFileSync } from 'node:child_process';
 import { ROOT, LIB_DIR, DOWNLOAD_DIR, MODEL, readJson, writeJson, writeFileAtomic, withLock, cachePath, chat, loadLedger, DONE, videoIndex } from './common.js';
 import { images, uploadVideo, pageMarkdown, addOtherVideo, pageIndex, slugify, clean, duration, QUEUE, PAGES_AR } from './page.js';
-import { assertPublishable, publishData } from './publishable.js';
+import { assertPublishable, publishData, auditData, isAudited, PublishBlockedError } from './publishable.js';
 
 export const ANALYZE_PROMPT = `You are watching a short car-repair video by Mohammad Al-Suhaiby (محمد الصهيبي), a Kuwaiti mechanic. Watch it fully, with sound and picture.
 Return ONLY a JSON object with these keys, all text in Arabic exactly as spoken (Kuwaiti dialect, do not correct or rephrase his words):
@@ -148,6 +148,7 @@ export function queuePage(v, final, { topic } = {}) {
 /** Moves a queued page live: page.md → content/videos/ar/<slug>.md, its images → public/covers and public/og. */
 export function publishQueued(id) {
   assertPublishable(id); // owner's rule: nothing goes live without its file on R2 AND its numbers, even if it is in the queue
+  if (!isAudited(id, auditData())) throw new PublishBlockedError(`not published (not audited, owner's rule 2026-11-12): ${id}`);
   const dir = path.join(QUEUE, id);
   const meta = readJson(path.join(dir, 'meta.json'));
   const dest = path.join(PAGES_AR, `${meta.slug}.md`);
