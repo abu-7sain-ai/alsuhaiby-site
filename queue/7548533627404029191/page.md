@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7548533627404029191"
 tiktokId: "7548533627404029191"
 duration: 40
-otherVideos: []
+otherVideos:
+  - tiktokId: "7670613927876742420"
+    title: "شوف إذا عندك تأخير بالتشغيل، تدق سلف وتنطر للمكينة تمغط على ما تشتغل، ترى الوضع مو طبيعي عندك."
+    views: 41901
+    published: "2026-08-05"
+    cover: "/covers/7670613927876742420.webp"
 tags:
   - "تشغيل"
   - "بطارية"
