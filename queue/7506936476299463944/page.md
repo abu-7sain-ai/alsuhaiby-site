@@ -25,6 +25,11 @@ otherVideos:
     views: 20154
     published: "2026-05-07"
     cover: "/covers/7637208584257850645.webp"
+  - tiktokId: "7693602135811837205"
+    title: "علامات تدل إن عندك رواسب كربونية داخل المكينة."
+    views: 15016
+    published: "2026-10-06"
+    cover: "/covers/7693602135811837205.webp"
 tags:
   - "محرك"
   - "رواسب كربونية"
