@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7207122392970317057"
 tiktokId: "7207122392970317057"
 duration: 56
-otherVideos: []
+otherVideos:
+  - tiktokId: "7639808150199225620"
+    title: "خمسة من أهم الأسباب اللي تخلي القير الأوتوماتيك ما يرجع ورا."
+    views: 56429
+    published: "2026-05-14"
+    cover: "/covers/7639808150199225620.webp"
 tags:
   - "قير"
   - "ريوس"
