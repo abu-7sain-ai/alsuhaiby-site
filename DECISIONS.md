@@ -3,14 +3,16 @@
 ## 2026-11-12 — Content audit in the remaining bursts (owner)
 1. After the backlog is finished, the remaining bursts audit every live/queued article (highest views first) instead of leaving the weekly quota unused.
 2. Three rules, no asking: the video is the reference (contradictions corrected); nothing attributed to him that he never said (removed or reworded as general information); anything not verifiable against the video removed.
-3. Length 1150–1400 after the edit by expanding only verified points; never inventing. If that is impossible the accurate shorter article stays (listed «short»).
+3. (superseded by 10) Length of audited articles: see 10.
 4. Commit + push after every article; never half-edited.
 5. Escalate to the owner only: risk to a reader's safety or to Mohammad's professional reputation — one list, the run never stops for it.
 6. Mode = BALANCED (owner, 2026-11-12, standing rule — do not ask again). Why: his videos are 20–60 seconds, so strict mode cuts pages to 200–350 words, which defeats the site’s purpose (ranking in Google, being cited by AI engines). The essential protection is the same in both modes: nothing false is ever said in his name.
    Balanced = remove every figure, step, warning, cause or claim he did not give, and anything in his voice he never said; keep correct, undisputed explanation of how the parts work, clearly framed as general information, not as his claim.
-7. Repetition stays banned in the expand step (no recaps, no restating his points); a shorter article beats padding.
+7. (superseded by 10) There is no expand step in the audit any more.
 8. Escalation bar: real injury risk, or a false or softened claim in his name. Nothing looser.
-9. The 3 test articles (fuel filling, myths, overheating) were redone from their pre-audit versions in balanced mode to remove the strict-mode padding.
+9. The 3 test articles (fuel filling, myths, overheating) were redone from their pre-audit versions in balanced mode to remove the strict-mode padding (they were audited with the old expand step, whose fact-checked additions are still in them).
+10. LENGTH (owner, 2026-11-12, standing rule): for AUDITED articles accuracy beats length — a truthful 643-word page is better than a padded 1150-word one. The 1150–1400 range and the hold rule («held-length») apply to NEWLY WRITTEN articles only (night.js). An audited article is never held, and no sentence is ever added just to reach a word count. In code: audit.js has no expand step and never reads the range; it only records words before/after. Nothing else gates a live or queued page on length (daily.js does not), so an audited short page publishes normally.
+11. Escalations (real injury risk, or a false or softened claim in his name) are never loosened to reduce the count. At 17 in the first 3 articles the remaining 224 will produce many more: every one is collected in the library’s audit-escalations.json, and each burst’s Telegram reports how many were found in that burst and the total.
 
 ## 2026-11-12 — Bursts follow the real session reset (owner)
 1. The old triggers (23:40, 04:40, 09:40, 14:40, 19:40) were deleted, not added to. The task now has exactly three: 11:22 (→12:18), 16:22 (→17:18), 21:00 (→21:58, cut short for the 22:00 weekly reset).

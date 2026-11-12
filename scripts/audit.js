@@ -7,11 +7,11 @@
 //   3. Anything that cannot be verified against the video is removed.
 // "Verified" = he says/shows it, or it is the plain why/how behind HIS point with no new fact of its own. New figures, causes,
 // steps, advice, warnings, products, stories, brand claims = not verified → removed.
-// Per article: audit call (every unit: title, summary, intro, headings, sentences, FAQ) → edits applied → if it changed and fell
-// under 1150 words: expand ONLY the verified points (no new claims), the added sentences re-checked with the same audit rules
-// (up to 2 passes) → a wording-only coherence pass → page written whole (writeFileAtomic) + library final.ar.json + audit.ar.json
-// → commit + push BOTH repos after every article. Accuracy beats length: if it cannot reach 1150 without new claims it stays
-// shorter and is listed («short») — it is never padded with unverified text. A page edited by hand (manualEdit) is skipped.
+// Per article: audit call (every unit: title, summary, intro, headings, sentences, FAQ) → edits applied → a wording-only coherence
+// pass → page written whole (writeFileAtomic) + library final.ar.json + audit.ar.json → commit + push BOTH repos after every article.
+// LENGTH (owner, 2026-11-12, standing rule): the 1150–1400 range and the hold rule are for NEWLY WRITTEN articles only (night.js). An
+// audited article is never held and never padded: accuracy beats length, a truthful 643-word page beats a padded 1150-word one. There
+// is NO expand step here, and nothing in this file looks at the word count except to record it. A page edited by hand (manualEdit) is skipped.
 // Escalations (risk «harm» = could physically harm a reader, «reputation» = could damage Mohammad's professional reputation) are
 // collected in the library (audit-escalations.json) — the run never stops for them; the fix is applied and the item listed.
 // All run rules apply: 15-minute cap per article, no retries, first failure → «deferred» (step + reason), machine guard, locks,
@@ -22,7 +22,7 @@ import path from 'node:path';
 import { ROOT, LIB_DIR, args, cachePath, readJson, writeJson, writeFileAtomic, withLock, wordCount, chat, ClaudeLimitError, StopError, SkipError, runFlags, killChildren, killFor } from './lib/common.js';
 import { gitSync, queued } from './lib/pipeline.js';
 import { PAGES_AR, QUEUE, fmValue, yamlStr, clean } from './lib/page.js';
-import { toUnits, fromUnits, splitSentences, words, applyEdits, LIMITS, TARGET } from './lib/article.js';
+import { toUnits, fromUnits, words, applyEdits } from './lib/article.js';
 import { machineGate, MachineStopError } from './lib/machine.js';
 
 const A = args();
@@ -65,14 +65,6 @@ FAQ: if a question's answer is not verified, REMOVE its answer sentences and the
 Do not touch units that are verified and correctly attributed. Do not rewrite for style.
 Return ONLY JSON:
 {"verdicts":[{"id":"S12","action":"CORRECT|REWORD|REMOVE","text":"only for CORRECT/REWORD","rule":1,"risk":"none|harm|reputation","reason":"..."}],"note":"one English sentence on the article overall"}`;
-
-const EXPAND_PROMPT = () => `You are the writer of this Arabic article for محمد الصهيبي's site (spoken Kuwaiti dialect, short sentences, «كراج» never «ورشة», talking to the driver as «انت»).
-After a strict accuracy audit the article is too short. ADD sentences that explain his points more fully: the plain why/how behind HIS points, what the driver notices as HE describes it, and (balanced mode) how the parts involved work.
-${RULES()}
-So you may NOT add any new number, cause, sign, step, tool, product, advice, warning, story or claim, and nothing is attributed to him that he did not say.${MODE === 'balanced' ? `
-You MAY add correct, undisputed general explanation of how the parts and systems in his points work, and of the mechanism behind HIS points, written as general information (not as his words). This is the main way to make the article complete.` : ''}
-NEVER repeat or restate an idea that is already in the article (no recaps, no «خلها ببالك», no listing his points again, no "as we said"). If nothing new and verified can be added to a section, add nothing there — a shorter article is better than padding.
-Return ONLY JSON: {"additions":[{"section":0,"text":"one or more new Arabic sentences for the END of that section"}]}`;
 
 const COHERE_PROMPT = `A strict accuracy audit removed or corrected some sentences of this Arabic article. Make it read coherently again with MINIMAL wording edits only:
 fix dangling references («ثانيًا» with no «أولًا», «كما ذكرنا» pointing to removed text, broken transitions); if the number in the title or summary no longer matches the number of sections that give his points, edit the title/summary so it matches.
@@ -164,33 +156,6 @@ async function auditOne(item, step) {
     messages: [{ role: 'system', content: COHERE_PROMPT }, { role: 'user', content: `ARTICLE (JSON)\n${JSON.stringify({ title: out.title, summary: out.summary, description: out.description, intro: out.intro, sections: out.sections.map(({ heading, body }) => ({ heading, body })), faq: out.faq })}` }] });
   const ce = applyEdits(out, co.edits || []); out = ce.article;
 
-  // 3) under 1150 after the edit → expand the verified points only (≤ 2 passes), every added sentence re-audited
-  const expands = [];
-  for (let pass = 1; pass <= 2 && words(out) < LIMITS[0] && out.sections.length; pass++) {
-    step(`expand ${pass}`);
-    const before = words(out), need = TARGET[0] + 25 - before;
-    const ex = await chat({ script: 'audit', label: L(`expand ${pass}`), model: MODEL, temperature: 0.3,
-      messages: [{ role: 'system', content: EXPAND_PROMPT() }, { role: 'user', content: `VIDEO TRANSCRIPTS (the only source)\n${src.text}\n\nThe article is ${before} words; add about ${need} words, spread over the sections.\n\nSECTIONS (index | heading | body)\n${out.sections.map((x, i) => `${i} | ${x.heading} | ${x.body}`).join('\n')}` }] });
-    const added = [];
-    for (const ad of ex.additions || []) if (out.sections[ad.section] && typeof ad.text === 'string') splitSentences(ad.text).forEach((s) => added.push({ id: `A${added.length + 1}`, where: `section${+ad.section}.body`, section: +ad.section, text: s.text }));
-    if (!added.length) break;
-    step(`expand ${pass} check`);
-    const chk = await chat({ script: 'audit', label: L(`expand ${pass} check`), model: MODEL, temperature: 0,
-      messages: [{ role: 'system', content: AUDIT_PROMPT() }, { role: 'user', content: `VIDEO TRANSCRIPTS (the reference)\n${src.text}\n\nTHE ARTICLE AS IT IS (context only)\n${out.sections.map((x) => `## ${x.heading}\n${x.body}`).join('\n\n')}\n\nARTICLE UNITS (only these NEW sentences are checked; also REMOVE, rule 3, any that repeats or restates an idea already in the article)\n${added.map((u) => `${u.id} [${u.where}] ${u.text}`).join('\n')}` }] });
-    for (const vd of chk.verdicts || []) {
-      const u = added.find((x) => x.id === vd.id); if (!u) continue;
-      const action = String(vd.action || '').toUpperCase();
-      if (action === 'REMOVE') u.cut = true; else if (typeof vd.text === 'string' && vd.text.trim()) u.text = vd.text.trim();
-    }
-    const keep = added.filter((u) => !u.cut);
-    // never over 1400: drop added sentences from the end until it fits
-    const next = structuredClone(out);
-    const bySec = new Map(); for (const u of keep) bySec.set(u.section, [...(bySec.get(u.section) || []), u]);
-    for (const [i, us] of bySec) next.sections[i].body = `${next.sections[i].body}\n\n${us.map((u) => u.text).join(' ')}`;
-    while (words(next) > LIMITS[1] && keep.length) { keep.pop(); const nb = new Map(); for (const u of keep) nb.set(u.section, [...(nb.get(u.section) || []), u]); for (let i = 0; i < next.sections.length; i++) next.sections[i].body = out.sections[i].body + (nb.get(i) ? `\n\n${nb.get(i).map((u) => u.text).join(' ')}` : ''); }
-    out = next;
-    expands.push({ pass, before, after: words(out), added: added.length, kept: keep.length });
-  }
   const wordsAfter = words(out);
 
   // 4) write: the page (whole file), the library article + audit log
@@ -200,9 +165,8 @@ async function auditOne(item, step) {
   const fin = readJson(finalPath, null);
   if (fin) writeJson(finalPath, { ...fin, title: out.title, summary: out.summary, description: out.description, intro: out.intro, sections: out.sections, faq: out.faq, words: wordsAfter, auditedAt: new Date().toISOString() });
   const status = 'changed';
-  const lengthNote = wordsAfter < LIMITS[0] ? 'short' : wordsAfter > LIMITS[1] ? 'long' : 'ok';
-  writeJson(cachePath(item.id, 'audit.ar'), { id: item.id, mode: MODE, slug: item.slug, where: item.where, auditedAt: new Date().toISOString(), wordsBefore, wordsAfter, length: lengthNote, note: r.note, log, coherenceEdits: ce.applied, rejectedEdits: ce.rejected, expands });
-  return { status, wordsBefore, wordsAfter, length: lengthNote, note: r.note, log };
+  writeJson(cachePath(item.id, 'audit.ar'), { id: item.id, mode: MODE, slug: item.slug, where: item.where, auditedAt: new Date().toISOString(), wordsBefore, wordsAfter, note: r.note, log, coherenceEdits: ce.applied, rejectedEdits: ce.rejected });
+  return { status, wordsBefore, wordsAfter, note: r.note, log };
 }
 
 // ---- the run ---------------------------------------------------------------------------------------------------------------
@@ -215,15 +179,16 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(ROOT, 'scr
   if (A.only) { const want = new Set(String(A.only).split(',')); todo = articleList().filter((a) => want.has(a.id)); }
   if (A.limit) todo = todo.slice(0, Number(A.limit));
   if (A.dry) { console.log(`${todo.length} to audit (highest views first):`); todo.slice(0, 15).forEach((a) => console.log(`  ${a.views}\t${a.where}\t${a.id}\t${a.title}`)); process.exit(0); }
-  const done = { changed: [], clean: [], skipped: [], failed: [], short: [] };
-  let stopKind = '', stopReason = '', failStreak = 0, netStreak = 0;
+  const done = { changed: [], clean: [], skipped: [], failed: [] };
+  let stopKind = '', stopReason = '', failStreak = 0, netStreak = 0, escalationsAdded = 0;
   const isNet = (e) => /fetch failed|network|ECONNRESET|ECONNREFUSED|ENOTFOUND|EAI_AGAIN|ETIMEDOUT|ENETUNREACH|socket hang up|getaddrinfo|Could not resolve host|unable to access/i.test(`${e?.message || ''}`);
-  const save = (extra = {}) => withLock('run-state', () => writeJson(PROGRESS, { startedAt: new Date(startedAt).toISOString(), updatedAt: new Date().toISOString(), concurrency: CONC, audited: done.changed.length + done.clean.length, changed: done.changed.length, clean: done.clean.length, skipped: done.skipped.length, failed: done.failed.length, short: done.short, left: auditLeft().length, running: true, stopped: null, ...extra, details: done }));
+  const save = (extra = {}) => withLock('run-state', () => writeJson(PROGRESS, { startedAt: new Date(startedAt).toISOString(), updatedAt: new Date().toISOString(), concurrency: CONC, audited: done.changed.length + done.clean.length, changed: done.changed.length, clean: done.clean.length, skipped: done.skipped.length, failed: done.failed.length, escalationsAdded, left: auditLeft().length, running: true, stopped: null, ...extra, details: done }));
   const stop = (kind, reason) => { if (stopKind) return; stopKind = kind; stopReason = reason; runFlags.stopping = true; console.warn(`  ⛔ stopping: ${reason}`); killChildren(); };
   const timer = Number.isFinite(hardStop) ? setTimeout(() => stop('time', `time limit reached (${kt(hardStop)} Kuwait)`), Math.max(0, hardStop - Date.now())) : null;
   const addEscalations = (item, log) => {
     const esc = log.filter((x) => x.risk === 'harm' || x.risk === 'reputation');
     if (!esc.length) return;
+    escalationsAdded += esc.length;
     withLock('audit-esc', () => { const all = readJson(ESC, []); for (const x of esc) all.push({ id: item.id, slug: item.slug, title: item.title, where: item.where, url: item.where === 'live' ? `https://alsuhaiby.com/${item.slug}/` : null, risk: x.risk, rule: x.rule, action: x.action, original: x.original, now: x.now, reason: x.reason, at: new Date().toISOString() }); writeJson(ESC, all); });
   };
   async function worker(w) {
@@ -240,10 +205,9 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(ROOT, 'scr
         const job = auditOne(item, (s) => { cur = s; }); job.catch(() => {});
         const res = await Promise.race([job, new Promise((_, rej) => { capTimer = setTimeout(() => { runFlags.aborted.add(item.id); killFor(item.id); rej(new SkipError('over 15 minutes (something stalled)', cur)); }, CAP_MS); })]).finally(() => clearTimeout(capTimer));
         if (runFlags.stopping) throw new StopError('stopped');
-        setAudit(item.id, { status: res.status, mode: MODE, slug: item.slug, where: item.where, views: item.views, wordsBefore: res.wordsBefore, wordsAfter: res.wordsAfter, length: res.length, changes: res.log?.length || 0, reason: res.reason });
+        setAudit(item.id, { status: res.status, mode: MODE, slug: item.slug, where: item.where, views: item.views, wordsBefore: res.wordsBefore, wordsAfter: res.wordsAfter, changes: res.log?.length || 0, reason: res.reason });
         if (res.status === 'changed') addEscalations(item, res.log);
         done[res.status].push({ id: item.id, slug: item.slug, changes: res.log?.length || 0, words: `${res.wordsBefore}→${res.wordsAfter}` });
-        if (res.length === 'short') done.short.push(item.id);
         // commit + push both repos after every article (never half-edited: the page was written whole before this)
         gitSync(LIB_DIR, ['.'], `audit: ${item.id} ${res.status}`);
         if (res.status === 'changed') gitSync(ROOT, [path.relative(ROOT, item.file).replace(/\\/g, '/')], `audit: ${item.slug} (${res.log.length} changes)`, { push: true });
