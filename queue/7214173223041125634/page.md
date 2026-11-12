@@ -30,6 +30,11 @@ otherVideos:
     views: 69200
     published: "2024-06-24"
     cover: "/covers/7384117314792279304.webp"
+  - tiktokId: "7672851368859667732"
+    title: "طبعاً علامة الزيت"
+    views: 14534
+    published: "2026-08-11"
+    cover: "/covers/7672851368859667732.webp"
 tags:
   - "محرك"
   - "لمبة الزيت"
