@@ -35,6 +35,11 @@ otherVideos:
     views: 37511
     published: "2026-04-20"
     cover: "/covers/7630897306514115861.webp"
+  - tiktokId: "7680642730833284373"
+    title: "لا تقول لي طاح حظك، عزمك طاح ودخان أسود."
+    views: 13726
+    published: "2026-09-01"
+    cover: "/covers/7680642730833284373.webp"
 tags:
   - "محرك"
   - "دخان أسود"
