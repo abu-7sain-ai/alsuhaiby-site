@@ -20,6 +20,11 @@ otherVideos:
     views: 91000
     published: "2024-12-01"
     cover: "/covers/7443521548759207176.webp"
+  - tiktokId: "7660590974015393044"
+    title: "أربع شغلات تطول من عمر الكويلات عندك"
+    views: 24687
+    published: "2026-07-09"
+    cover: "/covers/7660590974015393044.webp"
 tags:
   - "كويلات"
   - "بلكات"
