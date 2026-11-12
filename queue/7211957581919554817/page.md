@@ -30,6 +30,11 @@ otherVideos:
     views: 13473
     published: "2026-04-28"
     cover: "/covers/7633857349647633685.webp"
+  - tiktokId: "7672110029947882772"
+    title: "ست علامات تدل على تلف سنسر الهواء"
+    views: 3146
+    published: "2026-08-09"
+    cover: "/covers/7672110029947882772.webp"
 tags:
   - "محرك"
   - "سنسر الهواء"
