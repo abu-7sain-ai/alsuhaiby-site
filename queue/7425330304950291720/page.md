@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7425330304950291720"
 tiktokId: "7425330304950291720"
 duration: 27
-otherVideos: []
+otherVideos:
+  - tiktokId: "7562216577278545170"
+    title: "سويت لكم سلسلة بعنوان لا يقصون عليك"
+    views: 43500
+    published: "2025-10-17"
+    cover: "/covers/7562216577278545170.webp"
 tags:
   - "محرك"
   - "بلاكات"
