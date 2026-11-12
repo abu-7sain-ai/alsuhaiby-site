@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7229035148426087682"
 tiktokId: "7229035148426087682"
 duration: 32
-otherVideos: []
+otherVideos:
+  - tiktokId: "7198258057653095682"
+    title: "خمسة من الأسباب تخلي سيارتك توقف إذا شغلت المكيف"
+    views: 53000
+    published: "2023-02-09"
+    cover: "/covers/7198258057653095682.webp"
 tags:
   - "مكيف"
   - "طفي السيارة"
