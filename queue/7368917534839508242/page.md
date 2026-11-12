@@ -20,6 +20,11 @@ otherVideos:
     views: 44851
     published: "2026-06-06"
     cover: "/covers/7648338420707740948.webp"
+  - tiktokId: "7687666415217741076"
+    title: "ثلاث مشاكل إذا رهمت طرمبة البنزين راح تجي بسيارتك."
+    views: 3930
+    published: "2026-09-20"
+    cover: "/covers/7687666415217741076.webp"
 tags:
   - "طرمبة بنزين"
   - "فيوز"
