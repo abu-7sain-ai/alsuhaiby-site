@@ -30,6 +30,11 @@ otherVideos:
     views: 77300
     published: "2025-11-08"
     cover: "/covers/7570401033180941579.webp"
+  - tiktokId: "7663190353612147989"
+    title: "شنو المشكلة لو زاد الزيت عن حده الطبيعي في المكينة؟"
+    views: 7076
+    published: "2026-07-16"
+    cover: "/covers/7663190353612147989.webp"
 tags:
   - "محرك"
   - "زيت المكينة"
