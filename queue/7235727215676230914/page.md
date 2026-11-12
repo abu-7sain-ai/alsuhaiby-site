@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7235727215676230914"
 tiktokId: "7235727215676230914"
 duration: 34
-otherVideos: []
+otherVideos:
+  - tiktokId: "7640555268815768852"
+    title: "خمس أسباب تولع لمبة ال VSC أو نظام التوازن"
+    views: 25657
+    published: "2026-05-16"
+    cover: "/covers/7640555268815768852.webp"
 tags:
   - "لمبة التوازن"
   - "حساسات"
