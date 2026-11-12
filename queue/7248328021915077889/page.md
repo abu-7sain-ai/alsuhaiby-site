@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7248328021915077889"
 tiktokId: "7248328021915077889"
 duration: 36
-otherVideos: []
+otherVideos:
+  - tiktokId: "7643158375198444821"
+    title: "أربع نصائح لأهل السيارات الكهربائية بالصيف."
+    views: 6712
+    published: "2026-05-23"
+    cover: "/covers/7643158375198444821.webp"
 tags:
   - "سيارات كهربائية"
   - "بطارية"
