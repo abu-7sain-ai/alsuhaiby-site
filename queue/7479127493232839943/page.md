@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7479127493232839943"
 tiktokId: "7479127493232839943"
 duration: 26
-otherVideos: []
+otherVideos:
+  - tiktokId: "7657622514264247572"
+    title: "أربع من العلامات إذا شفتها، احتمال فحمة الدينمو تالفة عندك."
+    views: 28313
+    published: "2026-07-01"
+    cover: "/covers/7657622514264247572.webp"
 tags:
   - "كهرباء"
   - "دينمو"
