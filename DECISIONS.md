@@ -1,5 +1,12 @@
 # DECISIONS (newest first)
 
+## 2026-11-12 — Content audit in the remaining bursts (owner)
+1. After the backlog is finished, the remaining bursts audit every live/queued article (highest views first) instead of leaving the weekly quota unused.
+2. Three rules, no asking: the video is the reference (contradictions corrected); nothing attributed to him that he never said (removed or reworded as general information); anything not verifiable against the video removed.
+3. Length 1150–1400 after the edit by expanding only verified points; never inventing. If that is impossible the accurate shorter article stays (listed «short»).
+4. Commit + push after every article; never half-edited.
+5. Escalate to the owner only: risk to a reader's safety or to Mohammad's professional reputation — one list, the run never stops for it.
+
 ## 2026-11-12 — Bursts follow the real session reset (owner)
 1. The old triggers (23:40, 04:40, 09:40, 14:40, 19:40) were deleted, not added to. The task now has exactly three: 11:22 (→12:18), 16:22 (→17:18), 21:00 (→21:58, cut short for the 22:00 weekly reset).
 2. Self-correcting: each burst starts one hour before the REAL reset Claude reports (rate_limit_event in a tiny Haiku stream-json call), and stops 2 minutes before it; the armed times are only a fallback.

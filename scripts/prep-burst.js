@@ -12,6 +12,8 @@
 //   · Claude's reset time can't be read (network, odd output) → falls back to the armed trigger's own window (FALLBACK)
 // Armed triggers of the task «alsuhaiby-prep-supervisor» (Kuwait): 11:22, 16:22, 21:00 — they are only "wake-up and check"
 // times; the window itself always comes from the real reset.
+// Backlog finished (owner, 2026-11-12): the rest of the burst — and the later bursts — run the content audit (scripts/audit.js,
+// highest views first); the schedule stops only when the backlog is finished AND every article is audited.
 // Stops: session limit inside a burst → the burst ends at once (next trigger continues) · weekly limit → whole schedule
 // stops (task disabled) · backlog finished → «finished» message, whole schedule stops (task disabled) · nothing after 21:58
 // Thursday 2026-11-12 (the weekly quota resets at 22:00; the task also expires and deletes itself then).
@@ -26,9 +28,10 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
-import { ROOT, args, readJson, writeJson, loadLedger } from './lib/common.js';
+import { ROOT, LIB_DIR, args, readJson, writeJson, loadLedger } from './lib/common.js';
 import { remaining, queued } from './lib/pipeline.js';
 import { alert } from './lib/status.js';
+import { auditLeft } from './audit.js';
 import { HARD_STOP, MIN_BURST, fbCurrent, fbNext, decide, hm } from './lib/burst-window.js';
 
 const A = args();
@@ -44,6 +47,9 @@ const alive = (pid) => { if (!pid) return false; try { process.kill(pid, 0); ret
 const left = () => { const l = loadLedger(); return remaining().filter((v) => l[v.id]?.status !== 'failed').length; };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const state = () => readJson(STATE, {});
+const auditTodo = () => auditLeft().length; // articles not audited yet (scripts/audit.js)
+const escalations = () => readJson(path.join(LIB_DIR, 'audit-escalations.json'), []).length;
+const allDone = (extra = '') => { alert(`✅ alsuhaiby prep: the whole backlog is finished and every article is audited${extra}. Escalations for the owner: ${escalations()}. Schedule stopped.`); disableTask('backlog finished + audit finished'); process.exit(0); };
 
 const disableTask = (why) => { const r = spawnSync('schtasks', ['/Change', '/TN', TASK, '/DISABLE'], { encoding: 'utf8', timeout: 30e3 }); log(`schedule stopped (${why}) — task ${r.status === 0 ? 'disabled' : `not disabled: ${String(r.stderr || '').trim()}`}`); };
 
@@ -84,7 +90,7 @@ if (Date.now() >= HARD_STOP) { log('Thursday 21:58 hard stop passed — nothing 
 fs.writeFileSync(PID, String(process.pid));
 process.on('exit', () => { try { if (Number(fs.readFileSync(PID, 'utf8')) === process.pid) fs.rmSync(PID); } catch {} });
 try { os.setPriority(os.constants.priority.PRIORITY_BELOW_NORMAL); } catch {} // the run it starts inherits below-normal
-if (!left()) { alert('✅ alsuhaiby prep: the whole backlog is finished.'); disableTask('backlog finished'); process.exit(0); }
+if (!left() && !auditTodo()) allDone();
 
 // ---- the burst window, from the REAL reset -------------------------------------------------------------------------------
 let p = probe();
@@ -108,9 +114,9 @@ if (Date.now() < burst.start) { // fired early: wait quietly (no Claude call) un
 }
 const stop = burst.stop;
 const startLeft = left();
-if (!startLeft) { alert('✅ alsuhaiby prep: the whole backlog is finished.'); disableTask('backlog finished'); process.exit(0); }
+if (!startLeft && !auditTodo()) allDone();
 writeJson(STATE, { ...state(), phase: 'running', burstStart: new Date(Date.now()).toISOString(), stop: new Date(stop).toISOString(), source, concurrency: CONC, leftAtStart: startLeft, pid: process.pid });
-log(`burst ${hm(Date.now())}→${hm(stop)} (${source}) · concurrency ${CONC} · ${startLeft} left`);
+log(`burst ${hm(Date.now())}→${hm(stop)} (${source}) · concurrency ${CONC} · ${startLeft} left${startLeft ? '' : ` · audit: ${auditTodo()} articles left`}`);
 const startedAt = Date.now();
 
 // ---- run night.js until the burst's stop -----------------------------------------------------------------------------------
@@ -121,7 +127,7 @@ const runNight = () => new Promise((resolve) => {
   c.on('exit', (code) => resolve(code));
 });
 let written = 0, kind = 'none', why = '', runs = 0;
-for (;;) {
+if (startLeft) for (;;) {
   runs++;
   await runNight();
   const r = readJson(path.join(ROOT, 'data', 'run-night.json'), {});
@@ -132,15 +138,38 @@ for (;;) {
   if (stop - Date.now() < MIN_BURST * 60e3 || runs >= 3) break; // errors / network / crash: start again only while the burst has time left
 }
 
+// ---- backlog finished → the rest of the burst audits the articles (owner, 2026-11-12) ------------------------------------
+const runAudit = () => new Promise((resolve) => {
+  const minutes = Math.max(1, Math.floor((stop - Date.now()) / 60e3));
+  const out = fs.openSync(path.join(ROOT, 'data', 'run-audit.log'), 'a');
+  const c = spawn(process.execPath, ['scripts/audit.js', '--concurrency', String(CONC), `--minutes=${minutes}`, '--margin', String(MARGIN)], { cwd: ROOT, stdio: ['ignore', out, out], windowsHide: true });
+  c.on('exit', (code) => resolve(code));
+});
+const audit = { ran: false, audited: 0, changed: 0 };
+if (!left() && !['claude-limit', 'machine'].includes(kind) && stop - Date.now() >= MIN_BURST * 60e3 && auditTodo()) {
+  audit.ran = true;
+  for (let ar = 1; ar <= 3; ar++) {
+    log(`audit run ${ar}: ${auditTodo()} articles left`);
+    await runAudit();
+    const r = readJson(path.join(ROOT, 'data', 'run-audit.json'), {});
+    audit.audited += r.audited || 0; audit.changed += r.changed || 0;
+    kind = r.running ? 'crash' : r.stopped || 'none'; why = r.stopReason || '';
+    log(`audit run ${ar} ended: ${kind} ${why.slice(0, 120)} · audited ${r.audited || 0}, changed ${r.changed || 0}`);
+    if (['time', 'claude-limit', 'machine', 'none'].includes(kind)) break;
+    if (stop - Date.now() < MIN_BURST * 60e3) break;
+  }
+}
+
 // ---- end of burst: one message ---------------------------------------------------------------------------------------------
 const nowLeft = left();
 const weekly = kind === 'claude-limit' && /week/i.test(why);
-const reason = kind === 'time' ? 'time' : kind === 'claude-limit' ? (weekly ? 'weekly limit' : 'session limit') : kind === 'none' ? 'backlog finished' : { machine: 'machine guard', network: 'network down', errors: '3 failures in a row', tiktok: 'TikTok block', crash: 'crash' }[kind] || kind;
-writeJson(STATE, { ...state(), phase: 'idle', lastBurst: { start: new Date(startedAt).toISOString(), endedAt: new Date().toISOString(), source, reason, written, leftAtStart: startLeft, left: nowLeft } });
-if (!nowLeft) { alert(`✅ alsuhaiby prep: the whole backlog is finished (last burst wrote ${written}). Queue: ${queued().length}. Schedule stopped.`); disableTask('backlog finished'); process.exit(0); }
+const reason = kind === 'time' ? 'time' : kind === 'claude-limit' ? (weekly ? 'weekly limit' : 'session limit') : kind === 'none' ? (audit.ran ? 'audit finished' : 'backlog finished') : { machine: 'machine guard', network: 'network down', errors: '3 failures in a row', tiktok: 'TikTok block', crash: 'crash' }[kind] || kind;
+writeJson(STATE, { ...state(), phase: 'idle', lastBurst: { start: new Date(startedAt).toISOString(), endedAt: new Date().toISOString(), source, reason, written, leftAtStart: startLeft, left: nowLeft, audit } });
+if (!nowLeft && !auditTodo()) allDone(` (last burst: written ${written}, audited ${audit.audited}, changed ${audit.changed}; queue ${queued().length})`);
 const n = fbNext();
 const nextTxt = weekly ? 'Schedule stopped (weekly limit).' : n && n.start < HARD_STOP ? `Next check ${kt(n.start)} (burst timed from the real reset).` : 'No more bursts before Thursday 22:00.';
-alert(`🌙 alsuhaiby prep burst ${hm(startedAt)}–${hm(Date.now())} (${source}): written ${written}, ${nowLeft} remain. Ended: ${reason}. ${nextTxt}`);
+const auditTxt = audit.ran || !nowLeft ? ` Backlog finished.${audit.ran ? ` Audit: ${audit.audited} audited, ${audit.changed} changed, ${auditTodo()} left, ${escalations()} escalations so far.` : ''}` : '';
+alert(`🌙 alsuhaiby prep burst ${hm(startedAt)}–${hm(Date.now())} (${source}): written ${written}, ${nowLeft} remain.${auditTxt} Ended: ${reason}. ${nextTxt}`);
 if (weekly) disableTask('weekly limit');
-log(`burst done: ${reason} · written ${written} · ${nowLeft} left`);
+log(`burst done: ${reason} · written ${written} · ${nowLeft} left${audit.ran ? ` · audit ${audit.audited} audited, ${audit.changed} changed, ${auditTodo()} left` : ''}`);
 process.exit(0);
