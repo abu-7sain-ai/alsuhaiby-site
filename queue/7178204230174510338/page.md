@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7178204230174510338"
 tiktokId: "7178204230174510338"
 duration: 66
-otherVideos: []
+otherVideos:
+  - tiktokId: "7647605254988533012"
+    title: "خمس نقاط لازم تعرفها عن البرمجة."
+    views: 8456
+    published: "2026-06-04"
+    cover: "/covers/7647605254988533012.webp"
 tags:
   - "برمجة"
   - "كمبيوتر السيارة"
