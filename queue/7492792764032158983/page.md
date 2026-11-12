@@ -20,6 +20,11 @@ otherVideos:
     views: 60600
     published: "2025-10-02"
     cover: "/covers/7556651724497227015.webp"
+  - tiktokId: "7699538513930489108"
+    title: "تذبذب الآر بي إم مرات يكون طبيعي ومرات يكون فيه عطل"
+    views: 36449
+    published: "2026-10-22"
+    cover: "/covers/7699538513930489108.webp"
 tags:
   - "محرك"
   - "RPM"
