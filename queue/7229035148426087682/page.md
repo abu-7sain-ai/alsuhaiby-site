@@ -20,6 +20,11 @@ otherVideos:
     views: 53000
     published: "2023-02-09"
     cover: "/covers/7198258057653095682.webp"
+  - tiktokId: "7640935184199585045"
+    title: "أسباب توقف السيارة عند تشغيل المكيف."
+    views: 13421
+    published: "2026-05-17"
+    cover: "/covers/7640935184199585045.webp"
 tags:
   - "مكيف"
   - "طفي السيارة"
