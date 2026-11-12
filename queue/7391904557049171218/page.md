@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7391904557049171218"
 tiktokId: "7391904557049171218"
 duration: 32
-otherVideos: []
+otherVideos:
+  - tiktokId: "7643892216670276884"
+    title: "تعال تصير ميكانيكي بـ 30 ثانية وتأكد من سلامة البريك بأربع خطوات."
+    views: 35807
+    published: "2026-05-25"
+    cover: "/covers/7643892216670276884.webp"
 tags:
   - "بريك"
   - "زيت البريك"
