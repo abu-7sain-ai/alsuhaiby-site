@@ -25,6 +25,11 @@ otherVideos:
     views: 18704
     published: "2026-05-27"
     cover: "/covers/7644636195288255765.webp"
+  - tiktokId: "7673219998810377492"
+    title: "أهلاً، ريحة المكيف الخايسة وانتوا بكرامة"
+    views: 3319
+    published: "2026-08-12"
+    cover: "/covers/7673219998810377492.webp"
 tags:
   - "مكيف"
   - "ريحة المكيف"
