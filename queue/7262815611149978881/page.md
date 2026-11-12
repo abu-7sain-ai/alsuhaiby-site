@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7262815611149978881"
 tiktokId: "7262815611149978881"
 duration: 43
-otherVideos: []
+otherVideos:
+  - tiktokId: "7323263225028529416"
+    title: "ثلاث أسباب تخلينا نفضي تانك البنزين من السيارة في حال خزّناها ست شهور أو أكثر."
+    views: 51300
+    published: "2024-01-12"
+    cover: "/covers/7323263225028529416.webp"
 tags:
   - "وقود"
   - "تخزين السيارة"
