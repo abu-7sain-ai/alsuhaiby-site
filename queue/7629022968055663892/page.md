@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7629022968055663892"
 tiktokId: "7629022968055663892"
 duration: 39
-otherVideos: []
+otherVideos:
+  - tiktokId: "7695092779340418324"
+    title: "ما قد اشتكى لك صاحبك إن سيارته ترجف أول ما تتحرك؟"
+    views: 18846
+    published: "2026-10-10"
+    cover: "/covers/7695092779340418324.webp"
 tags:
   - "رجفة"
   - "قير"
