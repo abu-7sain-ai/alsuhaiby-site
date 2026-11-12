@@ -25,6 +25,11 @@ otherVideos:
     views: 98052
     published: "2026-04-11"
     cover: "/covers/7627544266234989844.webp"
+  - tiktokId: "7679888218195594517"
+    title: "انسى تجفيت القير وانسى تبديله"
+    views: 51885
+    published: "2026-08-30"
+    cover: "/covers/7679888218195594517.webp"
 tags:
   - "قير"
   - "زيت القير"
