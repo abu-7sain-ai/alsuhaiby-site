@@ -55,6 +55,11 @@ otherVideos:
     views: 12059
     published: "2026-05-05"
     cover: "/covers/7636465220990307605.webp"
+  - tiktokId: "7673952388704734484"
+    title: "خمسة من أسباب تعطل التيربو."
+    views: 3509
+    published: "2026-08-14"
+    cover: "/covers/7673952388704734484.webp"
 tags:
   - "تيربو"
   - "محرك"
