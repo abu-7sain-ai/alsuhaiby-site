@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7699937631936810261"
 tiktokId: "7699937631936810261"
 duration: 29
-otherVideos: []
+otherVideos:
+  - tiktokId: "7494287013638704392"
+    title: "أربع أسباب تخلي ريحة الكزوزت داخل السيارة، خصوصاً للتاهو."
+    views: 19700
+    published: "2025-04-17"
+    cover: "/covers/7494287013638704392.webp"
 tags:
   - "ريحة كربون"
   - "خط القزوز"
