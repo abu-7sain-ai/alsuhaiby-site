@@ -20,6 +20,11 @@ otherVideos:
     views: 6712
     published: "2026-05-23"
     cover: "/covers/7643158375198444821.webp"
+  - tiktokId: "7690663694258162965"
+    title: "أربع نصائح لأهل السيارات الكهربائية بالصيف"
+    views: 3670
+    published: "2026-09-28"
+    cover: "/covers/7690663694258162965.webp"
 tags:
   - "سيارات كهربائية"
   - "بطارية"
