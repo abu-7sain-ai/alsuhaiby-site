@@ -20,6 +20,11 @@ otherVideos:
     views: 103500
     published: "2026-01-27"
     cover: "/covers/7600094313489485068.webp"
+  - tiktokId: "7608662474803498260"
+    title: "بدال ما تفكر، خلني أعلمك ليش القير يطق، ويبدل بعنف."
+    views: 30000
+    published: "2026-02-19"
+    cover: "/covers/7608662474803498260.webp"
 tags:
   - "قير"
   - "نتعة"
