@@ -35,6 +35,11 @@ otherVideos:
     views: 5435
     published: "2026-05-12"
     cover: "/covers/7639066109609659669.webp"
+  - tiktokId: "7700666179072953620"
+    title: "خمس أسباب تخلي حرارة السيارة ترتفع"
+    views: 3424
+    published: "2026-10-25"
+    cover: "/covers/7700666179072953620.webp"
 tags:
   - "تبريد"
   - "حرارة"
