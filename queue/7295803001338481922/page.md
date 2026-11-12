@@ -25,6 +25,11 @@ otherVideos:
     views: 67300
     published: "2026-01-19"
     cover: "/covers/7597128850681744652.webp"
+  - tiktokId: "7622732442041928980"
+    title: "شنو الـ ABS؟ وليش تولع اللمبة مالته؟"
+    views: 43913
+    published: "2026-03-29"
+    cover: "/covers/7622732442041928980.webp"
 tags:
   - "فرامل"
   - "ABS"
