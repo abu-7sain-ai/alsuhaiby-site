@@ -85,6 +85,11 @@ otherVideos:
     views: 9479
     published: "2026-05-13"
     cover: "/covers/7639438523589741844.webp"
+  - tiktokId: "7689538295520333076"
+    title: "أربع أسباب تخلي ثقل بالسكان"
+    views: 7562
+    published: "2026-09-25"
+    cover: "/covers/7689538295520333076.webp"
 tags:
   - "سكان"
   - "زيت باور"
