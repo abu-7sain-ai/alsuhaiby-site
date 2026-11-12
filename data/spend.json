@@ -24980,6 +24980,16 @@
       "completionTokens": 96,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.32652
+    },
+    {
+      "at": "2026-11-12T08:24:10.639Z",
+      "script": "night",
+      "label": "7652426583851961620 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 95,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.32826
     }
   ]
 }

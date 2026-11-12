@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7224950697991621890"
 tiktokId: "7224950697991621890"
 duration: 43
-otherVideos: []
+otherVideos:
+  - tiktokId: "7652426583851961620"
+    title: "ثلاث معلومات مهمة لازم تعرفها عن الكاتش كان"
+    views: 11938
+    published: "2026-06-17"
+    cover: "/covers/7652426583851961620.webp"
 tags:
   - "محرك"
   - "كاتش كان"
