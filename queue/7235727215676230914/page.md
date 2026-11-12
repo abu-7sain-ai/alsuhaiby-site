@@ -20,6 +20,11 @@ otherVideos:
     views: 25657
     published: "2026-05-16"
     cover: "/covers/7640555268815768852.webp"
+  - tiktokId: "7694364587503832340"
+    title: "خمس أسباب تخلي لمبة الـ ESP أو التوازن تولع."
+    views: 5653
+    published: "2026-10-08"
+    cover: "/covers/7694364587503832340.webp"
 tags:
   - "لمبة التوازن"
   - "حساسات"
