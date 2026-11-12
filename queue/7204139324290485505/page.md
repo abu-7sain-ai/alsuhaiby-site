@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7204139324290485505"
 tiktokId: "7204139324290485505"
 duration: 41
-otherVideos: []
+otherVideos:
+  - tiktokId: "7633107608823500053"
+    title: "أربعة من الأعراض إذا شفتها دليل على تلف كتاوت الدينمو."
+    views: 25340
+    published: "2026-04-26"
+    cover: "/covers/7633107608823500053.webp"
 tags:
   - "كهرباء"
   - "دينمو"
