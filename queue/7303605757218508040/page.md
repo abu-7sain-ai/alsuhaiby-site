@@ -20,6 +20,11 @@ otherVideos:
     views: 109600
     published: "2024-09-13"
     cover: "/covers/7414114691901017351.webp"
+  - tiktokId: "7403052490561735954"
+    title: "ثلاث علامات إذا شفتها معناتها عندك مشكلة بالدينمو."
+    views: 44200
+    published: "2024-08-14"
+    cover: "/covers/7403052490561735954.webp"
 tags:
   - "دينمو"
   - "بطارية"
