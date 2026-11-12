@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7178982746117639425"
 tiktokId: "7178982746117639425"
 duration: 55
-otherVideos: []
+otherVideos:
+  - tiktokId: "7568916741288365368"
+    title: "ثلاث انواع لبلاكات السيارة، أو البواجي بلهجة ثانية، لازم انك تعرفها."
+    views: 46100
+    published: "2025-11-04"
+    cover: "/covers/7568916741288365368.webp"
 tags:
   - "بلاكات"
   - "محرك"
