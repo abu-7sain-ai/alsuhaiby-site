@@ -45,6 +45,11 @@ otherVideos:
     views: 41100
     published: "2026-01-22"
     cover: "/covers/7598242200559947019.webp"
+  - tiktokId: "7667642317800475925"
+    title: "اذا حسيت باهتزاز السكان على سرعة 80 إلى 180"
+    views: 25864
+    published: "2026-07-28"
+    cover: "/covers/7667642317800475925.webp"
 tags:
   - "تواير"
   - "ترصيص"
