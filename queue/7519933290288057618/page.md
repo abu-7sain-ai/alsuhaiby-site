@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7519933290288057618"
 tiktokId: "7519933290288057618"
 duration: 57
-otherVideos: []
+otherVideos:
+  - tiktokId: "7648714888340163861"
+    title: "ثلاث حالات نتكلم فيها عن أكثر موضوع عليه خلاف: زيت القير."
+    views: 34398
+    published: "2026-06-07"
+    cover: "/covers/7648714888340163861.webp"
 tags:
   - "قير"
   - "زيت القير"
