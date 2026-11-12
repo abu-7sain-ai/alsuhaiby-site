@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7300638942594977025"
 tiktokId: "7300638942594977025"
 duration: 35
-otherVideos: []
+otherVideos:
+  - tiktokId: "7650944335386578197"
+    title: "خمس حساسات إذا تعطلوا صعوبة في تشغيل السيارة."
+    views: 25940
+    published: "2026-06-13"
+    cover: "/covers/7650944335386578197.webp"
 tags:
   - "حساسات"
   - "صعوبة التشغيل"
