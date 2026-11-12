@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7211956381228829953"
 tiktokId: "7211956381228829953"
 duration: 41
-otherVideos: []
+otherVideos:
+  - tiktokId: "7642407876027452693"
+    title: "سته من علامات تلف سنسر الكام شفت."
+    views: 21038
+    published: "2026-05-21"
+    cover: "/covers/7642407876027452693.webp"
 tags:
   - "محرك"
   - "سنسر الكام شفت"
