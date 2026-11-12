@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7629392950283291925"
 tiktokId: "7629392950283291925"
 duration: 35
-otherVideos: []
+otherVideos:
+  - tiktokId: "7680269524641271060"
+    title: "أدري والله اني لجيتكم بعطل السيارات"
+    views: 20825
+    published: "2026-08-31"
+    cover: "/covers/7680269524641271060.webp"
 tags:
   - "حرارة"
   - "تبريد"
