@@ -25,6 +25,11 @@ otherVideos:
     views: 4631
     published: "2026-10-21"
     cover: "/covers/7699177708466523413.webp"
+  - tiktokId: "7700289388655217940"
+    title: "الراديتر عندك يحتر؟"
+    views: 2845
+    published: "2026-10-24"
+    cover: "/covers/7700289388655217940.webp"
 tags:
   - "حرارة"
   - "تبريد"
