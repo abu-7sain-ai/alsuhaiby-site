@@ -25,6 +25,11 @@ otherVideos:
     views: 35400
     published: "2024-05-08"
     cover: "/covers/7366694994956012808.webp"
+  - tiktokId: "7656885091741732117"
+    title: "خمس أسباب تخلي مؤشر الحرارة يخربط عندك"
+    views: 26187
+    published: "2026-06-29"
+    cover: "/covers/7656885091741732117.webp"
 tags:
   - "مؤشر الحرارة"
   - "سنسر الحرارة"
