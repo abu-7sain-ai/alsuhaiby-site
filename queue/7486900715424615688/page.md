@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7486900715424615688"
 tiktokId: "7486900715424615688"
 duration: 33
-otherVideos: []
+otherVideos:
+  - tiktokId: "7238310374011882754"
+    title: "أربع من الأشياء اللي تتلف توصيلات الرديتر."
+    views: 41500
+    published: "2023-05-28"
+    cover: "/covers/7238310374011882754.webp"
 tags:
   - "رديتر"
   - "هوز الرديتر"
