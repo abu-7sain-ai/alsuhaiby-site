@@ -20,6 +20,11 @@ otherVideos:
     views: 11938
     published: "2026-06-17"
     cover: "/covers/7652426583851961620.webp"
+  - tiktokId: "7693990842805013781"
+    title: "ثلاث معلومات حيل مهمة لازم تعرفها عن الكاتش كان."
+    views: 3185
+    published: "2026-10-07"
+    cover: "/covers/7693990842805013781.webp"
 tags:
   - "محرك"
   - "كاتش كان"
