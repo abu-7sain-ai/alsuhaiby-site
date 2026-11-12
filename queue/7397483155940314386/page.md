@@ -25,6 +25,11 @@ otherVideos:
     views: 67100
     published: "2022-11-23"
     cover: "/covers/7169301368581229826.webp"
+  - tiktokId: "7372979177466678535"
+    title: "خمس أخطاء لا تسويها عشان تحافظ على سيارتك."
+    views: 52500
+    published: "2024-05-25"
+    cover: "/covers/7372979177466678535.webp"
 tags:
   - "صيانة"
   - "زيت"
