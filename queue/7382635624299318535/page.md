@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7382635624299318535"
 tiktokId: "7382635624299318535"
 duration: 13
-otherVideos: []
+otherVideos:
+  - tiktokId: "7641295591355583764"
+    title: "ثلاث علامات تدل على تلف كتاوت المروحة."
+    views: 25948
+    published: "2026-05-18"
+    cover: "/covers/7641295591355583764.webp"
 tags:
   - "تبريد"
   - "مروحة الرديتر"
