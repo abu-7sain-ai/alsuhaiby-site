@@ -30,6 +30,11 @@ otherVideos:
     views: 71500
     published: "2026-03-09"
     cover: "/covers/7615311645354495253.webp"
+  - tiktokId: "7642778937721900309"
+    title: "خمس أعراض إذا شفتها معناته تلف كنترول القير عندك."
+    views: 29042
+    published: "2026-05-22"
+    cover: "/covers/7642778937721900309.webp"
 tags:
   - "قير"
   - "مخ القير"
