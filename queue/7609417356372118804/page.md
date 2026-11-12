@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7609417356372118804"
 tiktokId: "7609417356372118804"
 duration: 36
-otherVideos: []
+otherVideos:
+  - tiktokId: "7689917922063453460"
+    title: "انسى سيارتك تشتغل اذا عندك واحدة من هالأربع مشاكل."
+    views: 29199
+    published: "2026-09-26"
+    cover: "/covers/7689917922063453460.webp"
 tags:
   - "كهرباء"
   - "تشغيل"
