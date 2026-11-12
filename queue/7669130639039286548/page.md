@@ -20,6 +20,11 @@ otherVideos:
     views: 82400
     published: "2024-09-24"
     cover: "/covers/7418258399575526663.webp"
+  - tiktokId: "7559645218820099346"
+    title: "عشان لا يقصون عليك"
+    views: 44800
+    published: "2025-10-10"
+    cover: "/covers/7559645218820099346.webp"
 tags:
   - "محرك"
   - "زيت المكينة"
