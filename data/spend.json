@@ -1,5 +1,5 @@
 {
-  "totalUsd": 13.049802,
+  "totalUsd": 13.071298,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -23086,6 +23086,74 @@
       "completionTokens": 83,
       "costUsd": 0,
       "subscriptionUsdEquivalent": 0.31966
+    },
+    {
+      "at": "2026-11-12T02:16:23.278Z",
+      "script": "night",
+      "label": "tk-7696949129901100289 write",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 10797,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2252202
+    },
+    {
+      "at": "2026-11-12T02:16:23.394Z",
+      "script": "night",
+      "label": "tk-7522884378192530706 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 6924,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.19172820000000002
+    },
+    {
+      "at": "2026-11-12T02:16:24.067Z",
+      "script": "night",
+      "label": "7701025093631134977 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 6372,
+      "completionTokens": 1767,
+      "costUsd": 0.01140525
+    },
+    {
+      "at": "2026-11-12T02:16:28.465Z",
+      "script": "night",
+      "label": "7701025093631134977 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 104,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.32616799999999996
+    },
+    {
+      "at": "2026-11-12T02:16:39.778Z",
+      "script": "night",
+      "label": "tk-7627949491655576853 write (resize 1)",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 8806,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.2230242
+    },
+    {
+      "at": "2026-11-12T02:16:41.203Z",
+      "script": "night",
+      "label": "7643520063592516884 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 4834,
+      "completionTokens": 1724,
+      "costUsd": 0.0100905
+    },
+    {
+      "at": "2026-11-12T02:16:44.926Z",
+      "script": "night",
+      "label": "7643520063592516884 dedup",
+      "model": "claude-cli (subscription)",
+      "promptTokens": 2,
+      "completionTokens": 86,
+      "costUsd": 0,
+      "subscriptionUsdEquivalent": 0.32313600000000003
     }
   ]
 }
