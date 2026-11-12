@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7470601505083608328"
 tiktokId: "7470601505083608328"
 duration: 25
-otherVideos: []
+otherVideos:
+  - tiktokId: "7400822620242906376"
+    title: "أربع أسرار عشان تحافظ على أكسات سيارتك."
+    views: 23700
+    published: "2024-08-08"
+    cover: "/covers/7400822620242906376.webp"
 tags:
   - "أكسات"
   - "طقطقة"
