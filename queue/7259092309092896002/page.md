@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7259092309092896002"
 tiktokId: "7259092309092896002"
 duration: 17
-otherVideos: []
+otherVideos:
+  - tiktokId: "7650199972645850388"
+    title: "أربع مشاكل تجيك لو تسرب الماي من فتحة السقف."
+    views: 3833
+    published: "2026-06-11"
+    cover: "/covers/7650199972645850388.webp"
 tags:
   - "فتحة السقف"
   - "تسريب ماي"
