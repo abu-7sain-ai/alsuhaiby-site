@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7429727291028049170"
 tiktokId: "7429727291028049170"
 duration: 21
-otherVideos: []
+otherVideos:
+  - tiktokId: "7669496579761474836"
+    title: "إذا لقيت زيت على فلتر الهواء"
+    views: 14502
+    published: "2026-08-02"
+    cover: "/covers/7669496579761474836.webp"
 tags:
   - "محرك"
   - "فلتر الهواء"
