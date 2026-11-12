@@ -40,6 +40,11 @@ otherVideos:
     views: 48300
     published: "2023-09-26"
     cover: "/covers/7283192450422787335.webp"
+  - tiktokId: "7590826097613344056"
+    title: "خمسة أسباب تخرب كمبيوتر سيارتك."
+    views: 39600
+    published: "2026-01-02"
+    cover: "/covers/7590826097613344056.webp"
 tags:
   - "كمبيوتر السيارة"
   - "كهرباء"
