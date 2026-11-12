@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7607477522657283349"
 tiktokId: "7607477522657283349"
 duration: 31
-otherVideos: []
+otherVideos:
+  - tiktokId: "7704048966542822676"
+    title: "مو ضروري إذا تأخرت تبديلات قير سيارتك معناته إنه لازم تجفد أو تبدل القير."
+    views: 49253
+    published: "2026-11-03"
+    cover: "/covers/7704048966542822676.webp"
 tags:
   - "قير"
   - "تبديلات القير"
