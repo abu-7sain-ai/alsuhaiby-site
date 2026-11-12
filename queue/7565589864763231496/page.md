@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7565589864763231496"
 tiktokId: "7565589864763231496"
 duration: 38
-otherVideos: []
+otherVideos:
+  - tiktokId: "7658366384099003668"
+    title: "خمس معلومات أبيك تعرفها عن سنسر القير تي آر إس"
+    views: 5163
+    published: "2026-07-03"
+    cover: "/covers/7658366384099003668.webp"
 tags:
   - "قير"
   - "سنسر القير"
