@@ -14,6 +14,13 @@
 10. LENGTH (owner, 2026-11-12, standing rule): for AUDITED articles accuracy beats length — a truthful 643-word page is better than a padded 1150-word one. The 1150–1400 range and the hold rule («held-length») apply to NEWLY WRITTEN articles only (night.js). An audited article is never held, and no sentence is ever added just to reach a word count. In code: audit.js has no expand step and never reads the range; it only records words before/after. Nothing else gates a live or queued page on length (daily.js does not), so an audited short page publishes normally.
 11. Escalations (real injury risk, or a false or softened claim in his name) are never loosened to reduce the count. At 17 in the first 3 articles the remaining 224 will produce many more: every one is collected in the library’s audit-escalations.json, and each burst’s Telegram reports how many were found in that burst and the total.
 
+## 2026-11-12 — Corrected audit rule «explain» (owner) — supersedes «full freedom to cut» and balanced mode
+1. Result of the first queue audit: 188 of 204 articles came out under 500 words (shortest 125) — too short to rank or be cited. The cutting went too far and removed legitimate mechanical explanation.
+2. BANNED (unchanged): any figure, step, warning, cause, recommendation or claim he did not give; anything in his voice he did not say; repeating his own points in other words.
+3. REQUIRED: for EACH point he makes, explain how the fault works — what the part does, why the symptom appears, what happens if it is ignored — as plain general mechanical information, never as his claim or advice. That explanation is the body of the article.
+4. No word-count target; the length follows. Config auditMode = «explain». Pipeline: audit (default KEEP) → map (sections for a cause he did not list go) → completion of missing explanation → sweep of every unit for banned items → coherence (title count = the number of points HE lists).
+5. Articles audited earlier under 500 words are flagged `redo` in audit.json and are NOT audited for the publisher until redone (so the 02:07 job cannot publish a short one); redo restarts from the pre-audit text found in git.
+
 ## 2026-11-12 — Audit stays on this PC; nothing is published unaudited (owner)
 1. The audit runs on this machine (Claude subscription), not in the cloud.
 2. Phase A: tonight's bursts audit only the 33 live pages (highest views first), corrections pushed live. Nothing else in those bursts until they are done.
