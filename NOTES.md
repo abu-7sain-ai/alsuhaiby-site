@@ -10,8 +10,8 @@ Rules: CONSTITUTION.md · decisions: DECISIONS.md · Arabic how-to: README.md ·
 | Videos (MP4) | Cloudflare R2 bucket `alsuhaiby-media` → https://media.alsuhaiby.com/<tiktokId>.mp4 |
 | Deploy | Every push to `main` → Cloudflare Workers Builds runs `npm run build` + `npx wrangler deploy` |
 | Manual deploy | `npm run deploy` (build + wrangler deploy; needs `wrangler login`) |
-| Project folder | `Desktopalsuhaiby` (one parent, not a git repo; 2026-11-10): `alsuhaiby-site` (PUBLIC repo), `alsuhaiby-library` (PRIVATE repo, side by side, never inside the site), `media`, `archive`. Code finds everything relative to the site folder (scripts/lib/common.js → PARENT) |
-| Source videos | After the move (2026-11-13): the old Telegram export lives on **D:alsuhaiby	elegram-export** (rarely read); yt-dlp downloads go to `<parent>mediadownloads` on demand (the old Videos copy is deleted; every video is on R2). Never committed |
+| Project folder | `C:UsersHPDesktopalsuhaiby` (moved 2026-11-13; one parent, not a git repo): `alsuhaiby-site` (PUBLIC repo) and `alsuhaiby-library` (PRIVATE repo), side by side, never one inside the other; `archive` (one-of-a-kind files). Both repos stay on C: (SSD). Code finds everything relative to the site folder (scripts/lib/common.js → PARENT) |
+| Source videos | Old Telegram export: `D:alsuhaiby	elegram-export` (rarely read, HDD; `map.json`, `video_files`; env `ALSUHAIBY_D_ROOT` overrides the drive). yt-dlp downloads go to `<parent>mediadownloads` on demand (the old Videos copy was deleted; every video is on R2). Never committed |
 | Private library | `<parent>alsuhaiby-library` = PRIVATE repo abu-7sain-ai/alsuhaiby-library: library.json (all videos), ledger.json (dedup), videos/<id>/{analysis,dedup,write.ar,review.ar,final.ar}.json |
 | Queue | `queue/<id>/` (page.md + cover/thumb/og + meta.json) — written by the night run, published by the cloud |
 | Published log | `data/published.json` (id → slug, date; never republished) |

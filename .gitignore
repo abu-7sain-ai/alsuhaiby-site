@@ -12,3 +12,8 @@ data/machine.json
 data/machine.json.tmp
 data/meters-pos.json
 data/meters.stop
+
+data/run-*.out
+data/run-test-*
+data/prep-burst.json
+data/prep-supervisor.json
