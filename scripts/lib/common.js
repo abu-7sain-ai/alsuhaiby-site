@@ -10,13 +10,15 @@ export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 // PARENT = the folder that holds this repo. The old places (Desktop, Videos) are still found until the move is done.
 export const PARENT = path.dirname(ROOT);
 const firstThere = (...ps) => ps.find((p) => fs.existsSync(p)) || ps[0];
-export const VIDEO_DIR = process.env.VIDEO_DIR || firstThere(path.join(PARENT, 'media', 'telegram-export', 'video_files'), path.join(os.homedir(), 'Videos', 'ChatExport_2026-10-30', 'video_files'));
+// Owner 2026-11-13: the repos stay on C: (SSD) in <Desktop>\alsuhaiby\; the rarely-read Telegram export lives on D:\alsuhaiby\telegram-export.
+// Each place is tried in turn, so the code works before, during and after the move.
+export const VIDEO_DIR = process.env.VIDEO_DIR || firstThere(path.join('D:\\', 'alsuhaiby', 'telegram-export', 'video_files'), path.join(PARENT, 'media', 'telegram-export', 'video_files'), path.join(os.homedir(), 'Videos', 'ChatExport_2026-10-30', 'video_files'));
 export const EXPORT_DIR = path.dirname(VIDEO_DIR);
 // Private library repo (abu-7sain-ai/alsuhaiby-library): transcripts, analyses, articles, review logs, dedup ledger. Never public.
 export const LIB_DIR = process.env.LIB_DIR || path.join(PARENT, 'alsuhaiby-library'); // next to this repo, never inside it (it is private)
 export const LIBRARY = process.env.LIBRARY_JSON || path.join(LIB_DIR, 'library.json');
 // Videos fetched with yt-dlp (never committed; the copy everyone plays is on R2).
-export const DOWNLOAD_DIR = process.env.DOWNLOAD_DIR || firstThere(path.join(PARENT, 'media', 'downloads'), path.join(os.homedir(), 'Videos', 'alsuhaiby-downloads'));
+export const DOWNLOAD_DIR = process.env.DOWNLOAD_DIR || firstThere(path.join(PARENT, 'media', 'downloads'), path.join(os.homedir(), 'Videos', 'alsuhaiby-downloads')); // (the old Videos copy is deleted by the move; new downloads are created in <parent>\media\downloads on demand)
 export const OLD_ANALYSES = process.env.OLD_ANALYSES || path.join(os.homedir(), 'Desktop', 'KatibSuhaibi', 'data', 'files', 'بيانات-الحساب-والفيديوهات.txt');
 export const MODEL = process.env.OPENROUTER_MODEL || 'google/gemini-3.8-flash';
 export const LANGS = ['ar', 'en', 'fr', 'es', 'ur'];
