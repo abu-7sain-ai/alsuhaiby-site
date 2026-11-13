@@ -12,7 +12,7 @@ export const PARENT = path.dirname(ROOT);
 const firstThere = (...ps) => ps.find((p) => fs.existsSync(p)) || ps[0];
 // Owner 2026-11-13: the repos stay on C: (SSD) in <Desktop>\alsuhaiby\; the rarely-read Telegram export lives on D:\alsuhaiby\telegram-export.
 // Each place is tried in turn, so the code works before, during and after the move.
-export const VIDEO_DIR = process.env.VIDEO_DIR || firstThere(path.join('D:\\', 'alsuhaiby', 'telegram-export', 'video_files'), path.join(PARENT, 'media', 'telegram-export', 'video_files'), path.join(os.homedir(), 'Videos', 'ChatExport_2026-10-30', 'video_files'));
+export const VIDEO_DIR = process.env.VIDEO_DIR || firstThere(path.join(process.env.ALSUHAIBY_D_ROOT || 'D:\\', 'alsuhaiby', 'telegram-export', 'video_files'), path.join(PARENT, 'media', 'telegram-export', 'video_files'), path.join(os.homedir(), 'Videos', 'ChatExport_2026-10-30', 'video_files'));
 export const EXPORT_DIR = path.dirname(VIDEO_DIR);
 // Private library repo (abu-7sain-ai/alsuhaiby-library): transcripts, analyses, articles, review logs, dedup ledger. Never public.
 export const LIB_DIR = process.env.LIB_DIR || path.join(PARENT, 'alsuhaiby-library'); // next to this repo, never inside it (it is private)

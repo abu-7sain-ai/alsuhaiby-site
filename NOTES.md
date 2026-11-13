@@ -11,7 +11,7 @@ Rules: CONSTITUTION.md · decisions: DECISIONS.md · Arabic how-to: README.md ·
 | Deploy | Every push to `main` → Cloudflare Workers Builds runs `npm run build` + `npx wrangler deploy` |
 | Manual deploy | `npm run deploy` (build + wrangler deploy; needs `wrangler login`) |
 | Project folder | `Desktopalsuhaiby` (one parent, not a git repo; 2026-11-10): `alsuhaiby-site` (PUBLIC repo), `alsuhaiby-library` (PRIVATE repo, side by side, never inside the site), `media`, `archive`. Code finds everything relative to the site folder (scripts/lib/common.js → PARENT) |
-| Source videos | `<parent>media	elegram-exportideo_files` (old Telegram export, was ~/Videos/ChatExport_2026-10-30) + `<parent>mediadownloads<id>.mp4` (yt-dlp, was ~/Videos/alsuhaiby-downloads). Never committed |
+| Source videos | After the move (2026-11-13): the old Telegram export lives on **D:alsuhaiby	elegram-export** (rarely read); yt-dlp downloads go to `<parent>mediadownloads` on demand (the old Videos copy is deleted; every video is on R2). Never committed |
 | Private library | `<parent>alsuhaiby-library` = PRIVATE repo abu-7sain-ai/alsuhaiby-library: library.json (all videos), ledger.json (dedup), videos/<id>/{analysis,dedup,write.ar,review.ar,final.ar}.json |
 | Queue | `queue/<id>/` (page.md + cover/thumb/og + meta.json) — written by the night run, published by the cloud |
 | Published log | `data/published.json` (id → slug, date; never republished) |

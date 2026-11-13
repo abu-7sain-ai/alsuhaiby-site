@@ -133,3 +133,11 @@
 ## 2026-11-05 — Phase 1
 1. GitHub public repo abu-7sain-ai/alsuhaiby-site. 2. One page per topic; strongest video is the main one, others embedded.
 3. Six-dimension quality scale. 4. Instagram files left out. 5. Reports in English with a Kuwait-time ETA and one status line.
+
+## Final move plan (owner, 2026-11-13) — supersedes the 2026-11-10 «everything under Desktop\alsuhaiby» plan
+1. Both repos STAY on C: (SSD; a D: HDD would slow git and every audit run), consolidated side by side in `Desktop\alsuhaiby\alsuhaiby-site` (PUBLIC) and `Desktop\alsuhaiby\alsuhaiby-library` (PRIVATE). Never one inside the other.
+2. The Telegram export (`Videos\ChatExport_2026-10-30`, 0.22 GB, rarely read) is COPIED to `D:\alsuhaiby\telegram-export`, every file checked by SHA-256, then the original goes to the Recycle Bin. `scripts/lib/common.js` finds it there first (`ALSUHAIBY_D_ROOT` overrides the drive for tests).
+3. `Videos\alsuhaiby-downloads` (1.31 GB, 669 videos) is deleted (Recycle Bin) — but only if every video in it is on R2 (`data/r2.json`); otherwise it is kept and the run says so. New downloads are created in `<parent>\media\downloads` on demand.
+4. `archive\` holds the 2 research files from Downloads + `5889539663_pin (2).mp4` (no copy anywhere).
+5. The Windows task `alsuhaiby-audit-daily` is re-pointed at the new folder (disabled during the move, re-enabled after, restored on rollback); the two `.vbs` launchers now find the site folder from their own place.
+6. `scripts/move-project.ps1` (run by the Desktop click-file «نقل المشروع»): refuses to start if a project process is alive or D: is missing/too small; renames the repos, copies to D:, fixes the 5 shortcuts, the task and the memory copy; verifies; ANY failure undoes everything. Tested in a sandbox: `scripts/test-move-sandbox.ps1` (success, rollback, video-not-on-R2, dry run).
