@@ -25,6 +25,11 @@ otherVideos:
     views: 14065
     published: "2026-05-15"
     cover: "/covers/7640180135307529493.webp"
+  - tiktokId: "7707719661353323797"
+    title: "أربع علامات تدل على تلف النوك سنسر أو حساس الطرق"
+    views: 2678
+    published: "2026-11-13"
+    cover: "/covers/7707719661353323797.webp"
 tags:
   - "محرك"
   - "حساس الطرق"
