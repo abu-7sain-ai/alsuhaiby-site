@@ -5,29 +5,29 @@
     "at": "2026-11-10T17:55:59.229Z",
     "ok": true
   },
-  "updatedAt": "2026-11-14T03:08:19.386Z",
-  "nextScheduledRun": "2026-11-15 02:00 Kuwait (GitHub Actions, daily)",
+  "updatedAt": "2026-11-15T02:35:58.227Z",
+  "nextScheduledRun": "2026-11-16 02:00 Kuwait (GitHub Actions, daily)",
   "pagesPublished": {
-    "total": 47,
+    "total": 54,
     "byLang": {
-      "ar": 47
+      "ar": 54
     }
   },
   "videosProcessed": 50,
-  "videosOnR2": 723,
+  "videosOnR2": 724,
   "openRouterSpendUsd": {
-    "total": 14.188,
-    "last30Days": 14.188
+    "total": 14.214,
+    "last30Days": 14.214
   },
   "keyCreditLeftUsd": {
-    "usd": 35.84,
+    "usd": 35.81,
     "source": "key limit"
   },
   "siteHealth": {
-    "at": "2026-11-14T03:08:19.386Z",
+    "at": "2026-11-15T02:35:58.227Z",
     "url": "https://alsuhaiby.com/",
     "httpStatus": 200,
-    "ms": 148,
+    "ms": 116,
     "up": true
   },
   "alerts": {},
@@ -47,51 +47,51 @@
     }
   },
   "lastDaily": {
-    "day": "2026-11-14",
-    "at": "2026-11-14T03:08:19.179Z",
+    "day": "2026-11-15",
+    "at": "2026-11-15T02:35:58.047Z",
     "published": [
       {
-        "title": "سيارتي تصرف بنزين وعزمها ضعيف: 6 مشاكل من انسداد فلتر الهواء",
-        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%B5%D8%B1%D9%81-%D8%A8%D9%86%D8%B2%D9%8A%D9%86-%D9%81%D9%84%D8%AA%D8%B1-%D8%A7%D9%84%D9%87%D9%88%D8%A7%D8%A1/"
+        "title": "ليش بطارية سيارتي بالدبة مو بالكبوت؟ 4 أسباب",
+        "url": "https://alsuhaiby.com/%D9%84%D9%8A%D8%B4-%D8%A8%D8%B7%D8%A7%D8%B1%D9%8A%D8%A9-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%A8%D8%A7%D9%84%D8%AF%D8%A8%D8%A9-%D9%85%D9%88-%D8%A8%D8%A7%D9%84%D9%83%D8%A8%D9%88%D8%AA/"
       },
       {
-        "title": "ماي الرديتر الأحمر ولا الأخضر؟ 6 نقاط لازم تعرفها",
-        "url": "https://alsuhaiby.com/%D9%85%D8%A7%D9%8A-%D8%A7%D9%84%D8%B1%D8%AF%D9%8A%D8%AA%D8%B1-%D8%A7%D9%84%D8%A3%D8%AD%D9%85%D8%B1-%D9%88%D9%84%D8%A7-%D8%A7%D9%84%D8%A3%D8%AE%D8%B6%D8%B1/"
+        "title": "سيارتي ضعيفة وتصرف بنزين: 6 أعراض لتلف البلاكات",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%B6%D8%B9%D9%8A%D9%81%D8%A9-%D9%88%D8%AA%D8%B5%D8%B1%D9%81-%D8%A8%D9%86%D8%B2%D9%8A%D9%86-%D8%A7%D9%84%D8%A8%D9%84%D8%A7%D9%83%D8%A7%D8%AA/"
       },
       {
-        "title": "ليش أبدل زيت السيارة قبل موعده؟ 3 مواقف تستهلكه بدون عداد",
-        "url": "https://alsuhaiby.com/%D9%84%D9%8A%D8%B4-%D8%A3%D8%A8%D8%AF%D9%84-%D8%B2%D9%8A%D8%AA-%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A9-%D9%82%D8%A8%D9%84-%D9%85%D9%88%D8%B9%D8%AF%D9%87/"
+        "title": "زاد الزيت في سيارتي عن الحد: 5 أشياء لازم تعرفها",
+        "url": "https://alsuhaiby.com/%D8%B2%D8%A7%D8%AF-%D8%A7%D9%84%D8%B2%D9%8A%D8%AA-%D9%81%D9%8A-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%B9%D9%86-%D8%A7%D9%84%D8%AD%D8%AF/"
       },
       {
-        "title": "سيارتي تطلع دخان أبيض وحرارتها ترتفع: 5 علامات هوا بدورة التبريد",
-        "url": "https://alsuhaiby.com/%D8%AF%D8%AE%D8%A7%D9%86-%D8%A3%D8%A8%D9%8A%D8%B6-%D9%87%D9%88%D8%A7-%D8%A8%D8%AF%D9%88%D8%B1%D8%A9-%D8%A7%D9%84%D8%AA%D8%A8%D8%B1%D9%8A%D8%AF/"
+        "title": "ليتات سيارتي تخفت والبطارية تفضى: 5 أعراض تلف كتاوت الدينمو",
+        "url": "https://alsuhaiby.com/%D9%84%D9%8A%D8%AA%D8%A7%D8%AA-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%AE%D9%81%D8%AA-%D9%83%D8%AA%D8%A7%D9%88%D8%AA-%D8%A7%D9%84%D8%AF%D9%8A%D9%86%D9%85%D9%88/"
       },
       {
-        "title": "السكان يرجف على سرعة 80 أو 100: 4 مشاكل يسببها الترصيص",
-        "url": "https://alsuhaiby.com/%D8%A7%D9%84%D8%B3%D9%83%D8%A7%D9%86-%D9%8A%D8%B1%D8%AC%D9%81-%D9%85%D8%B4%D8%A7%D9%83%D9%84-%D8%A7%D9%84%D8%AA%D8%B1%D8%B5%D9%8A%D8%B5/"
+        "title": "سيارتي ترجف لما أشغل المكيف: 3 أسباب",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%B1%D8%AC%D9%81-%D9%84%D9%85%D8%A7-%D8%A3%D8%B4%D8%BA%D9%84-%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%81/"
       },
       {
-        "title": "سيارتي ترجف وتدق من قدام: 5 أسباب تتلف كراسي المكينة",
-        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%B1%D8%AC%D9%81-%D9%88%D8%AA%D8%AF%D9%82-%D9%83%D8%B1%D8%A7%D8%B3%D9%8A-%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%86%D8%A9/"
+        "title": "سيارتي تاكل بنزين وتطلع دخان أزرق: 5 علامات تلف بلف بخار الزيت",
+        "url": "https://alsuhaiby.com/%D8%B9%D9%84%D8%A7%D9%85%D8%A7%D8%AA-%D8%AA%D9%84%D9%81-%D8%A8%D9%84%D9%81-%D8%A8%D8%AE%D8%A7%D8%B1-%D8%A7%D9%84%D8%B2%D9%8A%D8%AA/"
       },
       {
-        "title": "سيارتي تحر والماي ينقص؟ 6 علامات إن قازقيت المكينة تالف",
-        "url": "https://alsuhaiby.com/%D8%B9%D9%84%D8%A7%D9%85%D8%A7%D8%AA-%D8%AA%D9%84%D9%81-%D9%82%D8%A7%D8%B2%D9%82%D9%8A%D8%AA-%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%86%D8%A9/"
+        "title": "سيارتي ترجف وتصرف بنزين: 5 علامات رواسب كربونية بالمكينة",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%B1%D8%AC%D9%81-%D8%B1%D9%88%D8%A7%D8%B3%D8%A8-%D9%83%D8%B1%D8%A8%D9%88%D9%86%D9%8A%D8%A9-%D8%A8%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%86%D8%A9/"
       }
     ],
     "merged": [
-      "7707719661353323797 → سيارتي-مكتومة-علامات-تلف-حساس-الطرق"
+      "7708096059284753684 → شنو-لازم-أشيك-عليه-سيارتي"
     ],
-    "queueLeft": 187,
+    "queueLeft": 180,
     "queueNotAudited": 1,
     "newQueued": 0,
     "archiveLeft": 0,
-    "costTodayUsd": 0.029,
+    "costTodayUsd": 0.026,
     "costGuard": null,
     "errors": []
   },
-  "queueWaiting": 187,
+  "queueWaiting": 180,
   "publishPerDay": 7,
-  "videosAnalyzed": 719,
+  "videosAnalyzed": 724,
   "archiveLeft": 11
 }
