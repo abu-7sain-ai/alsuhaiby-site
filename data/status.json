@@ -5,29 +5,29 @@
     "at": "2026-11-10T17:55:59.229Z",
     "ok": true
   },
-  "updatedAt": "2026-11-15T02:35:58.227Z",
-  "nextScheduledRun": "2026-11-16 02:00 Kuwait (GitHub Actions, daily)",
+  "updatedAt": "2026-11-16T02:46:05.829Z",
+  "nextScheduledRun": "2026-11-17 02:00 Kuwait (GitHub Actions, daily)",
   "pagesPublished": {
-    "total": 54,
+    "total": 61,
     "byLang": {
-      "ar": 54
+      "ar": 61
     }
   },
   "videosProcessed": 50,
-  "videosOnR2": 724,
+  "videosOnR2": 725,
   "openRouterSpendUsd": {
-    "total": 14.214,
-    "last30Days": 14.214
+    "total": 14.448,
+    "last30Days": 14.448
   },
   "keyCreditLeftUsd": {
-    "usd": 35.81,
+    "usd": 35.69,
     "source": "key limit"
   },
   "siteHealth": {
-    "at": "2026-11-15T02:35:58.227Z",
+    "at": "2026-11-16T02:46:05.829Z",
     "url": "https://alsuhaiby.com/",
     "httpStatus": 200,
-    "ms": 116,
+    "ms": 255,
     "up": true
   },
   "alerts": {},
@@ -47,51 +47,49 @@
     }
   },
   "lastDaily": {
-    "day": "2026-11-15",
-    "at": "2026-11-15T02:35:58.047Z",
+    "day": "2026-11-16",
+    "at": "2026-11-16T02:46:05.510Z",
     "published": [
       {
-        "title": "ليش بطارية سيارتي بالدبة مو بالكبوت؟ 4 أسباب",
-        "url": "https://alsuhaiby.com/%D9%84%D9%8A%D8%B4-%D8%A8%D8%B7%D8%A7%D8%B1%D9%8A%D8%A9-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%A8%D8%A7%D9%84%D8%AF%D8%A8%D8%A9-%D9%85%D9%88-%D8%A8%D8%A7%D9%84%D9%83%D8%A8%D9%88%D8%AA/"
+        "title": "سكان سيارتي ثقيل: 4 أسباب لثقل السكان",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%83%D8%A7%D9%86-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AB%D9%82%D9%8A%D9%84-%D8%A3%D8%B3%D8%A8%D8%A7%D8%A8/"
       },
       {
-        "title": "سيارتي ضعيفة وتصرف بنزين: 6 أعراض لتلف البلاكات",
-        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%B6%D8%B9%D9%8A%D9%81%D8%A9-%D9%88%D8%AA%D8%B5%D8%B1%D9%81-%D8%A8%D9%86%D8%B2%D9%8A%D9%86-%D8%A7%D9%84%D8%A8%D9%84%D8%A7%D9%83%D8%A7%D8%AA/"
+        "title": "سيارتي تسخن والحرارة ترتفع: 5 أسباب لازم تعرفها",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%B3%D8%AE%D9%86-%D9%88%D8%A7%D9%84%D8%AD%D8%B1%D8%A7%D8%B1%D8%A9-%D8%AA%D8%B1%D8%AA%D9%81%D8%B9/"
       },
       {
-        "title": "زاد الزيت في سيارتي عن الحد: 5 أشياء لازم تعرفها",
-        "url": "https://alsuhaiby.com/%D8%B2%D8%A7%D8%AF-%D8%A7%D9%84%D8%B2%D9%8A%D8%AA-%D9%81%D9%8A-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%B9%D9%86-%D8%A7%D9%84%D8%AD%D8%AF/"
+        "title": "قزاز سيارتي يتشقق من الحر: 3 نصايح تحافظ عليه",
+        "url": "https://alsuhaiby.com/%D9%82%D8%B2%D8%A7%D8%B2-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D9%8A%D8%AA%D8%B4%D9%82%D9%82-%D9%85%D9%86-%D8%A7%D9%84%D8%AD%D8%B1/"
       },
       {
-        "title": "ليتات سيارتي تخفت والبطارية تفضى: 5 أعراض تلف كتاوت الدينمو",
-        "url": "https://alsuhaiby.com/%D9%84%D9%8A%D8%AA%D8%A7%D8%AA-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%AE%D9%81%D8%AA-%D9%83%D8%AA%D8%A7%D9%88%D8%AA-%D8%A7%D9%84%D8%AF%D9%8A%D9%86%D9%85%D9%88/"
+        "title": "مروحة السيارة ما تشتغل أو تعلق؟ 3 علامات تلف كتاوت المروحة",
+        "url": "https://alsuhaiby.com/%D9%85%D8%B1%D9%88%D8%AD%D8%A9-%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A9-%D9%85%D8%A7-%D8%AA%D8%B4%D8%AA%D8%BA%D9%84-%D9%83%D8%AA%D8%A7%D9%88%D8%AA/"
       },
       {
-        "title": "سيارتي ترجف لما أشغل المكيف: 3 أسباب",
-        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%B1%D8%AC%D9%81-%D9%84%D9%85%D8%A7-%D8%A3%D8%B4%D8%BA%D9%84-%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%81/"
+        "title": "مؤشر الحرارة يخربط والسيارة مو حارة: 5 أسباب",
+        "url": "https://alsuhaiby.com/%D9%85%D8%A4%D8%B4%D8%B1-%D8%A7%D9%84%D8%AD%D8%B1%D8%A7%D8%B1%D8%A9-%D9%8A%D8%AE%D8%B1%D8%A8%D8%B7-%D9%88%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A9-%D9%85%D9%88-%D8%AD%D8%A7%D8%B1%D8%A9/"
       },
       {
-        "title": "سيارتي تاكل بنزين وتطلع دخان أزرق: 5 علامات تلف بلف بخار الزيت",
-        "url": "https://alsuhaiby.com/%D8%B9%D9%84%D8%A7%D9%85%D8%A7%D8%AA-%D8%AA%D9%84%D9%81-%D8%A8%D9%84%D9%81-%D8%A8%D8%AE%D8%A7%D8%B1-%D8%A7%D9%84%D8%B2%D9%8A%D8%AA/"
+        "title": "دخان يطلع من فتحة عصا الزيت في سيارتي: 5 أسباب",
+        "url": "https://alsuhaiby.com/%D8%AF%D8%AE%D8%A7%D9%86-%D9%8A%D8%B7%D9%84%D8%B9-%D9%85%D9%86-%D9%81%D8%AA%D8%AD%D8%A9-%D8%B9%D8%B5%D8%A7-%D8%A7%D9%84%D8%B2%D9%8A%D8%AA/"
       },
       {
-        "title": "سيارتي ترجف وتصرف بنزين: 5 علامات رواسب كربونية بالمكينة",
-        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%B1%D8%AC%D9%81-%D8%B1%D9%88%D8%A7%D8%B3%D8%A8-%D9%83%D8%B1%D8%A8%D9%88%D9%86%D9%8A%D8%A9-%D8%A8%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%86%D8%A9/"
+        "title": "سيارتي تنقط زيت بين القير والمكينة: ليش الجبنة اللي ورا تصليحها غالي؟",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D9%86%D9%82%D8%B7-%D8%B2%D9%8A%D8%AA-%D8%A8%D9%8A%D9%86-%D8%A7%D9%84%D9%82%D9%8A%D8%B1-%D9%88%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%86%D8%A9/"
       }
     ],
-    "merged": [
-      "7708096059284753684 → شنو-لازم-أشيك-عليه-سيارتي"
-    ],
-    "queueLeft": 180,
-    "queueNotAudited": 1,
-    "newQueued": 0,
+    "merged": [],
+    "queueLeft": 174,
+    "queueNotAudited": 2,
+    "newQueued": 1,
     "archiveLeft": 0,
-    "costTodayUsd": 0.026,
+    "costTodayUsd": 0.235,
     "costGuard": null,
     "errors": []
   },
-  "queueWaiting": 180,
+  "queueWaiting": 174,
   "publishPerDay": 7,
-  "videosAnalyzed": 724,
+  "videosAnalyzed": 725,
   "archiveLeft": 11
 }

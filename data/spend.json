@@ -1,5 +1,5 @@
 {
-  "totalUsd": 14.213897,
+  "totalUsd": 14.448435,
   "calls": [
     {
       "at": "2026-11-05T21:19:33.744Z",
@@ -45149,6 +45149,69 @@
       "promptTokens": 24007,
       "completionTokens": 354,
       "costUsd": 0.01933275
+    },
+    {
+      "at": "2026-11-16T02:42:32.077Z",
+      "script": "daily",
+      "label": "7708461206004075796 analyze",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 4928,
+      "completionTokens": 1431,
+      "costUsd": 0.00906225
+    },
+    {
+      "at": "2026-11-16T02:42:39.192Z",
+      "script": "daily",
+      "label": "7708461206004075796 dedup",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 24114,
+      "completionTokens": 696,
+      "costUsd": 0.0206955
+    },
+    {
+      "at": "2026-11-16T02:43:33.767Z",
+      "script": "daily",
+      "label": "tk-7708461206004075796 write",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 1671,
+      "completionTokens": 5965,
+      "costUsd": 0.023622
+    },
+    {
+      "at": "2026-11-16T02:44:18.476Z",
+      "script": "daily",
+      "label": "tk-7708461206004075796 write (resize 1)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 4494,
+      "completionTokens": 5638,
+      "costUsd": 0.024513
+    },
+    {
+      "at": "2026-11-16T02:44:47.557Z",
+      "script": "daily",
+      "label": "tk-7708461206004075796 write (resize 2)",
+      "model": "google/gemini-3.8-flash",
+      "promptTokens": 7960,
+      "completionTokens": 4187,
+      "costUsd": 0.018608775
+    },
+    {
+      "at": "2026-11-16T02:45:40.010Z",
+      "script": "daily",
+      "label": "tk-7708461206004075796 review pass1",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 8239,
+      "completionTokens": 8481,
+      "costUsd": 0.101288
+    },
+    {
+      "at": "2026-11-16T02:45:56.117Z",
+      "script": "daily",
+      "label": "tk-7708461206004075796 review pass2",
+      "model": "anthropic/claude-sonnet-5.5",
+      "promptTokens": 7384,
+      "completionTokens": 2198,
+      "costUsd": 0.036748
     }
   ]
 }
