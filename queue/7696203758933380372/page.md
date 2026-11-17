@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7696203758933380372"
 tiktokId: "7696203758933380372"
 duration: 41
-otherVideos: []
+otherVideos:
+  - tiktokId: "7708839762907417877"
+    title: "أغلب الناس يحسبون ضعف العزم بعد المَطَبّة بسبة المكينة، بس القصة ترى أعقد شوي."
+    views: 6007
+    published: "2026-11-16"
+    cover: "/covers/7708839762907417877.webp"
 tags:
   - "محرك"
   - "ضعف العزم"
