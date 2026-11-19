@@ -5,29 +5,29 @@
     "at": "2026-11-10T17:55:59.229Z",
     "ok": true
   },
-  "updatedAt": "2026-11-18T04:13:06.422Z",
-  "nextScheduledRun": "2026-11-19 02:00 Kuwait (GitHub Actions, daily)",
+  "updatedAt": "2026-11-19T04:07:35.977Z",
+  "nextScheduledRun": "2026-11-20 02:00 Kuwait (GitHub Actions, daily)",
   "pagesPublished": {
-    "total": 75,
+    "total": 82,
     "byLang": {
-      "ar": 75
+      "ar": 82
     }
   },
   "videosProcessed": 50,
-  "videosOnR2": 727,
+  "videosOnR2": 728,
   "openRouterSpendUsd": {
-    "total": 14.509,
-    "last30Days": 14.509
+    "total": 14.54,
+    "last30Days": 14.54
   },
   "keyCreditLeftUsd": {
-    "usd": 35.52,
+    "usd": 35.49,
     "source": "key limit"
   },
   "siteHealth": {
-    "at": "2026-11-18T04:13:06.422Z",
+    "at": "2026-11-19T04:07:35.977Z",
     "url": "https://alsuhaiby.com/",
     "httpStatus": 200,
-    "ms": 190,
+    "ms": 108,
     "up": true
   },
   "alerts": {},
@@ -47,51 +47,51 @@
     }
   },
   "lastDaily": {
-    "day": "2026-11-18",
-    "at": "2026-11-18T04:13:06.191Z",
+    "day": "2026-11-19",
+    "at": "2026-11-19T04:07:35.816Z",
     "published": [
       {
-        "title": "سيارتي تنتع وقت ما يبدّل القير: 4 أسباب",
-        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D9%86%D8%AA%D8%B9-%D9%88%D9%82%D8%AA-%D8%AA%D8%A8%D8%AF%D9%8A%D9%84-%D8%A7%D9%84%D9%82%D9%8A%D8%B1/"
+        "title": "سيارتي ما ترجع ورا والقير أوتوماتيك: 5 أسباب",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D9%85%D8%A7-%D8%AA%D8%B1%D8%AC%D8%B9-%D9%88%D8%B1%D8%A7-%D8%A7%D9%84%D9%82%D9%8A%D8%B1-%D8%A3%D9%88%D8%AA%D9%88%D9%85%D8%A7%D8%AA%D9%8A%D9%83/"
       },
       {
-        "title": "المكينة تهرب زيت بعد الفلاش؟ 4 أضرار للفلاش إنجن",
-        "url": "https://alsuhaiby.com/%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%86%D8%A9-%D8%AA%D9%87%D8%B1%D8%A8-%D8%B2%D9%8A%D8%AA-%D8%A8%D8%B9%D8%AF-%D8%A7%D9%84%D9%81%D9%84%D8%A7%D8%B4/"
+        "title": "ماي يطلع من قزوز سيارتي: 3 أسباب لازم تعرفها",
+        "url": "https://alsuhaiby.com/%D9%85%D8%A7%D9%8A-%D9%8A%D8%B7%D9%84%D8%B9-%D9%85%D9%86-%D9%82%D8%B2%D9%88%D8%B2-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A/"
       },
       {
-        "title": "التيربو يخرب بسرعة عندي؟ 4 أسباب تخرب التيربو",
-        "url": "https://alsuhaiby.com/%D8%A7%D9%84%D8%AA%D9%8A%D8%B1%D8%A8%D9%88-%D9%8A%D8%AE%D8%B1%D8%A8-%D8%A8%D8%B3%D8%B1%D8%B9%D8%A9-%D8%B9%D9%86%D8%AF%D9%8A/"
+        "title": "سيارتي تاكل زيت بدون تهريب: 4 علامات إن الشنابر تلفت",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%A7%D9%83%D9%84-%D8%B2%D9%8A%D8%AA-%D8%AA%D9%84%D9%81-%D8%A7%D9%84%D8%B4%D9%86%D8%A7%D8%A8%D8%B1/"
       },
       {
-        "title": "لقيت زيت على فلتر الهواء؟ سبب واحد لا يقصون عليك فيه",
-        "url": "https://alsuhaiby.com/%D8%B2%D9%8A%D8%AA-%D8%B9%D9%84%D9%89-%D9%81%D9%84%D8%AA%D8%B1-%D8%A7%D9%84%D9%87%D9%88%D8%A7%D8%A1-%D8%B3%D8%A8%D8%A8-%D9%88%D8%A7%D8%AD%D8%AF/"
+        "title": "سيارتي مكتومة وتطقطق: 4 علامات تلف حساس الطرق",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D9%85%D9%83%D8%AA%D9%88%D9%85%D8%A9-%D8%B9%D9%84%D8%A7%D9%85%D8%A7%D8%AA-%D8%AA%D9%84%D9%81-%D8%AD%D8%B3%D8%A7%D8%B3-%D8%A7%D9%84%D8%B7%D8%B1%D9%82/"
       },
       {
-        "title": "غسلت المكينة بالماي وصار فيها عطل؟ 4 مشاكل ممكن تصير",
-        "url": "https://alsuhaiby.com/%D8%BA%D8%B3%D9%84%D8%AA-%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%86%D8%A9-%D8%A8%D8%A7%D9%84%D9%85%D8%A7%D9%8A-%D9%85%D8%B4%D8%A7%D9%83%D9%84/"
+        "title": "سيارتي تقطع وما تسحب: 5 علامات تلف فلتر البنزين",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D9%82%D8%B7%D8%B9-%D8%B9%D9%84%D8%A7%D9%85%D8%A7%D8%AA-%D8%AA%D9%84%D9%81-%D9%81%D9%84%D8%AA%D8%B1-%D8%A7%D9%84%D8%A8%D9%86%D8%B2%D9%8A%D9%86/"
       },
       {
-        "title": "سيارتي ما تشتغل والبطارية جديدة: 5 أسباب",
-        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D9%85%D8%A7-%D8%AA%D8%B4%D8%AA%D8%BA%D9%84-%D9%88%D8%A7%D9%84%D8%A8%D8%B7%D8%A7%D8%B1%D9%8A%D8%A9-%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9/"
+        "title": "القير يعلق في سيارتي: 5 أسباب لازم تعرفها",
+        "url": "https://alsuhaiby.com/%D8%A7%D9%84%D9%82%D9%8A%D8%B1-%D9%8A%D8%B9%D9%84%D9%82-%D9%81%D9%8A-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%A3%D8%B3%D8%A8%D8%A7%D8%A8/"
       },
       {
-        "title": "سيارتي تسحب بنزين وايد: هل برمجة التوفير تنفع؟ 3 أضرار",
-        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%B3%D8%AD%D8%A8-%D8%A8%D9%86%D8%B2%D9%8A%D9%86-%D8%A8%D8%B1%D9%85%D8%AC%D8%A9-%D8%A7%D9%84%D8%AA%D9%88%D9%81%D9%8A%D8%B1/"
+        "title": "زيت سيارتي يسود بسرعة: 3 أسباب لازم تعرفها",
+        "url": "https://alsuhaiby.com/%D8%B2%D9%8A%D8%AA-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D9%8A%D8%B3%D9%88%D8%AF-%D8%A8%D8%B3%D8%B1%D8%B9%D8%A9-%D8%A3%D8%B3%D8%A8%D8%A7%D8%A8/"
       }
     ],
     "merged": [
-      "7709217455788395797 → سيارتك-تصرف-بنزين-وايد-اسباب"
+      "7709583432459848980 → كهرباء-السيارة-تشكل-بالحر-والمطر"
     ],
-    "queueLeft": 160,
+    "queueLeft": 153,
     "queueNotAudited": 2,
     "newQueued": 0,
     "archiveLeft": 0,
-    "costTodayUsd": 0.032,
+    "costTodayUsd": 0.031,
     "costGuard": null,
     "errors": []
   },
-  "queueWaiting": 160,
+  "queueWaiting": 153,
   "publishPerDay": 7,
-  "videosAnalyzed": 727,
+  "videosAnalyzed": 728,
   "archiveLeft": 11
 }
