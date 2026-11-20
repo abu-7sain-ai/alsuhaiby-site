@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7696949129901100289"
 tiktokId: "7696949129901100289"
 duration: 22
-otherVideos: []
+otherVideos:
+  - tiktokId: "7709950424337370389"
+    title: "إذا شفت القزوز ينقط عندك لا تخاف"
+    views: 2572
+    published: "2026-11-19"
+    cover: "/covers/7709950424337370389.webp"
 tags:
   - "قزوز"
   - "دبة البيئة"
