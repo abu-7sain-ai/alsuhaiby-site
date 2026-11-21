@@ -5,29 +5,29 @@
     "at": "2026-11-10T17:55:59.229Z",
     "ok": true
   },
-  "updatedAt": "2026-11-20T03:57:51.513Z",
-  "nextScheduledRun": "2026-11-21 02:00 Kuwait (GitHub Actions, daily)",
+  "updatedAt": "2026-11-21T03:55:42.787Z",
+  "nextScheduledRun": "2026-11-22 02:00 Kuwait (GitHub Actions, daily)",
   "pagesPublished": {
-    "total": 89,
+    "total": 96,
     "byLang": {
-      "ar": 89
+      "ar": 96
     }
   },
   "videosProcessed": 50,
-  "videosOnR2": 729,
+  "videosOnR2": 730,
   "openRouterSpendUsd": {
-    "total": 14.566,
-    "last30Days": 14.566
+    "total": 14.591,
+    "last30Days": 14.591
   },
   "keyCreditLeftUsd": {
-    "usd": 35.46,
+    "usd": 35.43,
     "source": "key limit"
   },
   "siteHealth": {
-    "at": "2026-11-20T03:57:51.512Z",
+    "at": "2026-11-21T03:55:42.787Z",
     "url": "https://alsuhaiby.com/",
     "httpStatus": 200,
-    "ms": 94,
+    "ms": 458,
     "up": true
   },
   "alerts": {},
@@ -47,42 +47,42 @@
     }
   },
   "lastDaily": {
-    "day": "2026-11-20",
-    "at": "2026-11-20T03:57:51.370Z",
+    "day": "2026-11-21",
+    "at": "2026-11-21T03:55:42.247Z",
     "published": [
       {
-        "title": "زيت طايح تحت سيارتك؟ 4 ألوان تعرف منها وين التهريب",
-        "url": "https://alsuhaiby.com/%D8%B2%D9%8A%D8%AA-%D8%B7%D8%A7%D9%8A%D8%AD-%D8%AA%D8%AD%D8%AA-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%83-%D8%A3%D9%84%D9%88%D8%A7%D9%86-%D8%A7%D9%84%D8%AA%D9%87%D8%B1%D9%8A%D8%A8/"
+        "title": "لمبة التوازن VSC ولعت في سيارتي: 5 أسباب",
+        "url": "https://alsuhaiby.com/%D9%84%D9%85%D8%A8%D8%A9-%D8%A7%D9%84%D8%AA%D9%88%D8%A7%D8%B2%D9%86-%D9%88%D9%84%D8%B9%D8%AA-%D9%81%D9%8A-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A/"
       },
       {
-        "title": "سيارتي تصرف بنزين ولمبة التشك ولعت: 6 علامات تلف سنسر الهواء",
-        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%B5%D8%B1%D9%81-%D8%A8%D9%86%D8%B2%D9%8A%D9%86-%D8%B9%D9%84%D8%A7%D9%85%D8%A7%D8%AA-%D8%B3%D9%86%D8%B3%D8%B1-%D8%A7%D9%84%D9%87%D9%88%D8%A7%D8%A1/"
+        "title": "ريحة بنزين بالسيارة وصعوبة بالتعبئة: 6 علامات تلف الكانستر",
+        "url": "https://alsuhaiby.com/%D8%B1%D9%8A%D8%AD%D8%A9-%D8%A8%D9%86%D8%B2%D9%8A%D9%86-%D8%B9%D9%84%D8%A7%D9%85%D8%A7%D8%AA-%D8%AA%D9%84%D9%81-%D8%A7%D9%84%D9%83%D8%A7%D9%86%D8%B3%D8%AA%D8%B1/"
       },
       {
-        "title": "سيارتي تطفي وطرمبة البنزين تضرب: 3 أمور تحميها",
-        "url": "https://alsuhaiby.com/%D8%B7%D8%B1%D9%85%D8%A8%D8%A9-%D8%A7%D9%84%D8%A8%D9%86%D8%B2%D9%8A%D9%86-%D8%AA%D8%B6%D8%B1%D8%A8-%D8%A3%D9%85%D9%88%D8%B1-%D8%AA%D8%AD%D9%85%D9%8A%D9%87%D8%A7/"
+        "title": "سيارتي ضعيفة وتصرف بنزين؟ 4 علامات تلف حساس القزوز",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%B6%D8%B9%D9%8A%D9%81%D8%A9-%D9%88%D8%AA%D8%B5%D8%B1%D9%81-%D8%A8%D9%86%D8%B2%D9%8A%D9%86-%D8%AD%D8%B3%D8%A7%D8%B3-%D8%A7%D9%84%D9%82%D8%B2%D9%88%D8%B2/"
       },
       {
-        "title": "عداد الحرارة ما يشتغل والمراوح واقفة: 5 علامات تلف سنسر الحرارة",
-        "url": "https://alsuhaiby.com/%D8%B9%D8%AF%D8%A7%D8%AF-%D8%A7%D9%84%D8%AD%D8%B1%D8%A7%D8%B1%D8%A9-%D8%B9%D9%84%D8%A7%D9%85%D8%A7%D8%AA-%D8%AA%D9%84%D9%81-%D8%B3%D9%86%D8%B3%D8%B1-%D8%A7%D9%84%D8%AD%D8%B1%D8%A7%D8%B1%D8%A9/"
+        "title": "سيارتي يطيح عزمها لما أشغل المكيف: 4 أسباب",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D9%8A%D8%B7%D9%8A%D8%AD-%D8%B9%D8%B2%D9%85%D9%87%D8%A7-%D9%84%D9%85%D8%A7-%D8%A3%D8%B4%D8%BA%D9%84-%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%81/"
       },
       {
-        "title": "سيارتي تطفي لما أشغل المكيف: 4 أسباب",
-        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%B7%D9%81%D9%8A-%D9%84%D9%85%D8%A7-%D8%A3%D8%B4%D8%BA%D9%84-%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%81/"
+        "title": "سيارتي تفتف وما تشتغل من أول مرة: 5 علامات تلف الديلكو",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D9%81%D8%AA%D9%81-%D8%B9%D9%84%D8%A7%D9%85%D8%A7%D8%AA-%D8%AA%D9%84%D9%81-%D8%A7%D9%84%D8%AF%D9%8A%D9%84%D9%83%D9%88/"
       },
       {
-        "title": "سيارتي تنط مع المطبات وتميل باللفات: 5 علامات خراب المعاونيات",
-        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D9%86%D8%B7-%D9%85%D8%B9-%D8%A7%D9%84%D9%85%D8%B7%D8%A8%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D8%B9%D8%A7%D9%88%D9%86%D9%8A%D8%A7%D8%AA/"
+        "title": "صوت وطقطقة بالسيارة عند المطبات: 5 علامات تلف كرسي المعاون",
+        "url": "https://alsuhaiby.com/%D8%B5%D9%88%D8%AA-%D8%B7%D9%82%D8%B7%D9%82%D8%A9-%D8%AA%D9%84%D9%81-%D9%83%D8%B1%D8%B3%D9%8A-%D8%A7%D9%84%D9%85%D8%B9%D8%A7%D9%88%D9%86/"
       },
       {
-        "title": "صوت دق من المكينة: 4 أسباب تتلف تكايات المكينة",
-        "url": "https://alsuhaiby.com/%D8%B5%D9%88%D8%AA-%D8%AF%D9%82-%D9%85%D9%86-%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%86%D8%A9-%D9%88%D8%AA%D9%84%D9%81-%D8%A7%D9%84%D8%AA%D9%83%D8%A7%D9%8A%D8%A7%D8%AA/"
+        "title": "زيت سيارتي يسود بسرعة؟ 5 علامات إن الزيت مغشوش",
+        "url": "https://alsuhaiby.com/%D8%B2%D9%8A%D8%AA-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D9%8A%D8%B3%D9%88%D8%AF-%D8%A8%D8%B3%D8%B1%D8%B9%D8%A9-%D9%85%D8%BA%D8%B4%D9%88%D8%B4/"
       }
     ],
     "merged": [
-      "7709950424337370389 → سيارتي-تنقط-ماي-من-القزوز"
+      "7710363001735433492 → تفتفة-ودخان-ازرق-زيت-البلاكات"
     ],
-    "queueLeft": 146,
+    "queueLeft": 139,
     "queueNotAudited": 2,
     "newQueued": 0,
     "archiveLeft": 0,
@@ -90,8 +90,8 @@
     "costGuard": null,
     "errors": []
   },
-  "queueWaiting": 146,
+  "queueWaiting": 139,
   "publishPerDay": 7,
-  "videosAnalyzed": 729,
+  "videosAnalyzed": 730,
   "archiveLeft": 11
 }
