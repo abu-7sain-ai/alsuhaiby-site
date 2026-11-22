@@ -35,6 +35,11 @@ otherVideos:
     views: 4450
     published: "2026-07-12"
     cover: "/covers/7661705580289035540.webp"
+  - tiktokId: "7710701182599040276"
+    title: "ثلاث أسباب لارتفاع حرارة البطارية"
+    views: 968
+    published: "2026-11-21"
+    cover: "/covers/7710701182599040276.webp"
 tags:
   - "بطارية"
   - "دينمو"
