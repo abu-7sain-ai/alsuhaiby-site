@@ -5,29 +5,29 @@
     "at": "2026-11-10T17:55:59.229Z",
     "ok": true
   },
-  "updatedAt": "2026-11-22T03:03:13.269Z",
-  "nextScheduledRun": "2026-11-23 02:00 Kuwait (GitHub Actions, daily)",
+  "updatedAt": "2026-11-23T03:42:37.812Z",
+  "nextScheduledRun": "2026-11-24 02:00 Kuwait (GitHub Actions, daily)",
   "pagesPublished": {
-    "total": 103,
+    "total": 110,
     "byLang": {
-      "ar": 103
+      "ar": 110
     }
   },
   "videosProcessed": 50,
-  "videosOnR2": 731,
+  "videosOnR2": 732,
   "openRouterSpendUsd": {
-    "total": 14.618,
-    "last30Days": 14.618
+    "total": 14.643,
+    "last30Days": 14.643
   },
   "keyCreditLeftUsd": {
-    "usd": 35.41,
+    "usd": 35.38,
     "source": "key limit"
   },
   "siteHealth": {
-    "at": "2026-11-22T03:03:13.269Z",
+    "at": "2026-11-23T03:42:37.812Z",
     "url": "https://alsuhaiby.com/",
     "httpStatus": 200,
-    "ms": 197,
+    "ms": 177,
     "up": true
   },
   "alerts": {},
@@ -47,51 +47,51 @@
     }
   },
   "lastDaily": {
-    "day": "2026-11-22",
-    "at": "2026-11-22T03:03:12.976Z",
+    "day": "2026-11-23",
+    "at": "2026-11-23T03:42:37.590Z",
     "published": [
       {
-        "title": "حرارة سيارتي ترتفع بعد الماي العادي بالراديتر: 5 مشاكل",
-        "url": "https://alsuhaiby.com/%D8%AD%D8%B1%D8%A7%D8%B1%D8%A9-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%A7%D9%84%D9%85%D8%A7%D9%8A-%D8%A7%D9%84%D8%B9%D8%A7%D8%AF%D9%8A-%D8%A8%D8%A7%D9%84%D8%B1%D8%A7%D8%AF%D9%8A%D8%AA%D8%B1/"
+        "title": "عداد السرعة ما يشتغل بسيارتي: 4 أسباب تعطله",
+        "url": "https://alsuhaiby.com/%D8%B9%D8%AF%D8%A7%D8%AF-%D8%A7%D9%84%D8%B3%D8%B1%D8%B9%D8%A9-%D9%85%D8%A7-%D9%8A%D8%B4%D8%AA%D8%BA%D9%84-%D8%A8%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A/"
       },
       {
-        "title": "ريحة المكيف خايسة في السيارة: 3 طرق تتخلص منها",
-        "url": "https://alsuhaiby.com/%D8%B1%D9%8A%D8%AD%D8%A9-%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%81-%D8%AE%D8%A7%D9%8A%D8%B3%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A9/"
+        "title": "دخان يطلع من الإكزوز أبيض أو أزرق أو أسود أو رمادي: 4 ألوان ومعناها",
+        "url": "https://alsuhaiby.com/%D8%AF%D8%AE%D8%A7%D9%86-%D9%8A%D8%B7%D9%84%D8%B9-%D9%85%D9%86-%D8%A7%D9%84%D8%A5%D9%83%D8%B2%D9%88%D8%B2-%D8%A3%D9%84%D9%88%D8%A7%D9%86/"
       },
       {
-        "title": "الهرن ما يشتغل وعلامة الإيرباق طالعة: 3 علامات تلف شريحة السكان",
-        "url": "https://alsuhaiby.com/%D8%B9%D9%84%D8%A7%D9%85%D8%A7%D8%AA-%D8%AA%D9%84%D9%81-%D8%B4%D8%B1%D9%8A%D8%AD%D8%A9-%D8%A7%D9%84%D8%B3%D9%83%D8%A7%D9%86/"
+        "title": "لمبة المكينة نورت فجأة في سيارتي: 5 أسباب تطلعها",
+        "url": "https://alsuhaiby.com/%D9%84%D9%85%D8%A8%D8%A9-%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%86%D8%A9-%D9%86%D9%88%D8%B1%D8%AA-%D9%81%D8%AC%D8%A3%D8%A9-%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A/"
       },
       {
-        "title": "سيارتي تدور وما تشتغل: 5 أسباب تقطع الكهربا عن طرمبة البنزين",
-        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%AF%D9%88%D8%B1-%D9%88%D9%85%D8%A7-%D8%AA%D8%B4%D8%AA%D8%BA%D9%84-%D8%B7%D8%B1%D9%85%D8%A8%D8%A9-%D8%A7%D9%84%D8%A8%D9%86%D8%B2%D9%8A%D9%86/"
+        "title": "القير يطلع صوت وزيته يهرّب: 4 أعراض إن مبرد القير عطلان",
+        "url": "https://alsuhaiby.com/%D8%A7%D9%84%D9%82%D9%8A%D8%B1-%D9%8A%D8%B7%D9%84%D8%B9-%D8%B5%D9%88%D8%AA-%D9%85%D8%A8%D8%B1%D8%AF-%D8%A7%D9%84%D9%82%D9%8A%D8%B1/"
       },
       {
-        "title": "صوت ورجفة لما أمسك البريك: 5 علامات إن السفايف تبي تبديل",
-        "url": "https://alsuhaiby.com/%D8%B5%D9%88%D8%AA-%D8%B1%D8%AC%D9%81%D8%A9-%D8%A7%D9%84%D8%A8%D8%B1%D9%8A%D9%83-%D8%A7%D9%84%D8%B3%D9%81%D8%A7%D9%8A%D9%81-%D8%AA%D8%A8%D9%8A-%D8%AA%D8%A8%D8%AF%D9%8A%D9%84/"
+        "title": "تبي تركب ليتات زينون لسيارتك؟ مميزاتها و4 عيوب لازم تعرفها",
+        "url": "https://alsuhaiby.com/%D9%85%D9%85%D9%8A%D8%B2%D8%A7%D8%AA-%D9%88%D8%B9%D9%8A%D9%88%D8%A8-%D9%84%D9%8A%D8%AA%D8%A7%D8%AA-%D8%A7%D9%84%D8%B2%D9%8A%D9%86%D9%88%D9%86/"
       },
       {
-        "title": "المكيف ما يبرد والسكان ثقيل؟ 4 علامات تلف سير المكينة",
-        "url": "https://alsuhaiby.com/%D8%B9%D9%84%D8%A7%D9%85%D8%A7%D8%AA-%D8%AA%D9%84%D9%81-%D8%B3%D9%8A%D8%B1-%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%86%D8%A9/"
+        "title": "سيارتي تخلط ماي وزيت: 4 أسباب وشلون تعرفها",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%AE%D9%84%D8%B7-%D9%85%D8%A7%D9%8A-%D9%88%D8%B2%D9%8A%D8%AA/"
       },
       {
-        "title": "سيارتي تحر وتسرب ماي: 5 علامات تلف مضخة الماي",
-        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%8A-%D8%AA%D8%AD%D8%B1-%D8%B9%D9%84%D8%A7%D9%85%D8%A7%D8%AA-%D8%AA%D9%84%D9%81-%D9%85%D8%B6%D8%AE%D8%A9-%D8%A7%D9%84%D9%85%D8%A7%D9%8A/"
+        "title": "سيارتك ثقيلة والمكيف ضعيف؟ 4 حالات طفّ فيها نظام الإيكو",
+        "url": "https://alsuhaiby.com/%D8%B3%D9%8A%D8%A7%D8%B1%D8%AA%D9%83-%D8%AB%D9%82%D9%8A%D9%84%D8%A9-%D9%88%D8%A7%D9%84%D9%85%D9%83%D9%8A%D9%81-%D8%B6%D8%B9%D9%8A%D9%81-%D9%86%D8%B8%D8%A7%D9%85-%D8%A7%D9%84%D8%A5%D9%8A%D9%83%D9%88/"
       }
     ],
     "merged": [
-      "7710701182599040276 → بطارية-سيارتي-حارة-ارتفاع-حرارة-البطارية"
+      "7711069531329842484 → سيارتي-ترجف-بعد-الغسيل-دخان"
     ],
-    "queueLeft": 132,
+    "queueLeft": 125,
     "queueNotAudited": 2,
     "newQueued": 0,
     "archiveLeft": 0,
-    "costTodayUsd": 0.027,
+    "costTodayUsd": 0.025,
     "costGuard": null,
     "errors": []
   },
-  "queueWaiting": 132,
+  "queueWaiting": 125,
   "publishPerDay": 7,
-  "videosAnalyzed": 731,
+  "videosAnalyzed": 732,
   "archiveLeft": 11
 }

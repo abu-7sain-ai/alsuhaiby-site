@@ -14,7 +14,12 @@ platforms:
   tiktok: "https://www.tiktok.com/@m_alsuhaiby/video/7625948382284074261"
 tiktokId: "7625948382284074261"
 duration: 32
-otherVideos: []
+otherVideos:
+  - tiktokId: "7711069531329842484"
+    title: "جتنا سيارة قبل فترة غسلها راعيها وقبل ما تطلع من المغسلة جتها رجفة ودخان واستمرت، أمانةً ابتلشنا فيها."
+    views: 4038
+    published: "2026-11-22"
+    cover: "/covers/7711069531329842484.webp"
 tags:
   - "محرك"
   - "رجفة"
