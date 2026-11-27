@@ -4,7 +4,7 @@ import { chat, wordCount } from './common.js';
 
 export const SYSTEMS = 'محرك, قير, مكيف, فرامل, كهرباء, تواير, وقود, تبريد, تعليق وتوجيه, عادات وصيانة';
 
-export const AR_RULES = `You write web articles in Arabic for the personal site of محمد الصهيبي, a Kuwaiti car mechanic who owns «كراج الصهيبي» (German cars, since 2022).
+export const AR_RULES = `You write web articles in Arabic for the personal site of محمد الصهيبي, a Kuwaiti car mechanic who owns «كراج الصهيبي» (since 2022). He is a car mechanic; never say or imply that he specialises in any make or country of cars.
 Each article turns one of his short TikTok videos into a full page that ranks on Google and gets quoted by AI assistants.
 
 SOURCE: the transcript below is his own words — the starting point. Every cause / sign / step he lists becomes its own section, in his order, and each section starts from what he said.
@@ -88,7 +88,7 @@ export function fromUnits(a, units) {
 
 export const words = (a) => wordCount([a.summary, a.intro, ...a.sections.map((s) => `${s.heading} ${s.body}`)].join(' '));
 
-export const PASS1 = `You are a skeptical Kuwaiti master mechanic with 25 years in a garage that services German and Japanese cars. You review a web article written by an AI from one video of محمد الصهيبي, a Kuwaiti mechanic.
+export const PASS1 = `You are a skeptical Kuwaiti master mechanic with 25 years in a car garage. You review a web article written by an AI from one video of محمد الصهيبي, a Kuwaiti mechanic.
 The article starts from his transcript and is EXPANDED ON PURPOSE with general automotive knowledge. That expansion is wanted: correct general knowledge is KEEP by default, even if he did not say it.
 The article is split into numbered units (sentences, headings, FAQ questions). Check EVERY factual claim in every unit against what a master mechanic knows for certain. Flag ONLY the units that need action:
 - FIX: the idea is right but a detail is wrong, exaggerated or too specific, OR the wording is literary / Modern Standard / not natural Kuwaiti-Gulf dialect. Give the corrected sentence in Arabic (same dialect, no new facts).

@@ -141,3 +141,6 @@
 4. `archive\` holds the 2 research files from Downloads + `5889539663_pin (2).mp4` (no copy anywhere).
 5. The Windows task `alsuhaiby-audit-daily` is re-pointed at the new folder (disabled during the move, re-enabled after, restored on rollback); the two `.vbs` launchers now find the site folder from their own place.
 6. `scripts/move-project.ps1` (run by the Desktop click-file «نقل المشروع»): refuses to start if a project process is alive or D: is missing/too small; renames the repos, copies to D:, fixes the 5 shortcuts, the task and the memory copy; verifies; ANY failure undoes everything. Tested in a sandbox: `scripts/test-move-sandbox.ps1` (success, rollback, video-not-on-R2, dry run).
+
+## No make specialisation (owner, 2026-11-27)
+1. محمد is a car mechanic, full stop. No page, meta tag, prompt or translation may say or imply he or the garage specialises in any make or country of cars. Removed from Home.astro (5 languages), about.astro and the writing/review prompts.

@@ -17,11 +17,11 @@ const popular = [...entries].sort((a, b) => b.data.views - a.data.views).slice(0
 const all = await getCollection('videos');
 const alternates = (['ar', ...OTHER_LANGS] as Lang[]).filter((l) => l === 'ar' || all.some((e) => e.data.lang === l)).map((l) => ({ lang: l, url: homeUrl(l) }));
 const intro = {
-  ar: `${P.name}، ${P.job} من الكويت وصاحب ${P.garage} المتخصص بالسيارات الألمانية. هنا كل فيديو من فيديوهاتي مكتوب بالتفصيل: العطل، أسبابه، وشلون تتصرف.`,
-  en: `${P.name}, a car mechanic from Kuwait and owner of ${P.garage}, specialised in German cars. Every video, written out in full: the problem, the causes and what to do.`,
-  fr: `${P.name}, mécanicien automobile au Koweït et propriétaire du ${P.garage}, spécialisé dans les voitures allemandes.`,
-  es: `${P.name}, mecánico de coches en Kuwait y dueño del ${P.garage}, especializado en coches alemanes.`,
-  ur: `${P.name}، کویت سے کار مکینک اور ${P.garage} کے مالک، جرمن گاڑیوں کے ماہر۔`,
+  ar: `${P.name}، ${P.job} من الكويت وصاحب ${P.garage}. هنا كل فيديو من فيديوهاتي مكتوب بالتفصيل: العطل، أسبابه، وشلون تتصرف.`,
+  en: `${P.name}, a car mechanic from Kuwait and owner of ${P.garage}. Every video, written out in full: the problem, the causes and what to do.`,
+  fr: `${P.name}, mécanicien automobile au Koweït et propriétaire du ${P.garage}.`,
+  es: `${P.name}, mecánico de coches en Kuwait y dueño del ${P.garage}.`,
+  ur: `${P.name}، کویت سے کار مکینک اور ${P.garage} کے مالک۔`,
 }[lang];
 const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: P.name, url: SITE + LANGS[lang].prefix + '/', inLanguage: lang,
   potentialAction: { '@type': 'SearchAction', target: `${SITE}/search/?q={q}`, 'query-input': 'required name=q' } },
